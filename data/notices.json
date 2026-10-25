@@ -220,7 +220,13 @@
       {
         "type": "text",
         "title": "解决办法",
-        "text": "把浏览器切换到「电脑版 / PC 模式」再刷新页面，就能正常看到下载按钮。下面这张图是切换后的效果参考：<br><br><img src=\"images/notice/lanzou-ua.png\" alt=\"蓝奏云切换电脑 UA 后下载界面\" style=\"max-width:100%;height:auto;display:block;margin:0 auto;border-radius:8px;border:1px solid #E8E5DF;\">"
+        "text": "把浏览器切换到「电脑版 / PC 模式」再刷新页面，就能正常看到下载按钮。下面这张图是切换后的效果参考："
+      },
+      {
+        "type": "image",
+        "src": "images/notice/lanzou-ua.png",
+        "alt": "蓝奏云切换电脑 UA 后下载界面",
+        "caption": "切换电脑 UA 后的下载界面"
       },
       {
         "type": "num",
