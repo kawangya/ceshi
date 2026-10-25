@@ -1,18 +1,11 @@
 [
   {
-    "name": "友站名称",
-    "desc": "一句话描述这个站点",
+    "_comment": "示例条目，添加时无需_comment和hidden字段",
+    "hidden": true,
+    "name": "示例友站",
     "url": "https://example.com",
     "icon": "images/friends/example.png",
     "letter": "友",
     "color": "#4E7296"
-  },
-  {
-    "name": "另一个友站",
-    "desc": "也可以不写描述",
-    "url": "https://example.org",
-    "icon": "",
-    "letter": "链",
-    "color": "#5F8468"
   }
 ]

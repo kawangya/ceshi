@@ -300,31 +300,35 @@
     bindNavTips();
   }
 
-  /* ============ 友站渲染 ============ */
+  /* ============ 友站渲染（底部横条，只显示图标 + 名字） ============ */
   function renderFriends() {
     if (!friendsSectionEl || !friendsGridEl) return;
 
-    if (!FRIENDS || !FRIENDS.length) {
+    // 过滤掉 hidden: true 的示例条目（用于在 friends.json 里保留格式注释）
+    const visible = (FRIENDS || []).filter(function (f) {
+      return f && f.hidden !== true;
+    });
+
+    if (!visible.length) {
       friendsSectionEl.hidden = true;
       friendsGridEl.innerHTML = '';
       return;
     }
 
     friendsSectionEl.hidden = false;
-    friendsGridEl.innerHTML = FRIENDS.map(function (f) {
+    friendsGridEl.innerHTML = visible.map(function (f) {
       const hasIcon = !!(f.icon && f.icon.trim());
       const iconHtml = hasIcon
         ? '<img data-fallback src="' + esc(f.icon) + '" alt="">'
         : '';
 
-      return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener">' +
+      return '<a class="friend-card" ' +
+               'href="' + esc(f.url || '#') + '" target="_blank" rel="noopener" ' +
+               'title="' + esc(f.name || '') + '">' +
                '<span class="friend-ico" style="background:' + esc(f.color || '#4E7296') + '">' +
                  '<span>' + esc(f.letter || '友') + '</span>' + iconHtml +
                '</span>' +
-               '<span class="friend-info">' +
-                 '<span class="friend-name">' + esc(f.name || '') + '</span>' +
-                 (f.desc ? '<span class="friend-desc">' + esc(f.desc) + '</span>' : '') +
-               '</span>' +
+               '<span class="friend-name">' + esc(f.name || '') + '</span>' +
              '</a>';
     }).join('');
 
@@ -673,7 +677,6 @@
     }
 
     function fallback() {
-      // 图片不存在时，移除 <a> 的跳转，避免点击假码跳到 404 图片
       qrEl.removeAttribute('href');
       qrEl.removeAttribute('target');
       qrEl.removeAttribute('rel');
