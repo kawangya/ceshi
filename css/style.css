@@ -299,6 +299,56 @@ body.modal-open { overflow: hidden; }
   letter-spacing: .01em;
 }
 
+/* ---------- 大类切换 ---------- */
+.cat-nav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  margin-bottom: 14px;
+  padding-bottom: 1px;
+  border-bottom: 1px solid var(--border);
+  scrollbar-width: none;
+}
+
+.cat-nav::-webkit-scrollbar { display: none; }
+
+.cat-tab {
+  position: relative;
+  flex-shrink: 0;
+  padding: 7px 14px 9px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .18s ease;
+}
+
+.cat-tab:hover { color: var(--text); }
+
+.cat-tab.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.cat-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .cat-tab { padding: 6px 11px 8px; font-size: 13px; }
+}
+
 .site-count { font-size: 12.5px; color: var(--text-mute); }
 
 .group-nav {
@@ -1223,4 +1273,50 @@ mark {
     animation-duration: .01ms !important;
     transition-duration: .01ms !important;
   }
+}
+
+/* ---------- 公告内图片 ---------- */
+.section-figure {
+  margin: 0;
+}
+
+.section-figure a {
+  display: block;
+  text-decoration: none;
+}
+
+.section-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  cursor: zoom-in;
+}
+
+.section-figure figcaption {
+  margin-top: 7px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-mute);
+  text-align: center;
+}
+
+.section-img-fail {
+  padding: 26px 12px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-mute);
+  background: var(--surface-2);
+  border: 1px dashed var(--border-strong);
+  border-radius: 10px;
+}
+
+/* text / num / kv 里手写的 <img> 也约束尺寸 */
+.modal-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
 }

@@ -1,18 +1,20 @@
 /* =========================================================
    卡王的导航 - 主脚本
    ---------------------------------------------------------
-   图片预留：
-   - 顶栏 logo / 头像：images/apple-touch-icon.png（HTML 中固定）
-   - QQ/邮箱/B站/抖音：images/qq.png 等（HTML 中固定）
-   - 公众号二维码：images/qr.png（HTML 中固定，缺失时回退假码）
-   - 导航图标：nav.json 的 icon 字段
-   - 友站图标：friends.json 的 icon 字段
-   图片不存在时自动隐藏，回退到字母/渐变占位。
-
    数据文件：
-   - nav.json       导航分组
-   - notices.json   公告
-   - friends.json   友站（可选，缺失不影响主页面）
+   - data/nav.json       大类 → 分组 → 站点
+   - data/notices.json   公告
+   - data/friends.json   友站（可选）
+
+   nav.json 结构：
+   {
+     "categories": [
+       { "id": "mc", "title": "MC 导航", "default": true,
+         "groups": [ { "id": "...", "title": "...", "items": [...] } ] },
+       ...
+     ]
+   }
+   也兼容旧格式（纯数组，会被自动包成「全部导航」大类）。
    ========================================================= */
 
 (function () {
@@ -24,7 +26,7 @@
   const FRIENDS_URL = './data/friends.json';
 
   /* ============ 数据容器 ============ */
-  let NAV_GROUPS = [];
+  let NAV_CATEGORIES = [];   // [{ id, title, default, groups: [...] }]
   let NOTICES = [];
   let FRIENDS = [];
   let TAGS = ['全部'];
@@ -32,6 +34,7 @@
   /* ============ 状态 ============ */
   let keyword = '';
   let noticeFilter = '全部';
+  let activeCategoryId = '';
   let activeGroupId = 'all';
   let lastFocused = null;
 
@@ -41,6 +44,7 @@
   const navGroupsEl   = document.getElementById('navGroups');
   const navEmptyEl    = document.getElementById('navEmpty');
   const siteCountEl   = document.getElementById('siteCount');
+  const catNavEl      = document.getElementById('catNav');
   const groupNavEl    = document.getElementById('groupNav');
   const navTipEl      = document.getElementById('navTip');
 
@@ -231,15 +235,35 @@
   window.addEventListener('scroll', hideTip, { passive: true });
   window.addEventListener('resize', hideTip, { passive: true });
 
-  /* ============ 导航渲染 ============ */
+  /* ============ 导航渲染（大类 → 分组 → 站点） ============ */
   function renderNav() {
     const q = keyword.trim().toLowerCase();
-    let html = '';
-    let shown = 0;
+
+    /* -------- 1. 大类 tab -------- */
+    let catHtml = '';
+    NAV_CATEGORIES.forEach(function (cat) {
+      catHtml += '<button class="cat-tab' + (cat.id === activeCategoryId ? ' active' : '') +
+                 '" type="button" data-cat="' + esc(cat.id) + '">' + esc(cat.title) + '</button>';
+    });
+    catNavEl.innerHTML = catHtml;
+
+    catNavEl.querySelectorAll('.cat-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        if (activeCategoryId === tab.dataset.cat) return;
+        activeCategoryId = tab.dataset.cat;
+        activeGroupId = 'all';   // 切大类时重置分组
+        hideTip();
+        renderNav();
+      });
+    });
+
+    /* -------- 2. 当前大类下的分组 chips -------- */
+    const currentCat = NAV_CATEGORIES.find(function (c) { return c.id === activeCategoryId; });
+    const groups = currentCat ? (currentCat.groups || []) : [];
 
     let chips = '<button class="chip' + (activeGroupId === 'all' ? ' active' : '') +
                 '" type="button" data-group="all">全部</button>';
-    NAV_GROUPS.forEach(function (g) {
+    groups.forEach(function (g) {
       chips += '<button class="chip' + (activeGroupId === g.id ? ' active' : '') +
                '" type="button" data-group="' + esc(g.id) + '">' + esc(g.title) + '</button>';
     });
@@ -252,7 +276,11 @@
       });
     });
 
-    NAV_GROUPS.forEach(function (group) {
+    /* -------- 3. 当前大类下的站点 -------- */
+    let html = '';
+    let shown = 0;
+
+    groups.forEach(function (group) {
       if (activeGroupId !== 'all' && activeGroupId !== group.id) return;
 
       const items = (group.items || []).filter(function (it) {
@@ -304,7 +332,6 @@
   function renderFriends() {
     if (!friendsSectionEl || !friendsGridEl) return;
 
-    // 过滤掉 hidden: true 的示例条目（用于在 friends.json 里保留格式注释）
     const visible = (FRIENDS || []).filter(function (f) {
       return f && f.hidden !== true;
     });
@@ -522,7 +549,45 @@
         wrap.appendChild(h);
       }
 
-      if (sec.type === 'kv') {
+      if (sec.type === 'image') {
+        // 图片段落：src 必填；caption / alt / href / maxWidth 可选
+        const fig = document.createElement('figure');
+        fig.className = 'section-figure';
+
+        const src = sec.src || sec.url || '';
+        if (src) {
+          const a = document.createElement('a');
+          a.href = sec.href || src;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          a.title = sec.alt || sec.caption || '点击查看大图';
+
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = sec.alt || sec.caption || '';
+          img.loading = 'lazy';
+          if (sec.maxWidth) img.style.maxWidth = sec.maxWidth + 'px';
+
+          img.addEventListener('error', function () {
+            const ph = document.createElement('div');
+            ph.className = 'section-img-fail';
+            ph.textContent = '图片加载失败';
+            a.replaceWith(ph);
+          }, { once: true });
+
+          a.appendChild(img);
+          fig.appendChild(a);
+        }
+
+        if (sec.caption) {
+          const cap = document.createElement('figcaption');
+          cap.textContent = sec.caption;
+          fig.appendChild(cap);
+        }
+
+        wrap.appendChild(fig);
+
+      } else if (sec.type === 'kv') {
         const ul = document.createElement('ul');
         ul.className = 'kv-list';
         (sec.items || []).forEach(function (it) {
@@ -589,6 +654,8 @@
       modalBody.textContent = n.content || n.excerpt;
     }
     modalBody.scrollTop = 0;
+
+    guardImgs(modalBody);
 
     modalActions.innerHTML = '';
     (n.links || []).forEach(function (link, i) {
@@ -699,7 +766,25 @@
       if (!navRes.ok) throw new Error('导航 JSON 加载失败：' + navRes.status);
       if (!noticeRes.ok) throw new Error('公告 JSON 加载失败：' + noticeRes.status);
 
-      NAV_GROUPS = await navRes.json();
+      const navData = await navRes.json();
+
+      /* 兼容两种 nav.json 格式：
+         - 新格式：{ categories: [ { id, title, groups: [...] } ] }
+         - 旧格式：直接是分组数组 [ { id, title, items: [...] } ]
+         旧格式会被自动包成「全部导航」一个大类。 */
+      if (Array.isArray(navData)) {
+        NAV_CATEGORIES = [{
+          id: 'all',
+          title: '全部导航',
+          default: true,
+          groups: navData
+        }];
+      } else if (navData && Array.isArray(navData.categories)) {
+        NAV_CATEGORIES = navData.categories;
+      } else {
+        NAV_CATEGORIES = [];
+      }
+
       NOTICES = await noticeRes.json();
 
       // 友站数据为可选，失败不影响主页面
@@ -713,6 +798,11 @@
         FRIENDS = [];
       }
 
+      /* 选中默认大类：优先 default: true，其次第一个 */
+      const def = NAV_CATEGORIES.find(function (c) { return c.default; }) || NAV_CATEGORIES[0];
+      activeCategoryId = def ? def.id : '';
+      activeGroupId = 'all';
+
       TAGS = ['全部', ...new Set(NOTICES.map(n => n.tag))];
 
       renderNoticeTabs();
@@ -723,8 +813,10 @@
       updateBackTop();
     } catch (err) {
       console.error(err);
+      catNavEl.innerHTML = '';
+      groupNavEl.innerHTML = '';
       navGroupsEl.innerHTML =
-        '导航数据加载失败';
+        '<div class="empty empty-lg">导航数据加载失败</div>';
       noticeListEl.innerHTML = '';
       noticeEmptyEl.hidden = false;
       noticeEmptyEl.textContent = '公告数据加载失败';
