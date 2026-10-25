@@ -109,10 +109,10 @@ body.modal-open { overflow: hidden; }
 .brand {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 11px;
   margin-right: auto;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16.5px;
   letter-spacing: .02em;
   flex-shrink: 0;
   text-decoration: none;
@@ -130,11 +130,11 @@ body.modal-open { overflow: hidden; }
 }
 
 .brand-mark {
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   background: linear-gradient(140deg, var(--accent), #8FA8BE);
-  box-shadow: 0 2px 6px rgba(78, 114, 150, .25);
+  box-shadow: 0 2px 8px rgba(78, 114, 150, .28);
 }
 
 .search-wrap {
