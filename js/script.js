@@ -72,6 +72,10 @@
   const modalActions  = document.getElementById('modalActions');
   const modalClose    = document.getElementById('modalClose');
 
+  const lightbox      = document.getElementById('lightbox');
+  const lightboxImg   = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+
   /* ============ 工具 ============ */
   function esc(str) {
     return String(str).replace(/[&<>"']/g, function (c) {
@@ -534,6 +538,30 @@
     });
   }
 
+  /* ============ 图片灯箱 ============ */
+  function openLightbox(src, alt) {
+    if (!src) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.classList.add('show');
+    document.body.classList.add('modal-open');
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('show');
+    lightboxImg.src = '';
+    // 公告弹窗还开着时保留滚动锁
+    if (!modalMask.classList.contains('show')) {
+      document.body.classList.remove('modal-open');
+    }
+  }
+
+  lightboxClose.addEventListener('click', closeLightbox);
+
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
   /* ============ 结构化内容渲染 ============ */
   function renderStructuredBody(sections) {
     const frag = document.createDocumentFragment();
@@ -550,11 +578,12 @@
       }
 
       if (sec.type === 'image') {
-        // 图片段落：src 必填；caption / alt / href / maxWidth 可选
+        // 图片段落：src 必填；alt / caption / href / maxWidth 可选
+        // 点击图片打开灯箱；右键仍可在新标签页打开原图
         const fig = document.createElement('figure');
         fig.className = 'section-figure';
 
-        const src = sec.src || sec.url || '';
+        const src = sec.src || '';
         if (src) {
           const a = document.createElement('a');
           a.href = sec.href || src;
@@ -574,6 +603,12 @@
             ph.textContent = '图片加载失败';
             a.replaceWith(ph);
           }, { once: true });
+
+          // 左键 → 灯箱
+          a.addEventListener('click', function (e) {
+            e.preventDefault();
+            openLightbox(src, img.alt);
+          });
 
           a.appendChild(img);
           fig.appendChild(a);
@@ -694,7 +729,13 @@
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && modalMask.classList.contains('show')) {
+    if (e.key !== 'Escape') return;
+    // 灯箱优先关闭
+    if (lightbox.classList.contains('show')) {
+      closeLightbox();
+      return;
+    }
+    if (modalMask.classList.contains('show')) {
       closeModal();
     }
   });

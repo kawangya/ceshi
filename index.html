@@ -151,7 +151,6 @@
   </aside>
 </main>
 
-<!-- 友站链接：固定在底部，横条小图标，不占内容空间 -->
 <section class="friends-section" id="friendsSection" aria-label="友站链接" hidden>
   <div class="friends-inner">
     <span class="friends-label">友站</span>
@@ -182,6 +181,13 @@
     <div class="modal-body" id="modalBody"></div>
     <div class="modal-actions" id="modalActions"></div>
   </div>
+</div>
+
+<!-- 图片灯箱 -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片预览">
+  <button class="lightbox-close" id="lightboxClose" type="button" aria-label="关闭">×</button>
+  <img class="lightbox-img" id="lightboxImg" alt="">
+  <div class="lightbox-hint">点击空白处或按 Esc 关闭</div>
 </div>
 
 <script src="js/script.js" defer></script>
