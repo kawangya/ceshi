@@ -795,6 +795,14 @@
       qrEl.innerHTML = makeQRCode(20241018);
     }
 
+    // 左键点击二维码 → 灯箱放大；右键仍可新标签页打开原图
+    qrEl.addEventListener('click', function (e) {
+      // 图片已经加载失败、被替换成假码时不触发
+      if (!img.isConnected) return;
+      e.preventDefault();
+      openLightbox(img.src, img.alt || '公众号二维码');
+    });
+
     if (img.complete && img.naturalWidth === 0) { fallback(); return; }
     img.addEventListener('error', fallback, { once: true });
   }
