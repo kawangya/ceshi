@@ -64,11 +64,6 @@ body.modal-open { overflow: hidden; }
 
 /* =========================================================
    图片图标通用规则
-   ---------------------------------------------------------
-   所有图标容器（brand-mark / avatar / acc-ico / nav-ico /
-   friend-ico）都使用 position:relative + overflow:hidden，
-   内部 <img> 绝对定位铺满，加载失败时由 JS 隐藏，露出底层
-   渐变/字母占位。
    ========================================================= */
 .brand-mark, .avatar, .acc-ico, .nav-ico, .friend-ico {
   position: relative;
@@ -740,10 +735,14 @@ mark {
   text-decoration: none;
 }
 
-.qr-code img {
+.qr-code img,
+.qr-code svg {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.qr-code img {
   object-fit: contain;
   border-radius: 6px;
 }

@@ -1,20 +1,18 @@
 /* =========================================================
    卡王的导航 - 主脚本
    ---------------------------------------------------------
-   【图片预留说明】
-   - 顶栏 logo：images/brand.png
-   - 个人头像：images/avatar.png
-   - QQ / 邮箱 / B站 / 抖音：images/qq.png 等（见 index.html）
-   - 公众号二维码：images/qr.png
-   - 导航卡片图标：nav.json 中每个站点的 icon 字段
-   - 友站图标：friends.json 中每个友站的 icon 字段
-   图片不存在或加载失败时自动隐藏，回退到字母/渐变占位。
+   图片预留：
+   - 顶栏 logo / 头像：images/apple-touch-icon.png（HTML 中固定）
+   - QQ/邮箱/B站/抖音：images/qq.png 等（HTML 中固定）
+   - 公众号二维码：images/qr.png（HTML 中固定，缺失时回退假码）
+   - 导航图标：nav.json 的 icon 字段
+   - 友站图标：friends.json 的 icon 字段
+   图片不存在时自动隐藏，回退到字母/渐变占位。
 
-   【修改数据】
-   - 导航：nav.json
-   - 公告：notices.json
-   - 友站：friends.json
-   字段说明见各 JSON 文件顶部注释（用 README 或单独说明）。
+   数据文件：
+   - nav.json       导航分组
+   - notices.json   公告
+   - friends.json   友站（可选，缺失不影响主页面）
    ========================================================= */
 
 (function () {
@@ -23,7 +21,7 @@
   /* ============ 远程 JSON 地址 ============ */
   const NAV_URL = './nav.json';
   const NOTICE_URL = './notices.json';
-  const FRIENDS_URL = './friends.json';   // 可选，不存在也不影响主页面
+  const FRIENDS_URL = './friends.json';
 
   /* ============ 数据容器 ============ */
   let NAV_GROUPS = [];
@@ -101,7 +99,7 @@
     (root || document).querySelectorAll('img[data-fallback]').forEach(guardImg);
   }
 
-  /* ---------- 二维码（装饰用，仅二维码图片缺失时回退） ---------- */
+  /* ---------- 二维码占位（图片缺失时使用） ---------- */
   function makeQRCode(seed) {
     const SIZE = 25;
     const finders = [[0, 0], [SIZE - 7, 0], [0, SIZE - 7]];
@@ -668,13 +666,21 @@
     const qrEl = document.getElementById('qrCode');
     if (!qrEl) return;
     const img = qrEl.querySelector('img');
+
     if (!img) {
       qrEl.innerHTML = makeQRCode(20241018);
       return;
     }
+
     function fallback() {
+      // 图片不存在时，移除 <a> 的跳转，避免点击假码跳到 404 图片
+      qrEl.removeAttribute('href');
+      qrEl.removeAttribute('target');
+      qrEl.removeAttribute('rel');
+      qrEl.style.cursor = 'default';
       qrEl.innerHTML = makeQRCode(20241018);
     }
+
     if (img.complete && img.naturalWidth === 0) { fallback(); return; }
     img.addEventListener('error', fallback, { once: true });
   }
