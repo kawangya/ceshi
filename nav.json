@@ -1,0 +1,86 @@
+[
+  {
+    "id": "launcher",
+    "title": "启动器与版本库",
+    "items": [
+      { "name": "HMCL 启动器", "letter": "H", "color": "#4E7296", "desc": "开源跨平台 Java 版启动器", "url": "https://hmcl.huangyuhui.net" },
+      { "name": "网易版 MC", "letter": "网", "color": "#5F8468", "desc": "国服官方入口与资源", "url": "https://mc.163.com" },
+      { "name": "MC版本库", "letter": "版", "color": "#7A6E96", "desc": "bbk.endyun.ltd 版本汇总", "url": "http://bbk.endyun.ltd" },
+      { "name": "星月版本库", "letter": "星", "color": "#9A7250", "desc": "Spectrollay 维护的版本仓库", "url": "https://spectrollay.github.io/minecraft_repository" },
+      { "name": "MineAPK版本库", "letter": "A", "color": "#6B6F7A", "desc": "安卓版 MC 版本下载", "url": "https://www.mineapk.cn" },
+      { "name": "klplt国际版", "letter": "K", "color": "#4F7A9B", "desc": "国际版客户端下载站", "url": "http://mcapks.net" }
+    ]
+  },
+  {
+    "id": "skin",
+    "title": "皮肤与创作",
+    "items": [
+      { "name": "NameMC", "letter": "N", "color": "#4E7296", "desc": "正版皮肤查询与历史记录", "url": "https://namemc.com/" },
+      { "name": "MC 皮肤编辑器", "letter": "皮", "color": "#5F8468", "desc": "网页端皮肤绘制与编辑", "url": "https://minecraftskineditor.org/" },
+      { "name": "Blockbench", "letter": "B", "color": "#9A7250", "desc": "免费 3D 模型与皮肤建模工具，支持 MC 皮肤和实体模型", "url": "https://www.blockbench.net/" },
+      { "name": "壁纸生成器", "letter": "壁", "color": "#7A6E96", "desc": "MC 风格壁纸与头像生成", "url": "https://wallpapers.novaskin.me/" },
+      { "name": "LittleSkin", "letter": "L", "color": "#96697C", "desc": "国际皮肤站，支持上传与使用", "url": "https://littleskin.cn/" },
+      { "name": "MC 工具集", "letter": "工", "color": "#4F7A9B", "desc": "命令生成、药水计算等", "url": "https://minecraft.tools/" }
+    ]
+  },
+  {
+    "id": "community",
+    "title": "资源社区",
+    "items": [
+      { "name": "MC 百科", "letter": "科", "color": "#4E7296", "desc": "模组、教程、工具中文百科", "url": "https://www.mcmod.cn/" },
+      { "name": "MineBBS", "letter": "M", "color": "#5F8468", "desc": "中文 MC 论坛与资源社区", "url": "https://www.minebbs.com/" },
+      { "name": "苦力怕论坛", "letter": "苦", "color": "#9A7250", "desc": "基岩版资源与讨论社区", "url": "https://klpbbs.com/" },
+      { "name": "Planet Minecraft", "letter": "P", "color": "#7A6E96", "desc": "皮肤、地图、建筑作品社区", "url": "https://www.planetminecraft.com/" },
+      { "name": "CurseForge", "letter": "C", "color": "#96697C", "desc": "全球最大 MC 模组平台", "url": "https://www.curseforge.com/minecraft" },
+      { "name": "Modrinth", "letter": "M", "color": "#4F7A9B", "desc": "现代开源模组托管", "url": "https://modrinth.com/" },
+      { "name": "DL论坛", "letter": "D", "color": "#6B6F7A", "desc": "mcpedl.com 基岩版资源", "url": "https://mcpedl.com" }
+    ]
+  },
+  {
+    "id": "online",
+    "title": "联机与服务器",
+    "items": [
+      { "name": "Radmin LAN", "letter": "R", "color": "#4E7296", "desc": "虚拟局域网联机工具", "url": "https://www.radmin-lan.cn/" },
+      { "name": "樱花内网穿透", "letter": "樱", "color": "#9A7250", "desc": "免费内网穿透与联机", "url": "https://www.natfrp.com/" },
+      { "name": "ToDesk", "letter": "T", "color": "#5F8468", "desc": "远程控制与代安装必备", "url": "https://www.todesk.com/" },
+      { "name": "UU远程", "letter": "U", "color": "#7A6E96", "desc": "网易远程协助工具", "url": "https://uuyc.163.com/" }
+    ]
+  },
+  {
+    "id": "tools",
+    "title": "实用工具",
+    "items": [
+      { "name": "Bandizip", "letter": "B", "color": "#4E7296", "desc": "PC 高效解压，界面清爽", "url": "https://www.bandisoft.com/bandizip/" },
+      { "name": "7-Zip", "letter": "7", "color": "#5F8468", "desc": "开源免费压缩解压", "url": "https://www.7-zip.org/" },
+      { "name": "MT 管理器", "letter": "M", "color": "#9A7250", "desc": "安卓文件管理与 APK 编辑", "url": "https://mt2.cn/" },
+      { "name": "ZArchiver", "letter": "Z", "color": "#7A6E96", "desc": "安卓专业解压缩", "url": "https://kawang.lanzoul.com/izM822xcu82d" },
+      { "name": "NP 管理器", "letter": "N", "color": "#96697C", "desc": "安卓无广告文件管理", "url": "http://normalplayer.top" },
+      { "name": "Chunkbase", "letter": "C", "color": "#4F7A9B", "desc": "种子地图与结构查询", "url": "https://www.chunkbase.com/" },
+      { "name": "mclo.gs", "letter": "L", "color": "#6B6F7A", "desc": "MC 崩溃日志在线分析", "url": "https://mclo.gs/" },
+      { "name": "FusionApp 2.0", "letter": "F", "color": "#9A7250", "desc": "网页套壳生成安卓 APP", "url": "#" }
+    ]
+  },
+  {
+    "id": "games",
+    "title": "游戏与修改",
+    "items": [
+      { "name": "Steam", "letter": "S", "color": "#4E7296", "desc": "全球最大 PC 游戏平台", "url": "https://store.steampowered.com/" },
+      { "name": "Epic Games", "letter": "E", "color": "#6B6F7A", "desc": "每周免费游戏与虚幻引擎", "url": "https://www.epicgames.com/" },
+      { "name": "WeGame", "letter": "W", "color": "#5F8468", "desc": "腾讯游戏平台", "url": "https://www.wegame.com.cn" },
+      { "name": "itch.io", "letter": "i", "color": "#96697C", "desc": "独立游戏与开发者社区", "url": "https://itch.io/" },
+      { "name": "Nexus Mods", "letter": "N", "color": "#9A7250", "desc": "全球最大游戏模组网站", "url": "https://www.nexusmods.com/" },
+      { "name": "GameBanana", "letter": "G", "color": "#7A6E96", "desc": "多游戏模组资源站", "url": "https://gamebanana.com/" },
+      { "name": "风灵月影", "letter": "风", "color": "#4F7A9B", "desc": "免费单机游戏修改器", "url": "https://flingtrainer.com/" },
+      { "name": "WeMod", "letter": "W", "color": "#5F8468", "desc": "一站式游戏修改器平台", "url": "https://www.wemod.com/zh" },
+      { "name": "Cheat Engine", "letter": "C", "color": "#6B6F7A", "desc": "开源内存修改与调试", "url": "https://www.cheatengine.org/" }
+    ]
+  },
+  {
+    "id": "nav",
+    "title": "导航聚合",
+    "items": [
+      { "name": "MCNav 导航", "letter": "M", "color": "#4E7296", "desc": "综合 MC 资源导航站", "url": "https://www.mcnav.net/" },
+      { "name": "所见皆是 MC", "letter": "所", "color": "#5F8468", "desc": "MC 主题资源聚合", "url": "https://mcisee.top/" }
+    ]
+  }
+]

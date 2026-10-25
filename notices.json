@@ -1,0 +1,232 @@
+[
+  {
+    "id": 1,
+    "tag": "代发",
+    "tagClass": "tag-skin",
+    "pinned": true,
+    "title": "网易皮肤代发-长期开放",
+    "excerpt": "原创设计易过审，避免影视动漫版权内容。支持公众号、QQ、邮箱三种投稿方式。",
+    "sections": [
+      {
+        "type": "kv",
+        "title": "投稿方式",
+        "items": [
+          {
+            "label": "公众号",
+            "value": "卡王的小窝",
+            "note": "皮肤可以以文件形式发送，或发送网盘链接"
+          },
+          {
+            "label": "QQ",
+            "valueHtml": "<a href=\"https://qm.qq.com/q/rqS3pr5QkM\" target=\"_blank\" rel=\"noopener\">3596374598</a>（备注来意）",
+            "note": "皮肤可勾选原图直接发送，或以文件形式发送，或发送网盘链接"
+          },
+          {
+            "label": "邮箱",
+            "valueHtml": "<a href=\"mailto:panniyueya@qq.com\">panniyueya@qq.com</a>",
+            "note": "皮肤以附件形式添加，或发送网盘链接"
+          }
+        ]
+      },
+      {
+        "type": "num",
+        "title": "投稿须知",
+        "items": [
+          "原创设计易过审核 ✨",
+          "避免影视动漫角色等版权内容",
+          "更多须知见<a href=\"https://mc.163.com/dev/mcmanual/mc-dev/mcguide/35-上架与入驻/课程03-组件上架的规范及过审攻略.html\" target=\"_blank\" rel=\"noopener\">官方说明</a>"
+        ]
+      },
+      {
+        "type": "kv",
+        "title": "投稿格式",
+        "items": [
+          { "label": "皮肤名称", "value": "必填" },
+          { "label": "皮肤风格", "value": "原版 / 科幻 / 神话 / 其他" },
+          { "label": "皮肤类型", "value": "粗臂 / 细臂" },
+          { "label": "皮肤简介", "value": "可选项" },
+          { "label": "皮肤文件", "value": "按上方投稿方式发送" },
+          { "label": "皮肤封面", "value": "可选项" }
+        ]
+      },
+      {
+        "type": "text",
+        "title": "审核与回复",
+        "text": "审核周期通常为 3-7 天。审核结果会通过你投稿时使用的渠道回复；未通过时会附上简要原因，可修改后重新投稿，次数不限。"
+      }
+    ],
+    "links": [
+      { "text": "查看投稿演示", "url": "https://mp.weixin.qq.com/s/dQ9c5c7iXxCwPoyPrNNOQw" },
+      { "text": "失败案例", "url": "https://mp.weixin.qq.com/s/82rPeexuyKiRF3NwS8VlIg" }
+    ]
+  },
+  {
+    "id": 2,
+    "tag": "流量卡",
+    "tagClass": "tag-card",
+    "pinned": true,
+    "noModal": true,
+    "title": "免费领大额流量卡",
+    "excerpt": "点击卡片直接前往领取页面。",
+    "content": "",
+    "links": [
+      { "text": "立即领取", "url": "https://172.lot-ml.com/ProductEn/index/2afe80abb66de5b9" }
+    ]
+  },
+  {
+    "id": 4,
+    "tag": "知识",
+    "tagClass": "tag-know",
+    "title": "MC 崩溃日志分析指南",
+    "excerpt": "找到崩溃报告 → 上传 mclo.gs → 看 Description 和 Caused by → 带着链接求助。",
+    "sections": [
+      {
+        "type": "num",
+        "title": "一、找到崩溃报告",
+        "items": [
+          "打开 <code>.minecraft/crash-reports</code> 文件夹，找到最新的一份报告（文件名里带日期和时间）",
+          "如果 crash-reports 为空，去看 <code>.minecraft/logs/latest.log</code>",
+          "启动器崩溃的话，查看启动器自己目录下的日志文件"
+        ]
+      },
+      {
+        "type": "text",
+        "title": "二、上传并分享",
+        "text": "把崩溃报告或 latest.log 的内容上传到 <a href=\"https://mclo.gs/\" target=\"_blank\" rel=\"noopener\">mclo.gs</a>，得到一个可分享的短链接。不要直接截图或整段粘贴到聊天框，长文本会被截断，很难排查。"
+      },
+      {
+        "type": "num",
+        "title": "三、看这几个关键位置",
+        "items": [
+          "报告最上方的 <strong>Description</strong>：一句话说明崩溃类型",
+          "<strong>Caused by</strong>：真正的起因，通常会指向某个模组或类",
+          "最后一行的 <strong>at</strong> 列表：出问题的调用栈",
+          "看到 <code>OutOfMemoryError</code>：内存不足，调大分配内存",
+          "看到 <code>NoSuchMethodError</code> 或 <code>ClassNotFoundException</code>：通常是模组版本不匹配"
+        ]
+      },
+      {
+        "type": "num",
+        "title": "四、求助时附上",
+        "items": [
+          "mclo.gs 链接",
+          "游戏版本（如 1.20.1）",
+          "模组加载器及版本（Forge / Fabric / NeoForge）",
+          "模组列表（可在启动器里截图）",
+          "崩溃发生时的游戏截图"
+        ]
+      }
+    ],
+    "links": [
+      { "text": "在线分析", "url": "https://mclo.gs/" }
+    ]
+  },
+  {
+    "id": 5,
+    "tag": "教程",
+    "tagClass": "tag-tutor",
+    "title": "浏览器搜索语法速查",
+    "excerpt": "精确匹配、排除、站内搜索、文件类型、数值范围、引擎差异，附三条可直接套用的组合示例。",
+    "sections": [
+      {
+        "type": "text",
+        "title": "先说明",
+        "text": "下列语法在 Google、Bing、百度中大体通用，但各引擎支持程度不同。示例中的「关键词」替换成你要搜的内容即可。"
+      },
+      {
+        "type": "kv",
+        "title": "精确与排除",
+        "items": [
+          { "label": "\"完整短语\"", "value": "只返回包含完整短语的结果", "note": "示例：\"人工智能发展史\"" },
+          { "label": "-关键词", "value": "排除包含该词的页面", "note": "示例：苹果 -手机" },
+          { "label": "OR / |", "value": "搜索任意一个关键词", "note": "示例：Python教程 OR Java教程" },
+          { "label": "(A OR B) C", "value": "括号分组，组合逻辑", "note": "示例：(Python OR Java) 入门教程" }
+        ]
+      },
+      {
+        "type": "kv",
+        "title": "站内与文件",
+        "items": [
+          { "label": "site:域名", "value": "只在指定网站内搜索", "note": "示例：关键词 site:example.com" },
+          { "label": "filetype:pdf", "value": "限定文件类型", "note": "示例：关键词 filetype:pdf，支持 pdf/doc/ppt/xls 等" },
+          { "label": "intitle:关键词", "value": "关键词出现在标题中", "note": "示例：intitle:气候变化" },
+          { "label": "inurl:关键词", "value": "关键词出现在网址中", "note": "示例：inurl:blog" }
+        ]
+      },
+      {
+        "type": "kv",
+        "title": "高级运算符",
+        "items": [
+          { "label": "*", "value": "通配符，代替未知词", "note": "示例：\"如何*学习编程\"，匹配「如何快速学习编程」" },
+          { "label": "数字..数字", "value": "数值范围", "note": "示例：手机 价格 2000..5000" },
+          { "label": "related:域名", "value": "查找相似站点", "note": "示例：related:example.com" },
+          { "label": "define:词语", "value": "查询词语定义", "note": "示例：define:元宇宙" },
+          { "label": "AROUND(n)", "value": "两个词相距 n 个词以内（Google）", "note": "示例：AI AROUND(5) 伦理" },
+          { "label": "before: / after:", "value": "按日期筛选（Google 支持）", "note": "示例：关键词 after:2023-01-01" }
+        ]
+      },
+      {
+        "type": "text",
+        "title": "引擎差异",
+        "text": "Google 支持的语法最全，AROUND、before/after、define 等都能用。Bing 支持大部分基础语法，额外支持 contains: 查找包含特定文件类型的链接。百度支持 site:、filetype:、intitle:、双引号精确匹配和减号排除，但对 AROUND、before/after 等高级语法支持有限，遇到不生效时建议换到 Google 试。"
+      },
+      {
+        "type": "num",
+        "title": "组合示例",
+        "items": [
+          "<code>\"人工智能\" filetype:pdf site:edu.cn -过时</code> —— 在教育网站里找关于「人工智能」的 PDF，排除过时内容",
+          "<code>(Python OR Java) 入门教程 after:2023-01-01</code> —— 找 2023 年之后发布的 Python 或 Java 入门教程",
+          "<code>intitle:评测 手机 价格 2000..5000</code> —— 标题含「评测」、价格在 2000-5000 之间的手机评测"
+        ]
+      }
+    ],
+    "links": []
+  },
+  {
+    "id": 6,
+    "tag": "教程",
+    "tagClass": "tag-tutor",
+    "noModal": true,
+    "title": "蓝奏云 APK 下载教学",
+    "excerpt": "手机端提示“非会员不在支持分享 APK 文件”？切换电脑 UA 或用第三方工具即可下载。",
+    "content": "",
+    "links": [
+      { "text": "查看教学", "url": "https://mp.weixin.qq.com/s/KyisjncKDKrzFEzM6Fd4kA" }
+    ]
+  },
+  {
+    "id": 7,
+    "tag": "工具",
+    "tagClass": "tag-tool",
+    "noModal": true,
+    "title": "有趣的翻译工具",
+    "excerpt": "微信、QQ、腾讯电脑管家自带的截图翻译，Alt+A / Ctrl+Alt+A / Alt+D 一按就翻。",
+    "content": "",
+    "links": [
+      { "text": "查看介绍", "url": "https://mp.weixin.qq.com/s/fXPEWOPiUw_QUg8_We6URA" }
+    ]
+  },
+  {
+    "id": 8,
+    "tag": "工具",
+    "tagClass": "tag-tool",
+    "title": "皮肤编辑器资源（手机 + 电脑）",
+    "excerpt": "Skinseed 安卓汉化版 + Mcskin3d 电脑汉化版，蓝奏云下载，附提取密码。",
+    "sections": [
+      {
+        "type": "text",
+        "title": "说明",
+        "text": "两个皮肤编辑器的汉化版本，按设备选择。蓝奏云链接如下，提取密码请留意对应条目。"
+      },
+      {
+        "type": "num",
+        "title": "下载地址",
+        "items": [
+          "<strong>Skinseed 汉化版</strong>（手机 / 安卓）—— <a href=\"https://kawang.lanzoul.com/b0xwto5hg\" target=\"_blank\" rel=\"noopener\">蓝奏云下载</a>，提取密码 <code>kawang</code>",
+          "<strong>Mcskin3d 汉化版</strong>（电脑 / Windows）—— <a href=\"https://kawang.lanzoul.com/ieJDI423aszi\" target=\"_blank\" rel=\"noopener\">蓝奏云下载</a>"
+        ]
+      }
+    ],
+    "links": []
+  }
+]
