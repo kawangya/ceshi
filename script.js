@@ -1,13 +1,20 @@
 /* =========================================================
    卡王的导航 - 主脚本
    ---------------------------------------------------------
-   【修改导航 / 公告的方法】
-   1. 导航数据在 nav.json，公告数据在 notices.json。
-   2. 直接编辑这两个 JSON 文件即可增加/删除/修改内容。
-   3. 如果 JSON 放在远程，把下面 NAV_URL / NOTICE_URL 改成你的地址。
-   4. 注意 JSON 不支持注释，字段名必须用双引号。
-   5. 本地测试请用本地服务器（如 python -m http.server），
-      不要直接双击 index.html 用 file:// 打开，否则 fetch 可能失败。
+   【图片预留说明】
+   - 顶栏 logo：images/brand.png
+   - 个人头像：images/avatar.png
+   - QQ / 邮箱 / B站 / 抖音：images/qq.png 等（见 index.html）
+   - 公众号二维码：images/qr.png
+   - 导航卡片图标：nav.json 中每个站点的 icon 字段
+   - 友站图标：friends.json 中每个友站的 icon 字段
+   图片不存在或加载失败时自动隐藏，回退到字母/渐变占位。
+
+   【修改数据】
+   - 导航：nav.json
+   - 公告：notices.json
+   - 友站：friends.json
+   字段说明见各 JSON 文件顶部注释（用 README 或单独说明）。
    ========================================================= */
 
 (function () {
@@ -16,10 +23,12 @@
   /* ============ 远程 JSON 地址 ============ */
   const NAV_URL = './nav.json';
   const NOTICE_URL = './notices.json';
+  const FRIENDS_URL = './friends.json';   // 可选，不存在也不影响主页面
 
   /* ============ 数据容器 ============ */
   let NAV_GROUPS = [];
   let NOTICES = [];
+  let FRIENDS = [];
   let TAGS = ['全部'];
 
   /* ============ 状态 ============ */
@@ -37,6 +46,9 @@
   const groupNavEl    = document.getElementById('groupNav');
   const navTipEl      = document.getElementById('navTip');
 
+  const friendsSectionEl = document.getElementById('friendsSection');
+  const friendsGridEl    = document.getElementById('friendsGrid');
+
   const noticeBar     = document.getElementById('noticeBar');
   const barTag        = document.getElementById('barTag');
   const barText       = document.getElementById('barText');
@@ -49,7 +61,6 @@
 
   const searchEl      = document.getElementById('search');
   const themeBtn      = document.getElementById('themeBtn');
-  const qrCodeEl      = document.getElementById('qrCode');
   const backTopBtn    = document.getElementById('backTop');
 
   const modalMask     = document.getElementById('modalMask');
@@ -78,7 +89,19 @@
     window.open(url, '_blank', 'noopener');
   }
 
-  /* ---------- 二维码（装饰用） ---------- */
+  /* ---------- 图片加载失败处理 ---------- */
+  function guardImg(img) {
+    if (!img) return;
+    function fail() { img.style.display = 'none'; }
+    if (img.complete && img.naturalWidth === 0) { fail(); return; }
+    img.addEventListener('error', fail, { once: true });
+  }
+
+  function guardImgs(root) {
+    (root || document).querySelectorAll('img[data-fallback]').forEach(guardImg);
+  }
+
+  /* ---------- 二维码（装饰用，仅二维码图片缺失时回退） ---------- */
   function makeQRCode(seed) {
     const SIZE = 25;
     const finders = [[0, 0], [SIZE - 7, 0], [0, SIZE - 7]];
@@ -245,9 +268,16 @@
 
       const cards = items.map(function (it) {
         const hasDesc = !!it.desc;
+        const hasIcon = !!(it.icon && it.icon.trim());
+        const iconHtml = hasIcon
+          ? '<img data-fallback src="' + esc(it.icon) + '" alt="">'
+          : '';
+
         return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + '" ' +
                  'href="' + esc(it.url || '#') + '" target="_blank" rel="noopener">' +
-                 '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' + esc(it.letter || '') + '</span>' +
+                 '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
+                   '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
+                 '</span>' +
                  '<span class="nav-info">' +
                    '<span class="nav-name">' + highlight(it.name, q) + '</span>' +
                    (hasDesc ? '<span class="nav-desc">' + highlight(it.desc, q) + '</span>' : '') +
@@ -268,7 +298,39 @@
     navEmptyEl.hidden = shown > 0;
     siteCountEl.textContent = shown + ' 个站点';
 
+    guardImgs(navGroupsEl);
     bindNavTips();
+  }
+
+  /* ============ 友站渲染 ============ */
+  function renderFriends() {
+    if (!friendsSectionEl || !friendsGridEl) return;
+
+    if (!FRIENDS || !FRIENDS.length) {
+      friendsSectionEl.hidden = true;
+      friendsGridEl.innerHTML = '';
+      return;
+    }
+
+    friendsSectionEl.hidden = false;
+    friendsGridEl.innerHTML = FRIENDS.map(function (f) {
+      const hasIcon = !!(f.icon && f.icon.trim());
+      const iconHtml = hasIcon
+        ? '<img data-fallback src="' + esc(f.icon) + '" alt="">'
+        : '';
+
+      return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener">' +
+               '<span class="friend-ico" style="background:' + esc(f.color || '#4E7296') + '">' +
+                 '<span>' + esc(f.letter || '友') + '</span>' + iconHtml +
+               '</span>' +
+               '<span class="friend-info">' +
+                 '<span class="friend-name">' + esc(f.name || '') + '</span>' +
+                 (f.desc ? '<span class="friend-desc">' + esc(f.desc) + '</span>' : '') +
+               '</span>' +
+             '</a>';
+    }).join('');
+
+    guardImgs(friendsGridEl);
   }
 
   /* ============ 公告条：置顶公告轮换 ============ */
@@ -601,6 +663,22 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
+  /* ============ 公众号二维码：图片缺失时回退到占位假码 ============ */
+  function bindQRCodeFallback() {
+    const qrEl = document.getElementById('qrCode');
+    if (!qrEl) return;
+    const img = qrEl.querySelector('img');
+    if (!img) {
+      qrEl.innerHTML = makeQRCode(20241018);
+      return;
+    }
+    function fallback() {
+      qrEl.innerHTML = makeQRCode(20241018);
+    }
+    if (img.complete && img.naturalWidth === 0) { fallback(); return; }
+    img.addEventListener('error', fallback, { once: true });
+  }
+
   /* ============ 加载远程 JSON ============ */
   async function loadData() {
     try {
@@ -615,13 +693,24 @@
       NAV_GROUPS = await navRes.json();
       NOTICES = await noticeRes.json();
 
+      // 友站数据为可选，失败不影响主页面
+      try {
+        const fRes = await fetch(FRIENDS_URL);
+        if (fRes.ok) {
+          const data = await fRes.json();
+          FRIENDS = Array.isArray(data) ? data : [];
+        }
+      } catch (e) {
+        FRIENDS = [];
+      }
+
       TAGS = ['全部', ...new Set(NOTICES.map(n => n.tag))];
 
-      /* 渲染 */
       renderNoticeTabs();
       renderNav();
       renderNotices();
       renderNoticeBar();
+      renderFriends();
       updateBackTop();
     } catch (err) {
       console.error(err);
@@ -633,11 +722,13 @@
       noticeEmptyEl.textContent = '公告数据加载失败';
       noticeBar.hidden = true;
       siteCountEl.textContent = '';
+      if (friendsSectionEl) friendsSectionEl.hidden = true;
     }
   }
 
   /* ============ 启动 ============ */
-  qrCodeEl.innerHTML = makeQRCode(20241018);
+  guardImgs(document);
+  bindQRCodeFallback();
   updateBackTop();
   loadData();
 })();

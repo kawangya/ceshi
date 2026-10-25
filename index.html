@@ -3,7 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="卡王 ">
+<meta name="description" content="卡王的导航">
 <title>卡王的导航</title>
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<meta property="og:title" content="卡王的导航">
+<meta property="og:description" content="我的世界（Minecraft）资源、工具与实用链接一站式入口">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kawangya.github.io/ceshi/">
+<meta property="og:image" content="https://kawangya.github.io/ceshi/images/apple-touch-icon.png">
+
 
 <script>
   (function () {
@@ -22,7 +32,9 @@
 <header class="topbar">
   <div class="topbar-inner">
     <div class="brand">
-      <span class="brand-mark"></span>
+      <span class="brand-mark">
+        <img data-fallback src="images/apple-touch-icon.png" alt="卡王的导航">
+      </span>
       <span class="brand-name">卡王的导航</span>
     </div>
 
@@ -67,12 +79,21 @@
     <div class="group-nav" id="groupNav"></div>
     <div id="navGroups"></div>
     <div class="empty empty-lg" id="navEmpty" hidden>没有找到匹配的站点</div>
+
+    <!-- 友站链接 -->
+    <section class="friends-section" id="friendsSection" aria-label="友站链接" hidden>
+      <h2 class="friends-title">友站链接</h2>
+      <div class="friends-grid" id="friendsGrid"></div>
+    </section>
   </section>
 
   <aside class="side-col">
     <section class="panel" aria-label="个人账号">
       <div class="profile-top">
-        <div class="avatar">卡</div>
+        <div class="avatar">
+          <span>卡</span>
+          <img data-fallback src="images/apple-touch-icon.png" alt="卡王">
+        </div>
         <div class="profile-meta">
           <div class="profile-name">卡王</div>
           <div class="profile-bio">MC 资源 / 皮肤代发 / 工具推荐</div>
@@ -81,29 +102,43 @@
 
       <div class="account-list">
         <a class="account-item" href="https://qm.qq.com/q/rqS3pr5QkM" target="_blank" rel="noopener" title="QQ：3596374598">
-          <span class="acc-ico" style="background:#4E7296">Q</span>
+          <span class="acc-ico" style="background:#4E7296">
+            <span>Q</span>
+            <img data-fallback src="images/qq.png" alt="QQ">
+          </span>
           <span class="acc-label">QQ</span>
           <span class="acc-value">3596374598</span>
         </a>
         <a class="account-item" href="mailto:panniyueya@qq.com" title="邮箱：panniyueya@qq.com">
-          <span class="acc-ico" style="background:#9A7250">邮</span>
+          <span class="acc-ico" style="background:#9A7250">
+            <span>邮</span>
+            <img data-fallback src="images/email.png" alt="邮箱">
+          </span>
           <span class="acc-label">邮箱</span>
           <span class="acc-value">panniyueya@qq.com</span>
         </a>
         <a class="account-item" href="https://space.bilibili.com/526424144" target="_blank" rel="noopener" title="哔哩哔哩">
-          <span class="acc-ico" style="background:#96697C">B</span>
+          <span class="acc-ico" style="background:#96697C">
+            <span>B</span>
+            <img data-fallback src="images/bilibili.png" alt="B站">
+          </span>
           <span class="acc-label">B站</span>
           <span class="acc-value">哔哩哔哩</span>
         </a>
         <a class="account-item" href="https://v.douyin.com/iLSLj2mq/" target="_blank" rel="noopener" title="抖音">
-          <span class="acc-ico" style="background:#3F3C48">抖</span>
+          <span class="acc-ico" style="background:#3F3C48">
+            <span>抖</span>
+            <img data-fallback src="images/douyin.png" alt="抖音">
+          </span>
           <span class="acc-label">抖音</span>
           <span class="acc-value">抖音主页</span>
         </a>
       </div>
 
       <div class="qr-block">
-        <div class="qr-code" id="qrCode" title="公众号二维码"></div>
+        <a class="qr-code" id="qrCode" href="images/qr.png" target="_blank" rel="noopener" title="点击查看大图">
+          <img src="images/qr.png" alt="卡王的小窝 公众号二维码">
+        </a>
         <div class="qr-text">
           <div class="qr-title">公众号</div>
           <div class="qr-desc">扫码关注「卡王的小窝」，获取皮肤代发与资源更新</div>

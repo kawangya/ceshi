@@ -62,6 +62,33 @@ body.modal-open { overflow: hidden; }
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-mute); }
 
+/* =========================================================
+   图片图标通用规则
+   ---------------------------------------------------------
+   所有图标容器（brand-mark / avatar / acc-ico / nav-ico /
+   friend-ico）都使用 position:relative + overflow:hidden，
+   内部 <img> 绝对定位铺满，加载失败时由 JS 隐藏，露出底层
+   渐变/字母占位。
+   ========================================================= */
+.brand-mark, .avatar, .acc-ico, .nav-ico, .friend-ico {
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-mark img,
+.avatar img,
+.acc-ico img,
+.nav-ico img,
+.friend-ico img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: inherit;
+}
+
 /* ---------- 顶栏 ---------- */
 .topbar {
   position: sticky;
@@ -96,8 +123,8 @@ body.modal-open { overflow: hidden; }
 }
 
 .brand-mark {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 6px;
   background: linear-gradient(140deg, var(--accent), #8FA8BE);
   box-shadow: 0 2px 6px rgba(78, 114, 150, .25);
@@ -496,6 +523,105 @@ mark {
   }
 }
 
+/* ---------- 友站链接 ---------- */
+.friends-section {
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 1px dashed var(--border);
+}
+
+.friends-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-mute);
+  letter-spacing: .02em;
+}
+
+.friends-title::before {
+  content: '';
+  width: 3px;
+  height: 11px;
+  border-radius: 2px;
+  background: var(--border-strong);
+}
+
+.friends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 9px;
+}
+
+.friend-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .18s ease, box-shadow .18s ease,
+              transform .18s ease, background-color .3s ease;
+}
+
+.friend-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+.friend-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.friend-ico {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .08);
+}
+
+.friend-info {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.friend-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.friend-desc {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ---------- 侧栏 ---------- */
 .side-col {
   position: sticky;
@@ -602,6 +728,7 @@ mark {
 }
 
 .qr-code {
+  display: block;
   width: 76px;
   height: 76px;
   flex-shrink: 0;
@@ -610,9 +737,16 @@ mark {
   background: #fff;
   border: 1px solid var(--border);
   box-shadow: 0 1px 3px rgba(60, 50, 40, .06);
+  text-decoration: none;
 }
 
-.qr-code svg { display: block; width: 100%; height: 100%; }
+.qr-code img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
 
 .qr-text { min-width: 0; }
 .qr-title { font-size: 13px; font-weight: 600; }
@@ -1075,6 +1209,7 @@ mark {
   .nav-grid { grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); }
   .nav-card { padding: 11px 12px; }
   .nav-ico { width: 30px; height: 30px; font-size: 12px; border-radius: 8px; }
+  .friends-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
   .modal-mask { padding: 14px; }
   .modal { max-height: 88vh; }
   .modal-head { padding: 16px 18px 0; }
