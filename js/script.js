@@ -26,7 +26,7 @@
   const FRIENDS_URL = './data/friends.json';
 
   /* ============ 数据容器 ============ */
-  let NAV_CATEGORIES = [];   // [{ id, title, default, groups: [...] }]
+  let NAV_CATEGORIES = [];
   let NOTICES = [];
   let FRIENDS = [];
   let TAGS = ['全部'];
@@ -75,6 +75,7 @@
   const lightbox      = document.getElementById('lightbox');
   const lightboxImg   = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxOpen  = document.getElementById('lightboxOpen');
 
   /* ============ 工具 ============ */
   function esc(str) {
@@ -145,6 +146,35 @@
     return '<svg viewBox="-1 -1 ' + (SIZE + 2) + ' ' + (SIZE + 2) + '" ' +
            'xmlns="http://www.w3.org/2000/svg" fill="#2B2B2B" shape-rendering="crispEdges">' +
            '<path d="' + path + '"/>' + finderSvg + '</svg>';
+  }
+
+  /* ============ 图片灯箱 ============ */
+  function openLightbox(src, alt) {
+    if (!src || !lightbox) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    if (lightboxOpen) lightboxOpen.href = src;
+    lightbox.classList.add('show');
+    document.body.classList.add('modal-open');
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.remove('show');
+    lightboxImg.src = '';
+    if (!modalMask.classList.contains('show')) {
+      document.body.classList.remove('modal-open');
+    }
+  }
+
+  if (lightboxClose) {
+    lightboxClose.addEventListener('click', closeLightbox);
+  }
+
+  if (lightbox) {
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox) closeLightbox();
+    });
   }
 
   /* ============ 导航提示浮层 ============ */
@@ -255,7 +285,7 @@
       tab.addEventListener('click', function () {
         if (activeCategoryId === tab.dataset.cat) return;
         activeCategoryId = tab.dataset.cat;
-        activeGroupId = 'all';   // 切大类时重置分组
+        activeGroupId = 'all';
         hideTip();
         renderNav();
       });
@@ -538,30 +568,6 @@
     });
   }
 
-  /* ============ 图片灯箱 ============ */
-  function openLightbox(src, alt) {
-    if (!src) return;
-    lightboxImg.src = src;
-    lightboxImg.alt = alt || '';
-    lightbox.classList.add('show');
-    document.body.classList.add('modal-open');
-  }
-
-  function closeLightbox() {
-    lightbox.classList.remove('show');
-    lightboxImg.src = '';
-    // 公告弹窗还开着时保留滚动锁
-    if (!modalMask.classList.contains('show')) {
-      document.body.classList.remove('modal-open');
-    }
-  }
-
-  lightboxClose.addEventListener('click', closeLightbox);
-
-  lightbox.addEventListener('click', function (e) {
-    if (e.target === lightbox) closeLightbox();
-  });
-
   /* ============ 结构化内容渲染 ============ */
   function renderStructuredBody(sections) {
     const frag = document.createDocumentFragment();
@@ -578,8 +584,6 @@
       }
 
       if (sec.type === 'image') {
-        // 图片段落：src 必填；alt / caption / href / maxWidth 可选
-        // 点击图片打开灯箱；右键仍可在新标签页打开原图
         const fig = document.createElement('figure');
         fig.className = 'section-figure';
 
@@ -604,7 +608,7 @@
             a.replaceWith(ph);
           }, { once: true });
 
-          // 左键 → 灯箱
+          // 左键 → 灯箱；右键仍可新标签页打开
           a.addEventListener('click', function (e) {
             e.preventDefault();
             openLightbox(src, img.alt);
@@ -730,8 +734,7 @@
 
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
-    // 灯箱优先关闭
-    if (lightbox.classList.contains('show')) {
+    if (lightbox && lightbox.classList.contains('show')) {
       closeLightbox();
       return;
     }
@@ -828,7 +831,6 @@
 
       NOTICES = await noticeRes.json();
 
-      // 友站数据为可选，失败不影响主页面
       try {
         const fRes = await fetch(FRIENDS_URL);
         if (fRes.ok) {
@@ -839,7 +841,6 @@
         FRIENDS = [];
       }
 
-      /* 选中默认大类：优先 default: true，其次第一个 */
       const def = NAV_CATEGORIES.find(function (c) { return c.default; }) || NAV_CATEGORIES[0];
       activeCategoryId = def ? def.id : '';
       activeGroupId = 'all';

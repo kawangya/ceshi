@@ -299,6 +299,8 @@ body.modal-open { overflow: hidden; }
   letter-spacing: .01em;
 }
 
+.site-count { font-size: 12.5px; color: var(--text-mute); }
+
 /* ---------- 大类切换 ---------- */
 .cat-nav {
   display: flex;
@@ -348,8 +350,6 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 640px) {
   .cat-tab { padding: 6px 11px 8px; font-size: 13px; }
 }
-
-.site-count { font-size: 12.5px; color: var(--text-mute); }
 
 .group-nav {
   display: flex;
@@ -1096,6 +1096,159 @@ mark {
   line-height: 1;
 }
 
+/* ---------- 公告内图片 ---------- */
+.section-figure {
+  margin: 0;
+}
+
+.section-figure a {
+  display: block;
+  text-decoration: none;
+}
+
+.section-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  cursor: zoom-in;
+  transition: opacity .18s ease;
+}
+
+.section-figure a:hover img { opacity: .92; }
+
+.section-figure figcaption {
+  margin-top: 7px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-mute);
+  text-align: center;
+}
+
+.section-img-fail {
+  padding: 26px 12px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-mute);
+  background: var(--surface-2);
+  border: 1px dashed var(--border-strong);
+  border-radius: 10px;
+}
+
+/* text / num / kv 里手写的 <img> 也约束尺寸 */
+.modal-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* ---------- 图片灯箱 ---------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px 76px;
+  background: rgba(15, 14, 12, .88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease, visibility .2s;
+  cursor: zoom-out;
+}
+
+.lightbox.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: calc(100vh - 116px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .55);
+  cursor: default;
+  user-select: none;
+  -webkit-user-drag: none;
+  background: #fff;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, .18);
+  border-color: rgba(255, 255, 255, .35);
+}
+
+.lightbox-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 14px 20px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, .55);
+  background: linear-gradient(to top, rgba(0, 0, 0, .55), rgba(0, 0, 0, 0));
+  cursor: default;
+}
+
+.lightbox-open {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .25);
+  background: rgba(255, 255, 255, .1);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background .18s ease, border-color .18s ease;
+}
+
+.lightbox-open:hover {
+  background: rgba(255, 255, 255, .22);
+  border-color: rgba(255, 255, 255, .4);
+}
+
+.lightbox-hint { pointer-events: none; white-space: nowrap; }
+
+@media (max-width: 640px) {
+  .lightbox { padding: 20px 12px 66px; }
+  .lightbox-close { top: 10px; right: 10px; width: 36px; height: 36px; font-size: 20px; }
+  .lightbox-hint { display: none; }
+}
+
 /* ---------- 回到顶部 ---------- */
 .back-top {
   position: fixed;
@@ -1273,127 +1426,4 @@ mark {
     animation-duration: .01ms !important;
     transition-duration: .01ms !important;
   }
-}
-
-/* ---------- 公告内图片 ---------- */
-.section-figure {
-  margin: 0;
-}
-
-.section-figure a {
-  display: block;
-  text-decoration: none;
-}
-
-.section-figure img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  margin: 0 auto;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-  cursor: zoom-in;
-}
-
-.section-figure figcaption {
-  margin-top: 7px;
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--text-mute);
-  text-align: center;
-}
-
-.section-img-fail {
-  padding: 26px 12px;
-  text-align: center;
-  font-size: 12px;
-  color: var(--text-mute);
-  background: var(--surface-2);
-  border: 1px dashed var(--border-strong);
-  border-radius: 10px;
-}
-
-/* text / num / kv 里手写的 <img> 也约束尺寸 */
-.modal-body img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-/* ---------- 图片灯箱 ---------- */
-.lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 120;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 24px;
-  background: rgba(15, 14, 12, .88);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .2s ease, visibility .2s;
-  cursor: zoom-out;
-}
-
-.lightbox.show {
-  opacity: 1;
-  visibility: visible;
-}
-
-.lightbox-img {
-  max-width: 100%;
-  max-height: calc(100vh - 80px);
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .55);
-  cursor: default;
-  user-select: none;
-  -webkit-user-drag: none;
-  background: #fff;
-}
-
-.lightbox-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, .2);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .08);
-  color: #fff;
-  font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
-  transition: background .18s ease, border-color .18s ease;
-}
-
-.lightbox-close:hover {
-  background: rgba(255, 255, 255, .18);
-  border-color: rgba(255, 255, 255, .35);
-}
-
-.lightbox-hint {
-  position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  color: rgba(255, 255, 255, .5);
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-@media (max-width: 640px) {
-  .lightbox { padding: 20px 12px; }
-  .lightbox-close { top: 10px; right: 10px; width: 36px; height: 36px; font-size: 20px; }
-  .lightbox-hint { display: none; }
 }
