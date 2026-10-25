@@ -876,6 +876,21 @@
     }
   }
 
+  /* ============ 点击 logo：回顶 / 刷新 ============ */
+  (function initBrandHome() {
+    const brand = document.querySelector('.brand');
+    if (!brand) return;
+
+    brand.addEventListener('click', function (e) {
+      // 已经在顶部 → 放行默认 <a href="./">，等于刷新页面
+      if (window.scrollY <= 8) return;
+
+      // 否则平滑回顶，不刷新
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
+
   /* ============ 启动 ============ */
   guardImgs(document);
   bindQRCodeFallback();
