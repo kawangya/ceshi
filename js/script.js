@@ -19,9 +19,9 @@
   'use strict';
 
   /* ============ 远程 JSON 地址 ============ */
-  const NAV_URL = './nav.json';
-  const NOTICE_URL = './notices.json';
-  const FRIENDS_URL = './friends.json';
+  const NAV_URL = './data/nav.json';
+  const NOTICE_URL = './data/notices.json';
+  const FRIENDS_URL = './data/friends.json';
 
   /* ============ 数据容器 ============ */
   let NAV_GROUPS = [];
@@ -724,8 +724,7 @@
     } catch (err) {
       console.error(err);
       navGroupsEl.innerHTML =
-        '<div class="empty empty-lg">数据加载失败，请检查 nav.json / notices.json 路径，' +
-        '并使用本地服务器打开页面。</div>';
+        '导航数据加载失败';
       noticeListEl.innerHTML = '';
       noticeEmptyEl.hidden = false;
       noticeEmptyEl.textContent = '公告数据加载失败';

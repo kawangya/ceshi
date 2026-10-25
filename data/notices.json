@@ -74,6 +74,29 @@
     ]
   },
   {
+    "id": 3,
+    "tag": "工具",
+    "tagClass": "tag-tool",
+    "title": "皮肤编辑器资源（手机 + 电脑）",
+    "excerpt": "Skinseed 安卓汉化版 + Mcskin3d 电脑汉化版，蓝奏云下载，附提取密码。",
+    "sections": [
+      {
+        "type": "text",
+        "title": "说明",
+        "text": "两个皮肤编辑器的汉化版本，按设备选择。蓝奏云链接如下，提取密码请留意对应条目。"
+      },
+      {
+        "type": "num",
+        "title": "下载地址",
+        "items": [
+          "<strong>Skinseed 汉化版</strong>（手机 / 安卓）—— <a href=\"https://kawang.lanzoul.com/b0xwto5hg\" target=\"_blank\" rel=\"noopener\">蓝奏云下载</a>，提取密码 <code>kawang</code>",
+          "<strong>Mcskin3d 汉化版</strong>（电脑 / Windows）—— <a href=\"https://kawang.lanzoul.com/ieJDI423aszi\" target=\"_blank\" rel=\"noopener\">蓝奏云下载</a>"
+        ]
+      }
+    ],
+    "links": []
+  },
+  {
     "id": 4,
     "tag": "知识",
     "tagClass": "tag-know",
@@ -205,28 +228,5 @@
     "links": [
       { "text": "查看介绍", "url": "https://mp.weixin.qq.com/s/fXPEWOPiUw_QUg8_We6URA" }
     ]
-  },
-  {
-    "id": 8,
-    "tag": "工具",
-    "tagClass": "tag-tool",
-    "title": "皮肤编辑器资源（手机 + 电脑）",
-    "excerpt": "Skinseed 安卓汉化版 + Mcskin3d 电脑汉化版，蓝奏云下载，附提取密码。",
-    "sections": [
-      {
-        "type": "text",
-        "title": "说明",
-        "text": "两个皮肤编辑器的汉化版本，按设备选择。蓝奏云链接如下，提取密码请留意对应条目。"
-      },
-      {
-        "type": "num",
-        "title": "下载地址",
-        "items": [
-          "<strong>Skinseed 汉化版</strong>（手机 / 安卓）—— <a href=\"https://kawang.lanzoul.com/b0xwto5hg\" target=\"_blank\" rel=\"noopener\">蓝奏云下载</a>，提取密码 <code>kawang</code>",
-          "<strong>Mcskin3d 汉化版</strong>（电脑 / Windows）—— <a href=\"https://kawang.lanzoul.com/ieJDI423aszi\" target=\"_blank\" rel=\"noopener\">蓝奏云下载</a>"
-        ]
-      }
-    ],
-    "links": []
   }
 ]
