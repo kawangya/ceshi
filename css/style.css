@@ -1182,7 +1182,8 @@ mark {
   opacity: 0;
   visibility: hidden;
   transition: opacity .2s ease, visibility .2s;
-  cursor: zoom-out;
+  cursor: default;
+  overflow: hidden;
 }
 
 .lightbox.show {
@@ -1198,10 +1199,17 @@ mark {
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, .55);
-  cursor: default;
+  cursor: zoom-in;
   user-select: none;
   -webkit-user-drag: none;
   background: #fff;
+  transform-origin: center center;
+  will-change: transform;
+  touch-action: none;
+}
+
+.lightbox-img.dragging {
+  cursor: grabbing;
 }
 
 .lightbox-close {
@@ -1235,7 +1243,7 @@ mark {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 10px;
   flex-wrap: wrap;
   padding: 14px 20px;
   font-size: 12px;
@@ -1259,6 +1267,29 @@ mark {
 }
 
 .lightbox-open:hover {
+  background: rgba(255, 255, 255, .22);
+  border-color: rgba(255, 255, 255, .4);
+}
+
+.lightbox-zoom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 62px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .25);
+  background: rgba(255, 255, 255, .1);
+  color: #fff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease;
+}
+
+.lightbox-zoom:hover {
   background: rgba(255, 255, 255, .22);
   border-color: rgba(255, 255, 255, .4);
 }
