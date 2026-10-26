@@ -44,6 +44,8 @@
   const navEmptyEl    = document.getElementById('navEmpty');
   const navSearchEl   = document.getElementById('navSearch');
   const catNavEl      = document.getElementById('catNav');
+  const catFootEl     = document.getElementById('catFoot');
+  const catRandomEl   = document.getElementById('catRandom');
   const groupNavEl    = document.getElementById('groupNav');
   const navTipEl      = document.getElementById('navTip');
 
@@ -443,6 +445,50 @@
 
   window.addEventListener('scroll', hideTip, { passive: true });
   window.addEventListener('resize', hideTip, { passive: true });
+
+  /* ============ 左侧底部：随机逛逛（只在当前大类中随机） ============ */
+  function collectSitesInCategory(catId) {
+    var cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
+    if (!cat) return [];
+    var list = [];
+    (cat.groups || []).forEach(function (g) {
+      (g.items || []).forEach(function (it) {
+        if (it && it.url && it.url !== '#') list.push(it);
+      });
+    });
+    return list;
+  }
+
+  function initCatRandom() {
+    if (!catRandomEl) return;
+    catRandomEl.addEventListener('click', function () {
+      var list = collectSitesInCategory(activeCategoryId);
+      if (!list.length) return;
+      var pick = list[Math.floor(Math.random() * list.length)];
+      window.open(pick.url, '_blank', 'noopener');
+    });
+  }
+
+  /* ============ 骨架屏 ============ */
+  function renderNavSkeleton() {
+    var cards = '';
+    for (var i = 0; i < 6; i++) {
+      cards += '<div class="skeleton skeleton-card"></div>';
+    }
+    navGroupsEl.innerHTML =
+      '<div class="nav-group">' +
+        '<div class="skeleton skeleton-group-title"></div>' +
+        '<div class="nav-grid">' + cards + '</div>' +
+      '</div>';
+  }
+
+  function renderNoticeSkeleton() {
+    var items = '';
+    for (var i = 0; i < 3; i++) {
+      items += '<li class="skeleton skeleton-notice"></li>';
+    }
+    noticeListEl.innerHTML = items;
+  }
 
   /* ============ 导航渲染（大类 → 分组 → 站点） ============ */
   function renderNav() {
@@ -921,6 +967,7 @@
     clearTimeout(navSearchTimer);
     const value = e.target.value;
     navSearchTimer = setTimeout(function () {
+      if (!NAV_CATEGORIES.length) return;   // 数据还没加载完，忽略输入
       navKeyword = value;
       if (navKeyword.trim() && activeGroupId !== 'all') {
         activeGroupId = 'all';
@@ -948,6 +995,19 @@
     document.documentElement.dataset.theme = next;
     try { localStorage.setItem('site.theme', next); } catch (e) {}
   });
+
+  /* 系统主题变化时自动跟随（用户手动选过主题则不跟随） */
+  (function initSystemThemeWatcher() {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function onChange(e) {
+      try {
+        if (localStorage.getItem('site.theme')) return;
+      } catch (err) {}
+      document.documentElement.dataset.theme = e.matches ? 'dark' : 'light';
+    }
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else if (mq.addListener) mq.addListener(onChange);
+  })();
 
   /* ============ 回到顶部 ============ */
   function updateBackTop() {
@@ -1026,10 +1086,14 @@
       activeCategoryId = def ? def.id : '';
       activeGroupId = 'all';
 
+      if (catFootEl) catFootEl.hidden = false;
+      renderNav();
+
       renderNav();
     } catch (err) {
       console.error(err);
       if (navSearchEl) navSearchEl.hidden = true;
+      if (catFootEl) catFootEl.hidden = true;
       catNavEl.innerHTML = '';
       groupNavEl.innerHTML = '';
       navGroupsEl.innerHTML = '<div class="empty empty-lg">导航数据加载失败</div>';
@@ -1073,5 +1137,8 @@
   guardImgs(document);
   bindQRCodeFallback();
   updateBackTop();
+  initCatRandom();
+  renderNavSkeleton();
+  renderNoticeSkeleton();
   loadData();
 })();
