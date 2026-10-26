@@ -297,10 +297,16 @@ body.modal-open { overflow: hidden; }
   align-items: start;
 }
 
-/* ---------- 左侧：大类导航 ---------- */
+/* ---------- 左侧：大类导航（整列一张卡片） ---------- */
 .cat-col {
   position: sticky;
   top: 84px;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: background-color .3s ease, border-color .3s ease;
 }
 
 .cat-nav {
@@ -316,9 +322,9 @@ body.modal-open { overflow: hidden; }
   justify-content: space-between;
   gap: 8px;
   width: 100%;
-  padding: 8px 10px 8px 14px;
-  border: 1px solid transparent;
-  border-radius: 10px;
+  padding: 8px 10px 8px 16px;
+  border: none;
+  border-radius: 8px;
   background: transparent;
   color: var(--text-dim);
   font-family: inherit;
@@ -326,7 +332,21 @@ body.modal-open { overflow: hidden; }
   font-weight: 500;
   text-align: left;
   cursor: pointer;
-  transition: color .18s ease, background-color .18s ease, border-color .18s ease;
+  transition: color .18s ease, background-color .18s ease;
+}
+
+/* 左侧竖条指示器：默认透明 */
+.cat-tab::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background-color .18s ease, height .18s ease;
 }
 
 .cat-tab:hover {
@@ -334,10 +354,20 @@ body.modal-open { overflow: hidden; }
   background: var(--surface-2);
 }
 
+.cat-tab:hover::before {
+  background: var(--border-strong);
+  height: 18px;
+}
+
 .cat-tab.active {
   color: var(--accent);
   background: var(--accent-soft);
   font-weight: 600;
+}
+
+.cat-tab.active::before {
+  background: var(--accent);
+  height: 20px;
 }
 
 .cat-tab-name {
@@ -349,36 +379,26 @@ body.modal-open { overflow: hidden; }
 
 .cat-tab-count {
   flex-shrink: 0;
-  min-width: 22px;
-  padding: 0 6px;
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 500;
-  line-height: 18px;
-  text-align: center;
   color: var(--text-mute);
-  background: rgba(0, 0, 0, .05);
-  border-radius: 6px;
-  transition: background-color .18s ease, color .18s ease;
-}
-
-[data-theme="dark"] .cat-tab-count {
-  background: rgba(255, 255, 255, .08);
+  opacity: .75;
+  transition: color .18s ease, opacity .18s ease;
 }
 
 .cat-tab.active .cat-tab-count {
-  background: rgba(78, 114, 150, .15);
   color: var(--accent);
-}
-
-[data-theme="dark"] .cat-tab.active .cat-tab-count {
-  background: rgba(143, 180, 210, .18);
-  color: var(--accent);
+  opacity: .85;
 }
 
 /* ---------- 中间：导航内容 ---------- */
-/* 搜索框独占一行，白底 + 阴影让它跳出来 */
+/* 搜索框独占一行，sticky 常驻，白底 + 阴影 */
 .nav-search {
-  margin-bottom: 16px;
+  position: sticky;
+  top: 60px;
+  z-index: 20;
+  padding: 8px 0 16px;
+  background: var(--bg);
 }
 
 .nav-search .search-wrap {
@@ -1509,9 +1529,14 @@ mark {
     padding: 22px 16px 40px;
   }
 
-  /* 大类恢复成顶部横向 */
+  /* 大类恢复成顶部横向，去掉卡片样式 */
   .cat-col {
     position: static;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .cat-nav {
@@ -1526,15 +1551,18 @@ mark {
   .cat-nav::-webkit-scrollbar { display: none; }
 
   .cat-tab {
+    position: relative;
     flex-shrink: 0;
     width: auto;
-    padding: 7px 10px 7px 12px;
-    border: none;
+    padding: 7px 12px 9px;
     border-radius: 0;
     background: transparent;
     text-align: center;
     overflow: visible;
   }
+
+  /* 横排时隐藏左侧竖条，靠底部下划线标识 */
+  .cat-tab::before { display: none; }
 
   .cat-tab:hover { background: transparent; color: var(--text); }
 
@@ -1556,16 +1584,11 @@ mark {
   }
 
   .cat-tab-count {
-    background: transparent;
-    min-width: 0;
-    padding: 0;
     font-size: 10.5px;
-    color: var(--text-mute);
     opacity: .8;
   }
 
   .cat-tab.active .cat-tab-count {
-    background: transparent;
     color: var(--accent);
     opacity: 1;
   }
