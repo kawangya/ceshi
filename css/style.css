@@ -376,9 +376,9 @@ body.modal-open { overflow: hidden; }
 }
 
 /* ---------- 中间：导航内容 ---------- */
-/* 搜索框独占一行 */
+/* 搜索框独占一行，白底 + 阴影让它跳出来 */
 .nav-search {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .nav-search .search-wrap {
@@ -386,8 +386,27 @@ body.modal-open { overflow: hidden; }
 }
 
 .nav-search .search-wrap input {
-  height: 38px;
-  font-size: 13.5px;
+  height: 40px;
+  padding: 0 16px 0 40px;
+  font-size: 14px;
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.nav-search .search-wrap input::placeholder {
+  color: var(--text-mute);
+}
+
+.nav-search .search-wrap input:focus {
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow);
+}
+
+.nav-search .search-icon {
+  left: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 .group-nav {
@@ -1557,7 +1576,8 @@ mark {
 
 @media (max-width: 640px) {
   .topbar-inner { padding: 0 14px; gap: 10px; }
-  .brand-name { display: none; }
+  .brand { gap: 9px; font-size: 15.5px; }
+  .brand-mark { width: 26px; height: 26px; }
   .notice-bar-inner { padding: 7px 14px; }
 
   .cat-tab { padding: 6px 8px 8px 10px; font-size: 13px; }
