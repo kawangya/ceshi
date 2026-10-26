@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN" data-theme="light" data-theme-color="default">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,8 +18,24 @@
   (function () {
     try {
       var s = localStorage.getItem('site.theme');
-      if (s) document.documentElement.dataset.theme = s;
-      else if (matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.dataset.theme = 'dark';
+      var theme;
+      if (!s || s === 'system') {
+        theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      } else {
+        theme = s;
+      }
+      document.documentElement.dataset.theme = theme;
+
+      var raw = localStorage.getItem('site.settings');
+      if (raw) {
+        try {
+          var st = JSON.parse(raw);
+          if (st && st.themeColor) document.documentElement.dataset.themeColor = st.themeColor;
+        } catch (e) {}
+      }
+      if (!document.documentElement.dataset.themeColor) {
+        document.documentElement.dataset.themeColor = 'default';
+      }
     } catch (e) {}
   })();
 </script>
@@ -48,6 +64,14 @@
         <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
       </svg>
     </button>
+
+    <button id="settingsBtn" class="icon-btn" aria-label="打开设置">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </svg>
+    </button>
   </div>
 </header>
 
@@ -61,7 +85,6 @@
 
 <main class="layout">
 
-  <!-- 左侧：大类导航 -->
   <aside class="cat-col" aria-label="导航大类">
     <h2 class="cat-title">导航分类</h2>
     <div class="cat-nav" id="catNav"></div>
@@ -70,9 +93,7 @@
     </div>
   </aside>
 
-  <!-- 中间：导航内容 -->
   <section class="main-col" aria-label="快捷导航">
-    <!-- 搜索框独占一行，吸顶 -->
     <div class="nav-search" id="navSearch">
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -89,7 +110,6 @@
     <div class="empty empty-lg" id="navEmpty" hidden>没有找到匹配的站点</div>
   </section>
 
-  <!-- 右侧：个人账号 + 公告资讯 -->
   <aside class="side-col">
     <section class="panel" aria-label="个人账号">
       <div class="profile-top">
@@ -204,6 +224,74 @@
     <a class="lightbox-open" id="lightboxOpen" href="#" target="_blank" rel="noopener">在新标签页打开原图</a>
     <span class="lightbox-hint">滚轮缩放 · 双击放大 · Esc 关闭</span>
   </div>
+</div>
+
+<div class="settings-mask" id="settingsMask" aria-hidden="true">
+  <aside class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="settings-head">
+      <h2 class="settings-title" id="settingsTitle">设置</h2>
+      <button class="settings-close" id="settingsClose" type="button" aria-label="关闭设置">×</button>
+    </div>
+
+    <div class="settings-body">
+
+      <div class="setting-item">
+        <div class="setting-label">
+          <div class="setting-name">主题配色</div>
+          <div class="setting-desc">整体配色方案，浅色 / 深色由顶栏按钮切换</div>
+        </div>
+        <div class="theme-colors" id="themeColors"></div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-label">
+          <div class="setting-name">跟随系统</div>
+          <div class="setting-desc">自动跟随系统的浅色 / 深色设置</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="setFollowSystem">
+          <span class="switch-track"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-label">
+          <div class="setting-name">公告条</div>
+          <div class="setting-desc">顶部置顶公告轮播</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="setNoticeBar">
+          <span class="switch-track"></span>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-label">
+          <div class="setting-name">默认大类</div>
+          <div class="setting-desc">打开页面先展示哪个分类（下次访问生效）</div>
+        </div>
+        <select class="setting-select" id="setDefaultCategory">
+          <option value="">跟随数据</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-label">
+          <div class="setting-name">打开方式</div>
+          <div class="setting-desc">点击站点卡片时</div>
+        </div>
+        <div class="segmented" id="setOpenMode">
+          <button type="button" data-value="new">新标签页</button>
+          <button type="button" data-value="self">当前页</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="settings-foot">
+      <button class="settings-reset" id="settingsReset" type="button">恢复默认</button>
+    </div>
+  </aside>
 </div>
 
 <script src="js/script.js" defer></script>

@@ -6,13 +6,14 @@
    - data/notices.json   公告
    - data/friends.json   友站（可选）
 
-   搜索：
-   - 导航搜索（#search）        只搜导航
-   - 公告搜索（#noticeSearch）  只搜公告
-   两者关键词互不干扰。
+   本地设置（localStorage['site.settings']）：
+   - themeColor:      配色方案，默认 'default'
+   - noticeBar:       是否显示公告条，默认 true
+   - defaultCategory: 默认大类 id，'' 表示跟随数据，默认 ''
+   - openInNewTab:    点击站点是否新标签页打开，默认 true
 
-   站点数显示：每个大类 tab 右侧显示该大类下站点总数。
-   公告条：无关闭按钮，鼠标悬停暂停轮播，多条时圆点可手动切换。
+   主题深浅（localStorage['site.theme']）：
+   - 'light' / 'dark'，没有值则跟随系统偏好
    ========================================================= */
 
 (function () {
@@ -22,6 +23,39 @@
   const NAV_URL = './data/nav.json';
   const NOTICE_URL = './data/notices.json';
   const FRIENDS_URL = './data/friends.json';
+
+  /* ============ 设置存储 ============ */
+  const SETTINGS_KEY = 'site.settings';
+  const DEFAULT_SETTINGS = {
+    themeColor: 'default',
+    noticeBar: true,
+    defaultCategory: '',
+    openInNewTab: true
+  };
+
+  /* 主题配色方案（当前只有默认，未来加条目 + 对应 CSS 变量即可） */
+  const THEME_COLORS = [
+    { id: 'default', name: '默认', dot: '#4E7296' }
+  ];
+
+  let SETTINGS = loadSettings();
+
+  function loadSettings() {
+    try {
+      const raw = localStorage.getItem(SETTINGS_KEY);
+      if (!raw) return Object.assign({}, DEFAULT_SETTINGS);
+      const obj = JSON.parse(raw);
+      return Object.assign({}, DEFAULT_SETTINGS, obj || {});
+    } catch (e) {
+      return Object.assign({}, DEFAULT_SETTINGS);
+    }
+  }
+
+  function saveSettings() {
+    try {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(SETTINGS));
+    } catch (e) {}
+  }
 
   /* ============ 数据容器 ============ */
   let NAV_CATEGORIES = [];
@@ -64,6 +98,7 @@
 
   const searchEl      = document.getElementById('search');
   const themeBtn      = document.getElementById('themeBtn');
+  const settingsBtn   = document.getElementById('settingsBtn');
   const backTopBtn    = document.getElementById('backTop');
 
   const modalMask     = document.getElementById('modalMask');
@@ -78,6 +113,15 @@
   const lightboxClose = document.getElementById('lightboxClose');
   const lightboxOpen  = document.getElementById('lightboxOpen');
   const lightboxZoom  = document.getElementById('lightboxZoom');
+
+  const settingsMask    = document.getElementById('settingsMask');
+  const settingsClose   = document.getElementById('settingsClose');
+  const themeColorsEl   = document.getElementById('themeColors');
+  const setFollowSystemEl = document.getElementById('setFollowSystem');
+  const setNoticeBarEl  = document.getElementById('setNoticeBar');
+  const setDefaultCategoryEl = document.getElementById('setDefaultCategory');
+  const setOpenModeEl   = document.getElementById('setOpenMode');
+  const settingsResetEl = document.getElementById('settingsReset');
 
   /* ============ 工具 ============ */
   function esc(str) {
@@ -446,29 +490,6 @@
   window.addEventListener('scroll', hideTip, { passive: true });
   window.addEventListener('resize', hideTip, { passive: true });
 
-  /* ============ 左侧底部：随机逛逛（只在当前大类中随机） ============ */
-  function collectSitesInCategory(catId) {
-    var cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
-    if (!cat) return [];
-    var list = [];
-    (cat.groups || []).forEach(function (g) {
-      (g.items || []).forEach(function (it) {
-        if (it && it.url && it.url !== '#') list.push(it);
-      });
-    });
-    return list;
-  }
-
-  function initCatRandom() {
-    if (!catRandomEl) return;
-    catRandomEl.addEventListener('click', function () {
-      var list = collectSitesInCategory(activeCategoryId);
-      if (!list.length) return;
-      var pick = list[Math.floor(Math.random() * list.length)];
-      window.open(pick.url, '_blank', 'noopener');
-    });
-  }
-
   /* ============ 骨架屏 ============ */
   function renderNavSkeleton() {
     var cards = '';
@@ -490,11 +511,39 @@
     noticeListEl.innerHTML = items;
   }
 
-  /* ============ 导航渲染（大类 → 分组 → 站点） ============ */
+  /* ============ 左侧底部：随机逛逛（只在当前大类中随机） ============ */
+  function collectSitesInCategory(catId) {
+    var cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
+    if (!cat) return [];
+    var list = [];
+    (cat.groups || []).forEach(function (g) {
+      (g.items || []).forEach(function (it) {
+        if (it && it.url && it.url !== '#') list.push(it);
+      });
+    });
+    return list;
+  }
+
+  function initCatRandom() {
+    if (!catRandomEl) return;
+    catRandomEl.addEventListener('click', function () {
+      var list = collectSitesInCategory(activeCategoryId);
+      if (!list.length) return;
+      var pick = list[Math.floor(Math.random() * list.length)];
+      if (SETTINGS.openInNewTab) {
+        window.open(pick.url, '_blank', 'noopener');
+      } else {
+        window.location.href = pick.url;
+      }
+    });
+  }
+
+  /* ============ 导航渲染 ============ */
   function renderNav() {
     const q = navKeyword.trim().toLowerCase();
+    const cardTarget = SETTINGS.openInNewTab ? '_blank' : '_self';
+    const cardRel = SETTINGS.openInNewTab ? 'noopener' : '';
 
-    /* 大类 tab：名字 + 该类站点总数 */
     let catHtml = '';
     NAV_CATEGORIES.forEach(function (cat) {
       const total = (cat.groups || []).reduce(function (sum, g) {
@@ -519,7 +568,6 @@
       });
     });
 
-    /* 分组 chips */
     const currentCat = NAV_CATEGORIES.find(function (c) { return c.id === activeCategoryId; });
     const groups = currentCat ? (currentCat.groups || []) : [];
 
@@ -538,7 +586,6 @@
       });
     });
 
-    /* 站点卡片 */
     let html = '';
     let shown = 0;
 
@@ -562,7 +609,9 @@
           : '';
 
         return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + '" ' +
-                 'href="' + esc(it.url || '#') + '" target="_blank" rel="noopener">' +
+                 'href="' + esc(it.url || '#') + '" ' +
+                 'target="' + cardTarget + '" ' +
+                 (cardRel ? 'rel="' + cardRel + '" ' : '') + '>' +
                  '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
                    '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
                  '</span>' +
@@ -589,7 +638,7 @@
     bindNavTips();
   }
 
-  /* ============ 友站渲染（底部横条，只显示图标 + 名字） ============ */
+  /* ============ 友站渲染 ============ */
   function renderFriends() {
     if (!friendsSectionEl || !friendsGridEl) return;
 
@@ -649,6 +698,8 @@
   }
 
   function renderNoticeBar() {
+    if (!SETTINGS.noticeBar) { noticeBar.hidden = true; stopBarTimer(); return; }
+
     const pinned = pinnedNotices();
     if (!pinned.length) { noticeBar.hidden = true; stopBarTimer(); return; }
 
@@ -955,19 +1006,22 @@
       closeLightbox();
       return;
     }
+    if (settingsMask && settingsMask.classList.contains('show')) {
+      closeSettings();
+      return;
+    }
     if (modalMask.classList.contains('show')) {
       closeModal();
     }
   });
 
   /* ============ 搜索 ============ */
-  /* 导航搜索：独立一行 */
   let navSearchTimer = null;
   searchEl.addEventListener('input', function (e) {
     clearTimeout(navSearchTimer);
     const value = e.target.value;
     navSearchTimer = setTimeout(function () {
-      if (!NAV_CATEGORIES.length) return;   // 数据还没加载完，忽略输入
+      if (!NAV_CATEGORIES.length) return;
       navKeyword = value;
       if (navKeyword.trim() && activeGroupId !== 'all') {
         activeGroupId = 'all';
@@ -976,7 +1030,6 @@
     }, 120);
   });
 
-  /* 公告搜索：在公告标题行 */
   if (noticeSearchEl) {
     let noticeSearchTimer = null;
     noticeSearchEl.addEventListener('input', function (e) {
@@ -989,25 +1042,197 @@
     });
   }
 
-  /* ============ 主题 ============ */
+  /* ============ 主题（浅 / 深 + 跟随系统） ============ */
+  function isFollowSystem() {
+    try {
+      var v = localStorage.getItem('site.theme');
+      return !v || v === 'system';
+    } catch (e) {
+      return true;
+    }
+  }
+
+  function setFollowSystem(on) {
+    if (on) {
+      try { localStorage.setItem('site.theme', 'system'); } catch (e) {}
+      var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+    } else {
+      // 关掉跟随：把当前显示值锁定为手动值
+      var current = document.documentElement.dataset.theme || 'light';
+      try { localStorage.setItem('site.theme', current); } catch (e) {}
+    }
+  }
+
+  /* 顶栏按钮：切到另一个手动值，自动关闭跟随 */
   themeBtn.addEventListener('click', function () {
-    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    var current = document.documentElement.dataset.theme;
+    var next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
     try { localStorage.setItem('site.theme', next); } catch (e) {}
+    syncSettingsUI();
   });
 
-  /* 系统主题变化时自动跟随（用户手动选过主题则不跟随） */
+  /* 系统主题变化：仅在跟随模式下自动切换 */
   (function initSystemThemeWatcher() {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
     function onChange(e) {
-      try {
-        if (localStorage.getItem('site.theme')) return;
-      } catch (err) {}
+      if (!isFollowSystem()) return;
       document.documentElement.dataset.theme = e.matches ? 'dark' : 'light';
     }
     if (mq.addEventListener) mq.addEventListener('change', onChange);
     else if (mq.addListener) mq.addListener(onChange);
   })();
+
+  /* ============ 设置面板 ============ */
+  function applySettings() {
+    // 主题配色
+    document.documentElement.dataset.themeColor = SETTINGS.themeColor || 'default';
+
+    // 公告条
+    if (NOTICES.length) {
+      renderNoticeBar();
+    } else if (!SETTINGS.noticeBar) {
+      noticeBar.hidden = true;
+      stopBarTimer();
+    }
+
+    // 打开方式：重新渲染导航，让卡片 target 更新
+    if (NAV_CATEGORIES.length) {
+      renderNav();
+    }
+  }
+
+  function syncSettingsUI() {
+    // 主题配色色块
+    if (themeColorsEl) {
+      themeColorsEl.innerHTML = '';
+      THEME_COLORS.forEach(function (c) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'color-dot' + (c.id === SETTINGS.themeColor ? ' active' : '');
+        b.dataset.color = c.id;
+        b.title = c.name;
+        b.style.setProperty('--dot-bg', c.dot);
+        b.addEventListener('click', function () {
+          SETTINGS.themeColor = c.id;
+          saveSettings();
+          applySettings();
+          syncSettingsUI();
+        });
+        themeColorsEl.appendChild(b);
+      });
+    }
+
+    // 跟随系统
+    if (setFollowSystemEl) {
+      setFollowSystemEl.checked = isFollowSystem();
+    }
+
+    // 公告条
+    if (setNoticeBarEl) {
+      setNoticeBarEl.checked = !!SETTINGS.noticeBar;
+    }
+
+    // 默认大类
+    if (setDefaultCategoryEl) {
+      // 填充选项
+      const current = SETTINGS.defaultCategory || '';
+      let html = '<option value="">跟随数据</option>';
+      NAV_CATEGORIES.forEach(function (c) {
+        html += '<option value="' + esc(c.id) + '">' + esc(c.title) + '</option>';
+      });
+      setDefaultCategoryEl.innerHTML = html;
+      setDefaultCategoryEl.value = current;
+    }
+
+    // 打开方式
+    if (setOpenModeEl) {
+      const mode = SETTINGS.openInNewTab ? 'new' : 'self';
+      setOpenModeEl.querySelectorAll('button').forEach(function (btn) {
+        btn.classList.toggle('active', btn.dataset.value === mode);
+      });
+    }
+  }
+
+  function initSettings() {
+    if (settingsBtn && settingsMask) {
+      settingsBtn.addEventListener('click', function () {
+        if (settingsMask.classList.contains('show')) closeSettings();
+        else openSettings();
+      });
+    }
+
+    if (settingsClose) {
+      settingsClose.addEventListener('click', closeSettings);
+    }
+
+    if (settingsMask) {
+      settingsMask.addEventListener('click', function (e) {
+        if (e.target === settingsMask) closeSettings();
+      });
+    }
+
+    if (setFollowSystemEl) {
+      setFollowSystemEl.addEventListener('change', function () {
+        setFollowSystem(!!setFollowSystemEl.checked);
+        syncSettingsUI();
+      });
+    }
+
+    if (setNoticeBarEl) {
+      setNoticeBarEl.addEventListener('change', function () {
+        SETTINGS.noticeBar = !!setNoticeBarEl.checked;
+        saveSettings();
+        applySettings();
+      });
+    }
+
+    if (setDefaultCategoryEl) {
+      setDefaultCategoryEl.addEventListener('change', function () {
+        SETTINGS.defaultCategory = setDefaultCategoryEl.value || '';
+        saveSettings();
+        // 不立即切换当前大类，下次访问生效
+      });
+    }
+
+    if (setOpenModeEl) {
+      setOpenModeEl.querySelectorAll('button').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const v = btn.dataset.value;
+          SETTINGS.openInNewTab = (v === 'new');
+          saveSettings();
+          applySettings();
+          syncSettingsUI();
+        });
+      });
+    }
+
+    if (settingsResetEl) {
+      settingsResetEl.addEventListener('click', function () {
+        SETTINGS = Object.assign({}, DEFAULT_SETTINGS);
+        saveSettings();
+        setFollowSystem(true);
+        applySettings();
+        syncSettingsUI();
+      });
+    }
+  }
+
+  function openSettings() {
+    if (!settingsMask) return;
+    syncSettingsUI();
+    settingsMask.classList.add('show');
+    settingsMask.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('settings-open');
+  }
+
+  function closeSettings() {
+    if (!settingsMask) return;
+    settingsMask.classList.remove('show');
+    settingsMask.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('settings-open');
+  }
 
   /* ============ 回到顶部 ============ */
   function updateBackTop() {
@@ -1031,7 +1256,7 @@
     });
   })();
 
-  /* ============ 公众号二维码：图片缺失时回退到占位假码 ============ */
+  /* ============ 公众号二维码 ============ */
   function bindQRCodeFallback() {
     const qrEl = document.getElementById('qrCode');
     if (!qrEl) return;
@@ -1060,9 +1285,9 @@
     img.addEventListener('error', fallback, { once: true });
   }
 
-  /* ============ 加载远程 JSON（导航 / 公告 / 友站分开处理） ============ */
+  /* ============ 加载远程 JSON ============ */
   async function loadData() {
-    /* -------- 导航：失败则隐藏搜索框 + 显示失败提示 -------- */
+    /* -------- 导航 -------- */
     try {
       const navRes = await fetchWithTimeout(NAV_URL);
       if (!navRes.ok) throw new Error('导航 JSON 加载失败：' + navRes.status);
@@ -1082,13 +1307,20 @@
         NAV_CATEGORIES = [];
       }
 
-      const def = NAV_CATEGORIES.find(function (c) { return c.default; }) || NAV_CATEGORIES[0];
-      activeCategoryId = def ? def.id : '';
+      // 决定初始大类：设置里的 defaultCategory 优先，其次数据里的 default，最后第一个
+      let targetCatId = '';
+      if (SETTINGS.defaultCategory) {
+        const found = NAV_CATEGORIES.find(function (c) { return c.id === SETTINGS.defaultCategory; });
+        if (found) targetCatId = found.id;
+      }
+      if (!targetCatId) {
+        const def = NAV_CATEGORIES.find(function (c) { return c.default; }) || NAV_CATEGORIES[0];
+        targetCatId = def ? def.id : '';
+      }
+      activeCategoryId = targetCatId;
       activeGroupId = 'all';
 
       if (catFootEl) catFootEl.hidden = false;
-      renderNav();
-
       renderNav();
     } catch (err) {
       console.error(err);
@@ -1099,7 +1331,7 @@
       navGroupsEl.innerHTML = '<div class="empty empty-lg">导航数据加载失败</div>';
     }
 
-    /* -------- 公告：失败不影响导航 -------- */
+    /* -------- 公告 -------- */
     try {
       const noticeRes = await fetchWithTimeout(NOTICE_URL);
       if (!noticeRes.ok) throw new Error('公告 JSON 加载失败：' + noticeRes.status);
@@ -1118,7 +1350,7 @@
       noticeBar.hidden = true;
     }
 
-    /* -------- 友站：失败静默 -------- */
+    /* -------- 友站 -------- */
     try {
       const fRes = await fetchWithTimeout(FRIENDS_URL, 6000);
       if (fRes.ok) {
@@ -1130,6 +1362,9 @@
     }
     renderFriends();
 
+    // 数据加载完，同步一次设置面板 UI（下拉里的分类此时才有值）
+    syncSettingsUI();
+
     updateBackTop();
   }
 
@@ -1138,6 +1373,8 @@
   bindQRCodeFallback();
   updateBackTop();
   initCatRandom();
+  initSettings();
+  applySettings();
   renderNavSkeleton();
   renderNoticeSkeleton();
   loadData();
