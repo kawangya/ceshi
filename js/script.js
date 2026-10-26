@@ -1535,4 +1535,17 @@
   renderNavSkeleton();
   renderNoticeSkeleton();
   loadData();
+
+  /* ============ 注册 Service Worker（PWA） ============ */
+  (function initServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js').then(function (reg) {
+        console.log('[PWA] Service Worker 已注册，作用域：', reg.scope);
+      }).catch(function (err) {
+        console.warn('[PWA] Service Worker 注册失败：', err);
+      });
+    });
+  })();
 })();
