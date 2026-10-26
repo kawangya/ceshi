@@ -56,7 +56,6 @@
     <span class="bar-tag" id="barTag"></span>
     <button class="bar-text" id="barText" type="button"></button>
     <span class="bar-dots" id="barDots"></span>
-    <button class="bar-close" id="barClose" type="button" aria-label="关闭公告条">×</button>
   </div>
 </div>
 
@@ -64,13 +63,14 @@
 
   <!-- 左侧：大类导航 -->
   <aside class="cat-col" aria-label="导航大类">
+    <h2 class="cat-title">导航分类</h2>
     <div class="cat-nav" id="catNav"></div>
   </aside>
 
   <!-- 中间：导航内容 -->
   <section class="main-col" aria-label="快捷导航">
-    <!-- 搜索框独占一行 -->
-    <div class="nav-search">
+    <!-- 搜索框独占一行，吸顶 -->
+    <div class="nav-search" id="navSearch">
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -86,7 +86,7 @@
     <div class="empty empty-lg" id="navEmpty" hidden>没有找到匹配的站点</div>
   </section>
 
-  <!-- 右侧：个人账号 + 公告 -->
+  <!-- 右侧：个人账号 + 公告资讯 -->
   <aside class="side-col">
     <section class="panel" aria-label="个人账号">
       <div class="profile-top">
@@ -146,9 +146,9 @@
       </div>
     </section>
 
-    <section class="panel" aria-label="公告">
+    <section class="panel" aria-label="公告资讯">
       <div class="panel-head">
-        <h2 class="panel-title">公告</h2>
+        <h2 class="panel-title">公告资讯</h2>
         <div class="notice-search">
           <input id="noticeSearch" type="search" placeholder="搜索公告…" autocomplete="off" aria-label="搜索公告">
         </div>
@@ -169,7 +169,7 @@
 </section>
 
 <footer class="site-footer">
-  卡王的导航 · 收集常用 MC 资源与工具。公告中的链接均为第三方页面，请自行判断安全性；本站不存储任何文件。
+  卡王的导航 · 收集常用资源与工具。链接均指向第三方页面，请自行判断安全性；本站不存储任何文件。
 </footer>
 
 <button class="back-top" id="backTop" type="button" aria-label="回到顶部">

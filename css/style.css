@@ -271,21 +271,6 @@ body.modal-open { overflow: hidden; }
 
 .bar-dot-item.active::after { background: var(--accent); }
 
-.bar-close {
-  flex-shrink: 0;
-  padding: 2px 5px;
-  border: none;
-  border-radius: 5px;
-  background: transparent;
-  color: var(--text-mute);
-  font-size: 15px;
-  line-height: 1;
-  cursor: pointer;
-  transition: background-color .16s ease, color .16s ease;
-}
-
-.bar-close:hover { background: var(--surface-2); color: var(--text); }
-
 /* ---------- 三栏布局 ---------- */
 .layout {
   max-width: 1120px;
@@ -307,6 +292,15 @@ body.modal-open { overflow: hidden; }
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   transition: background-color .3s ease, border-color .3s ease;
+}
+
+.cat-title {
+  margin: 0 0 8px;
+  padding: 1px 2px 11px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
 }
 
 .cat-nav {
@@ -335,7 +329,6 @@ body.modal-open { overflow: hidden; }
   transition: color .18s ease, background-color .18s ease;
 }
 
-/* 左侧竖条指示器：默认透明 */
 .cat-tab::before {
   content: '';
   position: absolute;
@@ -392,7 +385,7 @@ body.modal-open { overflow: hidden; }
 }
 
 /* ---------- 中间：导航内容 ---------- */
-/* 搜索框独占一行，sticky 常驻，白底 + 阴影 */
+/* 搜索框独占一行，吸顶，白底 + 阴影 */
 .nav-search {
   position: sticky;
   top: 60px;
@@ -1539,6 +1532,8 @@ mark {
     box-shadow: none;
   }
 
+  .cat-title { display: none; }
+
   .cat-nav {
     flex-direction: row;
     overflow-x: auto;
@@ -1603,6 +1598,24 @@ mark {
   .brand-mark { width: 26px; height: 26px; }
   .notice-bar-inner { padding: 7px 14px; }
 
+  /* 搜索框吸顶减薄，节省顶部空间 */
+  .nav-search {
+    top: 60px;
+    padding: 6px 0 10px;
+  }
+
+  .nav-search .search-wrap input {
+    height: 36px;
+    font-size: 13px;
+    padding: 0 12px 0 36px;
+  }
+
+  .nav-search .search-icon {
+    left: 12px;
+    width: 14px;
+    height: 14px;
+  }
+
   .cat-tab { padding: 6px 8px 8px 10px; font-size: 13px; }
 
   .nav-grid { grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); }
@@ -1629,6 +1642,10 @@ mark {
   .friend-name { max-width: 90px; }
 
   .site-footer { padding: 14px 16px 24px; }
+}
+
+@media (max-width: 400px) {
+  .cat-tab-count { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

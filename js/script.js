@@ -12,6 +12,7 @@
    两者关键词互不干扰。
 
    站点数显示：每个大类 tab 右侧显示该大类下站点总数。
+   公告条：无关闭按钮，鼠标悬停暂停轮播，多条时圆点可手动切换。
    ========================================================= */
 
 (function () {
@@ -41,6 +42,7 @@
   /* ============ 元素 ============ */
   const navGroupsEl   = document.getElementById('navGroups');
   const navEmptyEl    = document.getElementById('navEmpty');
+  const navSearchEl   = document.getElementById('navSearch');
   const catNavEl      = document.getElementById('catNav');
   const groupNavEl    = document.getElementById('groupNav');
   const navTipEl      = document.getElementById('navTip');
@@ -52,7 +54,6 @@
   const barTag        = document.getElementById('barTag');
   const barText       = document.getElementById('barText');
   const barDots       = document.getElementById('barDots');
-  const barClose      = document.getElementById('barClose');
 
   const noticeListEl   = document.getElementById('noticeList');
   const noticeEmptyEl  = document.getElementById('noticeEmpty');
@@ -93,6 +94,20 @@
   function openExternal(url) {
     if (!url || url === '#') return;
     window.open(url, '_blank', 'noopener');
+  }
+
+  /* ---------- 带超时的 fetch ---------- */
+  function fetchWithTimeout(url, ms) {
+    ms = ms || 10000;
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, ms);
+    return fetch(url, { signal: controller.signal }).then(function (res) {
+      clearTimeout(timer);
+      return res;
+    }, function (err) {
+      clearTimeout(timer);
+      throw err;
+    });
   }
 
   /* ---------- 图片加载失败处理 ---------- */
@@ -562,12 +577,11 @@
     guardImgs(friendsGridEl);
   }
 
-  /* ============ 公告条：置顶公告轮换 ============ */
+  /* ============ 公告条：置顶公告轮换（无关闭按钮） ============ */
   const BAR_INTERVAL = 7000;
   let barIndex = 0;
   let barTimer = null;
   let barPaused = false;
-  let barDismissed = false;
 
   function pinnedNotices() {
     return NOTICES.filter(function (n) { return n.pinned; });
@@ -589,8 +603,6 @@
   }
 
   function renderNoticeBar() {
-    if (barDismissed) { noticeBar.hidden = true; stopBarTimer(); return; }
-
     const pinned = pinnedNotices();
     if (!pinned.length) { noticeBar.hidden = true; stopBarTimer(); return; }
 
@@ -631,12 +643,6 @@
 
   noticeBar.addEventListener('mouseenter', function () { barPaused = true; });
   noticeBar.addEventListener('mouseleave', function () { barPaused = false; });
-
-  barClose.addEventListener('click', function () {
-    barDismissed = true;
-    noticeBar.hidden = true;
-    stopBarTimer();
-  });
 
   /* ============ 公告标签筛选 ============ */
   function renderNoticeTabs() {
@@ -994,16 +1000,12 @@
     img.addEventListener('error', fallback, { once: true });
   }
 
-  /* ============ 加载远程 JSON ============ */
+  /* ============ 加载远程 JSON（导航 / 公告 / 友站分开处理） ============ */
   async function loadData() {
+    /* -------- 导航：失败则隐藏搜索框 + 显示失败提示 -------- */
     try {
-      const [navRes, noticeRes] = await Promise.all([
-        fetch(NAV_URL),
-        fetch(NOTICE_URL)
-      ]);
-
+      const navRes = await fetchWithTimeout(NAV_URL);
       if (!navRes.ok) throw new Error('导航 JSON 加载失败：' + navRes.status);
-      if (!noticeRes.ok) throw new Error('公告 JSON 加载失败：' + noticeRes.status);
 
       const navData = await navRes.json();
 
@@ -1020,42 +1022,51 @@
         NAV_CATEGORIES = [];
       }
 
-      NOTICES = await noticeRes.json();
-
-      try {
-        const fRes = await fetch(FRIENDS_URL);
-        if (fRes.ok) {
-          const data = await fRes.json();
-          FRIENDS = Array.isArray(data) ? data : [];
-        }
-      } catch (e) {
-        FRIENDS = [];
-      }
-
       const def = NAV_CATEGORIES.find(function (c) { return c.default; }) || NAV_CATEGORIES[0];
       activeCategoryId = def ? def.id : '';
       activeGroupId = 'all';
 
+      renderNav();
+    } catch (err) {
+      console.error(err);
+      if (navSearchEl) navSearchEl.hidden = true;
+      catNavEl.innerHTML = '';
+      groupNavEl.innerHTML = '';
+      navGroupsEl.innerHTML = '<div class="empty empty-lg">导航数据加载失败</div>';
+    }
+
+    /* -------- 公告：失败不影响导航 -------- */
+    try {
+      const noticeRes = await fetchWithTimeout(NOTICE_URL);
+      if (!noticeRes.ok) throw new Error('公告 JSON 加载失败：' + noticeRes.status);
+
+      NOTICES = await noticeRes.json();
       TAGS = ['全部', ...new Set(NOTICES.map(n => n.tag))];
 
       renderNoticeTabs();
-      renderNav();
       renderNotices();
       renderNoticeBar();
-      renderFriends();
-      updateBackTop();
     } catch (err) {
       console.error(err);
-      catNavEl.innerHTML = '';
-      groupNavEl.innerHTML = '';
-      navGroupsEl.innerHTML =
-        '<div class="empty empty-lg">导航数据加载失败</div>';
       noticeListEl.innerHTML = '';
       noticeEmptyEl.hidden = false;
       noticeEmptyEl.textContent = '公告数据加载失败';
       noticeBar.hidden = true;
-      if (friendsSectionEl) friendsSectionEl.hidden = true;
     }
+
+    /* -------- 友站：失败静默 -------- */
+    try {
+      const fRes = await fetchWithTimeout(FRIENDS_URL, 6000);
+      if (fRes.ok) {
+        const data = await fRes.json();
+        FRIENDS = Array.isArray(data) ? data : [];
+      }
+    } catch (e) {
+      FRIENDS = [];
+    }
+    renderFriends();
+
+    updateBackTop();
   }
 
   /* ============ 启动 ============ */
