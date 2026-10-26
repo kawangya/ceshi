@@ -1,7 +1,7 @@
 {
-  "name": "卡王的导航 - MC 资源与工具",
-  "short_name": "卡王导航",
-  "description": "我的世界（Minecraft）资源、工具与实用链接一站式入口",
+  "name": "卡王的导航",
+  "short_name": "卡王的导航",
+  "description": "资源、工具与实用链接一站式入口",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
