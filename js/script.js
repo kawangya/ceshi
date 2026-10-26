@@ -1132,6 +1132,25 @@
     else if (mq.addListener) mq.addListener(onChange);
   })();
 
+  /* ============ theme-color 跟随深浅色 ============ */
+  (function initThemeColorSync() {
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) return;
+
+    function sync() {
+      var t = document.documentElement.dataset.theme;
+      meta.content = t === 'dark' ? '#191918' : '#4E7296';
+    }
+
+    sync();
+
+    var observer = new MutationObserver(sync);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+  })();
+
   /* ============ Toast ============ */
   let toastTimer = null;
   function showToast(msg, isError) {
