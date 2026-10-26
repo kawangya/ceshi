@@ -61,10 +61,16 @@
 </div>
 
 <main class="layout">
+
+  <!-- 左侧：大类导航 -->
+  <aside class="cat-col" aria-label="导航大类">
+    <div class="cat-nav" id="catNav"></div>
+  </aside>
+
+  <!-- 中间：导航内容 -->
   <section class="main-col" aria-label="快捷导航">
-    <div class="main-head">
-      <h1>导航</h1>
-      <span class="site-count" id="siteCount"></span>
+    <!-- 搜索框独占一行 -->
+    <div class="nav-search">
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -75,12 +81,12 @@
       </div>
     </div>
 
-    <div class="cat-nav" id="catNav"></div>
     <div class="group-nav" id="groupNav"></div>
     <div id="navGroups"></div>
     <div class="empty empty-lg" id="navEmpty" hidden>没有找到匹配的站点</div>
   </section>
 
+  <!-- 右侧：个人账号 + 公告 -->
   <aside class="side-col">
     <section class="panel" aria-label="个人账号">
       <div class="profile-top">
@@ -152,6 +158,7 @@
       <div class="empty" id="noticeEmpty" hidden>没有匹配的公告</div>
     </section>
   </aside>
+
 </main>
 
 <section class="friends-section" id="friendsSection" aria-label="友站链接" hidden>

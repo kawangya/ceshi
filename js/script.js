@@ -7,19 +7,11 @@
    - data/friends.json   友站（可选）
 
    搜索：
-   - 顶栏 #search       只搜导航
-   - 侧栏 #noticeSearch 只搜公告
+   - 导航搜索（#search）        只搜导航
+   - 公告搜索（#noticeSearch）  只搜公告
    两者关键词互不干扰。
 
-   nav.json 结构：
-   {
-     "categories": [
-       { "id": "mc", "title": "MC 导航", "default": true,
-         "groups": [ { "id": "...", "title": "...", "items": [...] } ] },
-       ...
-     ]
-   }
-   也兼容旧格式（纯数组，会被自动包成「全部导航」大类）。
+   站点数显示：每个大类 tab 右侧显示该大类下站点总数。
    ========================================================= */
 
 (function () {
@@ -37,8 +29,8 @@
   let TAGS = ['全部'];
 
   /* ============ 状态 ============ */
-  let navKeyword = '';       // 顶栏搜索：只作用于导航
-  let noticeKeyword = '';    // 侧栏搜索：只作用于公告
+  let navKeyword = '';
+  let noticeKeyword = '';
   let noticeFilter = '全部';
   let activeCategoryId = '';
   let activeGroupId = 'all';
@@ -49,7 +41,6 @@
   /* ============ 元素 ============ */
   const navGroupsEl   = document.getElementById('navGroups');
   const navEmptyEl    = document.getElementById('navEmpty');
-  const siteCountEl   = document.getElementById('siteCount');
   const catNavEl      = document.getElementById('catNav');
   const groupNavEl    = document.getElementById('groupNav');
   const navTipEl      = document.getElementById('navTip');
@@ -442,11 +433,18 @@
   function renderNav() {
     const q = navKeyword.trim().toLowerCase();
 
-    /* -------- 1. 大类 tab -------- */
+    /* 大类 tab：名字 + 该类站点总数 */
     let catHtml = '';
     NAV_CATEGORIES.forEach(function (cat) {
+      const total = (cat.groups || []).reduce(function (sum, g) {
+        return sum + ((g.items || []).length);
+      }, 0);
+
       catHtml += '<button class="cat-tab' + (cat.id === activeCategoryId ? ' active' : '') +
-                 '" type="button" data-cat="' + esc(cat.id) + '">' + esc(cat.title) + '</button>';
+                 '" type="button" data-cat="' + esc(cat.id) + '">' +
+                 '<span class="cat-tab-name">' + esc(cat.title) + '</span>' +
+                 '<span class="cat-tab-count">' + total + '</span>' +
+                 '</button>';
     });
     catNavEl.innerHTML = catHtml;
 
@@ -460,7 +458,7 @@
       });
     });
 
-    /* -------- 2. 当前大类下的分组 chips -------- */
+    /* 分组 chips */
     const currentCat = NAV_CATEGORIES.find(function (c) { return c.id === activeCategoryId; });
     const groups = currentCat ? (currentCat.groups || []) : [];
 
@@ -479,7 +477,7 @@
       });
     });
 
-    /* -------- 3. 当前大类下的站点 -------- */
+    /* 站点卡片 */
     let html = '';
     let shown = 0;
 
@@ -525,7 +523,6 @@
 
     navGroupsEl.innerHTML = html;
     navEmptyEl.hidden = shown > 0;
-    siteCountEl.textContent = shown + ' 个站点';
 
     guardImgs(navGroupsEl);
     bindNavTips();
@@ -912,7 +909,7 @@
   });
 
   /* ============ 搜索 ============ */
-  /* 顶栏：只搜导航 */
+  /* 导航搜索：独立一行 */
   let navSearchTimer = null;
   searchEl.addEventListener('input', function (e) {
     clearTimeout(navSearchTimer);
@@ -926,7 +923,7 @@
     }, 120);
   });
 
-  /* 侧栏：只搜公告 */
+  /* 公告搜索：在公告标题行 */
   if (noticeSearchEl) {
     let noticeSearchTimer = null;
     noticeSearchEl.addEventListener('input', function (e) {
@@ -956,6 +953,17 @@
   backTopBtn.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  /* ============ 点击品牌：回顶 / 刷新 ============ */
+  (function initBrandHome() {
+    const brand = document.querySelector('.brand');
+    if (!brand) return;
+    brand.addEventListener('click', function (e) {
+      if (window.scrollY <= 8) return;
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
 
   /* ============ 公众号二维码：图片缺失时回退到占位假码 ============ */
   function bindQRCodeFallback() {
@@ -1046,7 +1054,6 @@
       noticeEmptyEl.hidden = false;
       noticeEmptyEl.textContent = '公告数据加载失败';
       noticeBar.hidden = true;
-      siteCountEl.textContent = '';
       if (friendsSectionEl) friendsSectionEl.hidden = true;
     }
   }
