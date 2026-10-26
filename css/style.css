@@ -717,9 +717,15 @@ mark {
 
 /* ---------- 深色模式下卡片层次微调 ---------- */
 [data-theme="dark"] .nav-card,
-[data-theme="dark"] .panel,
-[data-theme="dark"] .cat-col {
+[data-theme="dark"] .panel {
   background: #232322;
+}
+
+/* .cat-col 只在大屏显示为卡片，窄屏要保留透明 */
+@media (min-width: 1025px) {
+  [data-theme="dark"] .cat-col {
+    background: #232322;
+  }
 }
 
 /* ---------- 右侧：侧栏 ---------- */
