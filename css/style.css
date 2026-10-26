@@ -51,7 +51,7 @@ body {
   transition: background-color .3s ease, color .3s ease;
 }
 
-body.modal-open { overflow: hidden; }
+body.modal-open,
 body.settings-open { overflow: hidden; }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -713,6 +713,13 @@ mark {
     animation: none;
     background: var(--surface-2);
   }
+}
+
+/* ---------- 深色模式下卡片层次微调 ---------- */
+[data-theme="dark"] .nav-card,
+[data-theme="dark"] .panel,
+[data-theme="dark"] .cat-col {
+  background: #232322;
 }
 
 /* ---------- 右侧：侧栏 ---------- */
@@ -1570,7 +1577,6 @@ mark {
   color: var(--text-mute);
 }
 
-/* 主题配色色块 */
 .theme-colors {
   flex-shrink: 0;
   display: flex;
@@ -1607,7 +1613,6 @@ mark {
   outline-offset: 2px;
 }
 
-/* 开关 */
 .switch {
   flex-shrink: 0;
   position: relative;
@@ -1659,7 +1664,6 @@ mark {
   outline-offset: 2px;
 }
 
-/* 下拉 */
 .setting-select {
   flex-shrink: 0;
   width: 130px;
@@ -1681,7 +1685,6 @@ mark {
   background: var(--surface);
 }
 
-/* 分段控件 */
 .segmented {
   flex-shrink: 0;
   display: inline-flex;
@@ -1704,9 +1707,7 @@ mark {
   transition: background-color .16s ease, color .16s ease;
 }
 
-.segmented button:hover {
-  color: var(--text);
-}
+.segmented button:hover { color: var(--text); }
 
 .segmented button.active {
   background: var(--surface);
@@ -1719,7 +1720,6 @@ mark {
   box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
 }
 
-/* 底部 */
 .settings-foot {
   flex-shrink: 0;
   padding: 12px 20px 18px;
@@ -1782,6 +1782,49 @@ mark {
 .settings-reset:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%) translateY(8px);
+  z-index: 200;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: #3A3733;
+  color: #F5F4F1;
+  font-size: 13px;
+  line-height: 1.5;
+  box-shadow: 0 8px 24px rgba(40, 34, 28, .25);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease, transform .2s ease, visibility .2s;
+  pointer-events: none;
+  max-width: min(360px, calc(100vw - 32px));
+  text-align: center;
+  word-break: break-word;
+}
+
+.toast.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.error {
+  background: #C0553D;
+}
+
+[data-theme="dark"] .toast {
+  background: #D6D2CA;
+  color: #191918;
+}
+
+[data-theme="dark"] .toast.error {
+  background: #D08E6C;
+  color: #191918;
 }
 
 /* ---------- 回到顶部 ---------- */
@@ -1919,7 +1962,7 @@ mark {
   text-align: center;
 }
 
-/* ---------- 响应式：平板 / 手机单栏 ---------- */
+/* ---------- 响应式 ---------- */
 @media (max-width: 1024px) {
   .layout {
     grid-template-columns: 1fr;
@@ -2058,49 +2101,6 @@ mark {
 
 @media (max-width: 400px) {
   .cat-tab-count { display: none; }
-}
-
-/* ---------- Toast 提示 ---------- */
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 40px;
-  transform: translateX(-50%) translateY(8px);
-  z-index: 200;
-  padding: 10px 18px;
-  border-radius: 10px;
-  background: #3A3733;
-  color: #F5F4F1;
-  font-size: 13px;
-  line-height: 1.5;
-  box-shadow: 0 8px 24px rgba(40, 34, 28, .25);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .2s ease, transform .2s ease, visibility .2s;
-  pointer-events: none;
-  max-width: min(360px, calc(100vw - 32px));
-  text-align: center;
-  word-break: break-word;
-}
-
-.toast.show {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0);
-}
-
-.toast.error {
-  background: #C0553D;
-}
-
-[data-theme="dark"] .toast {
-  background: #D6D2CA;
-  color: #191918;
-}
-
-[data-theme="dark"] .toast.error {
-  background: #D08E6C;
-  color: #191918;
 }
 
 @media (prefers-reduced-motion: reduce) {
