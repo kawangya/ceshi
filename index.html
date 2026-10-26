@@ -37,15 +37,6 @@
       <span class="brand-name">卡王的导航</span>
     </a>
 
-    <div class="search-wrap">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-      <input id="search" type="search" placeholder="搜索导航或公告…" autocomplete="off" aria-label="搜索">
-    </div>
-
     <button id="themeBtn" class="icon-btn" aria-label="切换深浅色模式">
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -74,7 +65,16 @@
     <div class="main-head">
       <h1>导航</h1>
       <span class="site-count" id="siteCount"></span>
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input id="search" type="search" placeholder="搜索导航…" autocomplete="off" aria-label="搜索导航">
+      </div>
     </div>
+
     <div class="cat-nav" id="catNav"></div>
     <div class="group-nav" id="groupNav"></div>
     <div id="navGroups"></div>
@@ -144,6 +144,9 @@
       <div class="panel-head">
         <h2 class="panel-title">公告</h2>
       </div>
+      <div class="notice-search">
+        <input id="noticeSearch" type="search" placeholder="搜索公告…" autocomplete="off" aria-label="搜索公告">
+      </div>
       <div class="notice-tabs" id="noticeTabs"></div>
       <ul class="notice-list" id="noticeList"></ul>
       <div class="empty" id="noticeEmpty" hidden>没有匹配的公告</div>
@@ -183,7 +186,6 @@
   </div>
 </div>
 
-<!-- 图片灯箱 -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片预览">
   <button class="lightbox-close" id="lightboxClose" type="button" aria-label="关闭">×</button>
   <img class="lightbox-img" id="lightboxImg" alt="">

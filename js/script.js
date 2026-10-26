@@ -6,6 +6,11 @@
    - data/notices.json   公告
    - data/friends.json   友站（可选）
 
+   搜索：
+   - 顶栏 #search       只搜导航
+   - 侧栏 #noticeSearch 只搜公告
+   两者关键词互不干扰。
+
    nav.json 结构：
    {
      "categories": [
@@ -32,7 +37,8 @@
   let TAGS = ['全部'];
 
   /* ============ 状态 ============ */
-  let keyword = '';
+  let navKeyword = '';       // 顶栏搜索：只作用于导航
+  let noticeKeyword = '';    // 侧栏搜索：只作用于公告
   let noticeFilter = '全部';
   let activeCategoryId = '';
   let activeGroupId = 'all';
@@ -57,9 +63,10 @@
   const barDots       = document.getElementById('barDots');
   const barClose      = document.getElementById('barClose');
 
-  const noticeListEl  = document.getElementById('noticeList');
-  const noticeEmptyEl = document.getElementById('noticeEmpty');
-  const noticeTabsEl  = document.getElementById('noticeTabs');
+  const noticeListEl   = document.getElementById('noticeList');
+  const noticeEmptyEl  = document.getElementById('noticeEmpty');
+  const noticeTabsEl   = document.getElementById('noticeTabs');
+  const noticeSearchEl = document.getElementById('noticeSearch');
 
   const searchEl      = document.getElementById('search');
   const themeBtn      = document.getElementById('themeBtn');
@@ -167,7 +174,6 @@
     if (lightboxZoom) {
       lightboxZoom.textContent = Math.round(lbScale * 100) + '%';
     }
-    // 放大后允许拖拽，光标切换
     if (lbScale > 1.01) {
       lightboxImg.style.cursor = lbDragging ? 'grabbing' : 'grab';
     } else {
@@ -208,13 +214,11 @@
   }
 
   if (lightbox) {
-    /* -------- 点击空白关闭（拖拽后不误触） -------- */
     lightbox.addEventListener('click', function (e) {
       if (lbMoved) { lbMoved = false; return; }
       if (e.target === lightbox) closeLightbox();
     });
 
-    /* -------- 滚轮缩放：以鼠标位置为中心 -------- */
     lightbox.addEventListener('wheel', function (e) {
       if (!lightbox.classList.contains('show')) return;
       e.preventDefault();
@@ -236,7 +240,6 @@
       applyLightboxTransform();
     }, { passive: false });
 
-    /* -------- 双击放大 / 还原 -------- */
     if (lightboxImg) {
       lightboxImg.addEventListener('dblclick', function (e) {
         e.stopPropagation();
@@ -255,7 +258,6 @@
         applyLightboxTransform();
       });
 
-      /* -------- 鼠标拖拽平移 -------- */
       lightboxImg.addEventListener('mousedown', function (e) {
         if (e.button !== 0) return;
         if (lbScale <= 1.01) return;
@@ -270,7 +272,6 @@
         e.preventDefault();
       });
 
-      /* -------- 触摸：单指拖拽 / 双指缩放 -------- */
       lightboxImg.addEventListener('touchstart', function (e) {
         if (e.touches.length === 1 && lbScale > 1.01) {
           lbDragging = true;
@@ -320,7 +321,6 @@
       });
     }
 
-    /* -------- 点击比例按钮重置 -------- */
     if (lightboxZoom) {
       lightboxZoom.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -329,7 +329,6 @@
     }
   }
 
-  /* -------- 全局鼠标移动 / 松开（只绑一次） -------- */
   window.addEventListener('mousemove', function (e) {
     if (!lbDragging) return;
     const dx = e.clientX - lbStartX;
@@ -441,7 +440,7 @@
 
   /* ============ 导航渲染（大类 → 分组 → 站点） ============ */
   function renderNav() {
-    const q = keyword.trim().toLowerCase();
+    const q = navKeyword.trim().toLowerCase();
 
     /* -------- 1. 大类 tab -------- */
     let catHtml = '';
@@ -661,7 +660,7 @@
 
   /* ============ 公告列表 ============ */
   function renderNotices() {
-    const q = keyword.trim().toLowerCase();
+    const q = noticeKeyword.trim().toLowerCase();
 
     let list = NOTICES.filter(function (n) {
       const okTag = noticeFilter === '全部' || n.tag === noticeFilter;
@@ -778,7 +777,6 @@
             a.replaceWith(ph);
           }, { once: true });
 
-          // 左键 → 灯箱；右键仍可新标签页打开
           a.addEventListener('click', function (e) {
             e.preventDefault();
             openLightbox(src, img.alt);
@@ -914,19 +912,32 @@
   });
 
   /* ============ 搜索 ============ */
-  let searchTimer = null;
+  /* 顶栏：只搜导航 */
+  let navSearchTimer = null;
   searchEl.addEventListener('input', function (e) {
-    clearTimeout(searchTimer);
+    clearTimeout(navSearchTimer);
     const value = e.target.value;
-    searchTimer = setTimeout(function () {
-      keyword = value;
-      if (keyword.trim() && activeGroupId !== 'all') {
+    navSearchTimer = setTimeout(function () {
+      navKeyword = value;
+      if (navKeyword.trim() && activeGroupId !== 'all') {
         activeGroupId = 'all';
       }
       renderNav();
-      renderNotices();
     }, 120);
   });
+
+  /* 侧栏：只搜公告 */
+  if (noticeSearchEl) {
+    let noticeSearchTimer = null;
+    noticeSearchEl.addEventListener('input', function (e) {
+      clearTimeout(noticeSearchTimer);
+      const value = e.target.value;
+      noticeSearchTimer = setTimeout(function () {
+        noticeKeyword = value;
+        renderNotices();
+      }, 120);
+    });
+  }
 
   /* ============ 主题 ============ */
   themeBtn.addEventListener('click', function () {
@@ -965,9 +976,7 @@
       qrEl.innerHTML = makeQRCode(20241018);
     }
 
-    // 左键点击二维码 → 灯箱放大；右键仍可新标签页打开原图
     qrEl.addEventListener('click', function (e) {
-      // 图片已经加载失败、被替换成假码时不触发
       if (!img.isConnected) return;
       e.preventDefault();
       openLightbox(img.src, img.alt || '公众号二维码');
@@ -990,10 +999,6 @@
 
       const navData = await navRes.json();
 
-      /* 兼容两种 nav.json 格式：
-         - 新格式：{ categories: [ { id, title, groups: [...] } ] }
-         - 旧格式：直接是分组数组 [ { id, title, items: [...] } ]
-         旧格式会被自动包成「全部导航」一个大类。 */
       if (Array.isArray(navData)) {
         NAV_CATEGORIES = [{
           id: 'all',
@@ -1045,21 +1050,6 @@
       if (friendsSectionEl) friendsSectionEl.hidden = true;
     }
   }
-
-  /* ============ 点击 logo：回顶 / 刷新 ============ */
-  (function initBrandHome() {
-    const brand = document.querySelector('.brand');
-    if (!brand) return;
-
-    brand.addEventListener('click', function (e) {
-      // 已经在顶部 → 放行默认 <a href="./">，等于刷新页面
-      if (window.scrollY <= 8) return;
-
-      // 否则平滑回顶，不刷新
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  })();
 
   /* ============ 启动 ============ */
   guardImgs(document);
