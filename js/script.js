@@ -122,6 +122,10 @@
   const setDefaultCategoryEl = document.getElementById('setDefaultCategory');
   const setOpenModeEl   = document.getElementById('setOpenMode');
   const settingsResetEl = document.getElementById('settingsReset');
+  const settingsExportEl = document.getElementById('settingsExport');
+  const settingsImportEl = document.getElementById('settingsImport');
+  const settingsFileEl   = document.getElementById('settingsFile');
+  const toastEl          = document.getElementById('toast');
 
   /* ============ 工具 ============ */
   function esc(str) {
@@ -1084,6 +1088,121 @@
     else if (mq.addListener) mq.addListener(onChange);
   })();
 
+  /* ============ Toast ============ */
+  let toastTimer = null;
+  function showToast(msg, isError) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.toggle('error', !!isError);
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove('show');
+    }, 2200);
+  }
+
+  /* ============ 导出配置 ============ */
+  function exportSettings() {
+    var themeVal = 'system';
+    try { themeVal = localStorage.getItem('site.theme') || 'system'; } catch (e) {}
+
+    var data = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      theme: themeVal,
+      settings: SETTINGS
+    };
+
+    var json = JSON.stringify(data, null, 2);
+    var blob = new Blob([json], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+
+    var d = new Date();
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+    var dateStr = d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate())
+                + '-' + pad(d.getHours()) + pad(d.getMinutes());
+
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'kawang-settings-' + dateStr + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+
+    showToast('配置已导出');
+  }
+
+  /* ============ 导入配置 ============ */
+  function importSettingsFromFile(file) {
+    if (!file) return;
+
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        var data = JSON.parse(e.target.result);
+        if (!data || typeof data !== 'object') {
+          throw new Error('文件内容不是有效的配置对象');
+        }
+
+        // 兼容两种格式：
+        // A. { version, theme, settings: {...} }  ← 本系统导出
+        // B. { themeColor, noticeBar, ... }        ← 直接是设置对象
+        var incoming = {};
+        var incomingTheme = null;
+
+        if (data.settings && typeof data.settings === 'object') {
+          incoming = data.settings;
+          if (typeof data.theme === 'string') incomingTheme = data.theme;
+        } else {
+          incoming = data;
+          if (typeof data.theme === 'string') incomingTheme = data.theme;
+        }
+
+        // 校验 + 合并
+        var merged = Object.assign({}, DEFAULT_SETTINGS);
+
+        if (typeof incoming.themeColor === 'string') {
+          var okColor = THEME_COLORS.some(function (c) { return c.id === incoming.themeColor; });
+          if (okColor) merged.themeColor = incoming.themeColor;
+        }
+        if (typeof incoming.noticeBar === 'boolean') {
+          merged.noticeBar = incoming.noticeBar;
+        }
+        if (typeof incoming.openInNewTab === 'boolean') {
+          merged.openInNewTab = incoming.openInNewTab;
+        }
+        if (typeof incoming.defaultCategory === 'string') {
+          merged.defaultCategory = incoming.defaultCategory;
+        }
+
+        SETTINGS = merged;
+        saveSettings();
+
+        // 深浅色
+        if (incomingTheme === 'system') {
+          try { localStorage.setItem('site.theme', 'system'); } catch (err) {}
+          var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+        } else if (incomingTheme === 'light' || incomingTheme === 'dark') {
+          try { localStorage.setItem('site.theme', incomingTheme); } catch (err) {}
+          document.documentElement.dataset.theme = incomingTheme;
+        }
+
+        applySettings();
+        syncSettingsUI();
+        showToast('配置已导入');
+      } catch (err) {
+        console.error(err);
+        showToast('导入失败：' + (err.message || '文件格式不正确'), true);
+      }
+    };
+    reader.onerror = function () {
+      showToast('导入失败：读取文件出错', true);
+    };
+    reader.readAsText(file);
+  }
+
   /* ============ 设置面板 ============ */
   function applySettings() {
     // 主题配色
@@ -1215,6 +1334,21 @@
         setFollowSystem(true);
         applySettings();
         syncSettingsUI();
+      });
+    }
+
+    if (settingsExportEl) {
+      settingsExportEl.addEventListener('click', exportSettings);
+    }
+
+    if (settingsImportEl && settingsFileEl) {
+      settingsImportEl.addEventListener('click', function () {
+        settingsFileEl.value = '';
+        settingsFileEl.click();
+      });
+      settingsFileEl.addEventListener('change', function () {
+        var file = settingsFileEl.files && settingsFileEl.files[0];
+        if (file) importSettingsFromFile(file);
       });
     }
   }

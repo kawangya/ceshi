@@ -289,10 +289,17 @@
     </div>
 
     <div class="settings-foot">
+      <div class="settings-actions">
+        <button class="settings-btn" id="settingsExport" type="button">导出配置</button>
+        <button class="settings-btn" id="settingsImport" type="button">导入配置</button>
+      </div>
       <button class="settings-reset" id="settingsReset" type="button">恢复默认</button>
+      <input type="file" id="settingsFile" accept="application/json,.json" hidden>
     </div>
   </aside>
 </div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="js/script.js" defer></script>
 </body>
