@@ -7,5 +7,12 @@
     "icon": "images/friends/example.png",
     "letter": "友",
     "color": "#4E7296"
+  },
+  {
+    "name": "示例友站",
+    "url": "https://example.com",
+    "icon": "images/friends/example.png",
+    "letter": "友",
+    "color": "#4E7296"
   }
 ]

@@ -1,17 +1,5 @@
 /* =========================================================
    卡王的导航 - 主脚本
-   ---------------------------------------------------------
-   渲染拆分：
-   - renderCatNav()      只渲染大类 tab
-   - renderGroupNav()    只渲染分组 chips
-   - updateGroupNavActive()  只更新 chips 高亮
-   - renderCards()       只渲染站点卡片
-   - renderNav()         全量渲染（启动 / 切大类时用）
-   搜索输入时只调 updateGroupNavActive + renderCards，
-   不重建大类 tab 和分组 chips，避免站点多时卡顿。
-
-   快捷键：
-   - /  聚焦导航搜索（不在输入框 / 弹窗 / 设置 / 灯箱内时）
    ========================================================= */
 
 (function () {
@@ -67,6 +55,11 @@
   let activeCategoryId = '';
   let activeGroupId = 'all';
   let lastFocused = null;
+
+  // 滚动相关状态
+  let isAutoScrolling = false;
+  let autoScrollTimer = null;
+  let scrollSpyTimer = null;
 
   const IS_TOUCH = window.matchMedia('(hover: none)').matches;
 
@@ -167,6 +160,11 @@
     (root || document).querySelectorAll('img[data-fallback]').forEach(guardImg);
   }
 
+  function updateNoticeBarH() {
+    const h = (noticeBar.hidden || !SETTINGS.noticeBar) ? 0 : noticeBar.offsetHeight;
+    document.documentElement.style.setProperty('--notice-bar-h', h + 'px');
+  }
+
   /* ---------- 二维码占位 ---------- */
   function makeQRCode(seed) {
     const SIZE = 25;
@@ -217,6 +215,7 @@
   let lbStartTx = 0, lbStartTy = 0;
   let lbPinchDist = 0;
   let lbPinchScale = 1;
+  let lbLastDragEnd = 0;
 
   function applyLightboxTransform() {
     if (!lightboxImg) return;
@@ -247,12 +246,14 @@
     if (lightboxOpen) lightboxOpen.href = src;
     resetLightboxTransform();
     lightbox.classList.add('show');
+    lightbox.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
   }
 
   function closeLightbox() {
     if (!lightbox) return;
     lightbox.classList.remove('show');
+    lightbox.setAttribute('aria-hidden', 'true');
     lightboxImg.src = '';
     resetLightboxTransform();
     if (!modalMask.classList.contains('show')) {
@@ -266,7 +267,7 @@
 
   if (lightbox) {
     lightbox.addEventListener('click', function (e) {
-      if (lbMoved) { lbMoved = false; return; }
+      if (Date.now() - lbLastDragEnd < 300) return;
       if (e.target === lightbox) closeLightbox();
     });
 
@@ -362,6 +363,7 @@
 
       lightboxImg.addEventListener('touchend', function (e) {
         if (e.touches.length === 0) {
+          if (lbMoved) lbLastDragEnd = Date.now();
           lbDragging = false;
           lightboxImg.classList.remove('dragging');
           applyLightboxTransform();
@@ -393,6 +395,7 @@
   window.addEventListener('mouseup', function () {
     if (!lbDragging) return;
     lbDragging = false;
+    if (lbMoved) lbLastDragEnd = Date.now();
     if (lightboxImg) lightboxImg.classList.remove('dragging');
     applyLightboxTransform();
   });
@@ -446,18 +449,41 @@
     hideTip();
   });
 
+  function measureCardTruncation() {
+    navGroupsEl.querySelectorAll('.nav-card').forEach(function (card) {
+      const descEl = card.querySelector('.nav-desc');
+      if (!descEl) return;
+      card.dataset.truncated =
+        descEl.scrollWidth > descEl.clientWidth + 1 ? 'true' : 'false';
+    });
+  }
+
+  let fontsReadyBound = false;
+  function bindFontsReadyMeasure() {
+    if (fontsReadyBound) return;
+    fontsReadyBound = true;
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(measureCardTruncation).catch(function () {});
+    }
+  }
+
+  let measureResizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(measureResizeTimer);
+    measureResizeTimer = setTimeout(measureCardTruncation, 150);
+  }, { passive: true });
+
   function bindNavTips() {
     hideTip();
+    measureCardTruncation();
+
     navGroupsEl.querySelectorAll('.nav-card').forEach(function (card) {
       const descEl = card.querySelector('.nav-desc');
       if (!descEl) return;
 
-      const truncated = descEl.scrollWidth > descEl.clientWidth + 1;
-      card.dataset.truncated = truncated ? 'true' : 'false';
-
       card.addEventListener('mouseenter', function () {
         if (IS_TOUCH) return;
-        if (!truncated) return;
+        if (card.dataset.truncated !== 'true') return;
         showTip(card, descEl.textContent.trim());
       });
       card.addEventListener('mouseleave', function () {
@@ -486,8 +512,15 @@
     hideTip();
   }, true);
 
-  window.addEventListener('scroll', hideTip, { passive: true });
   window.addEventListener('resize', hideTip, { passive: true });
+
+  /* 无链接卡片：阻止跳转并提示 */
+  navGroupsEl.addEventListener('click', function (e) {
+    const card = e.target.closest('.nav-card[data-disabled="true"]');
+    if (!card) return;
+    e.preventDefault();
+    showToast('该站点暂未提供链接');
+  });
 
   /* ============ 骨架屏 ============ */
   function renderNavSkeleton() {
@@ -537,24 +570,122 @@
     });
   }
 
-  /* ============ 导航渲染：拆分 ============ */
+  /* ============ 滚动定位与监听 ============ */
+  function scrollToResultsTop() {
+    if (window.scrollY <= 10) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
 
-  /* 只渲染大类 tab */
+  function scrollToGroup(groupId) {
+    if (!navGroupsEl) return;
+
+    requestAnimationFrame(function () {
+      let targetEl = null;
+      
+      if (groupId === 'all') {
+        targetEl = navGroupsEl.querySelector('.nav-group');
+      } else {
+        targetEl = navGroupsEl.querySelector('.nav-group[data-group-id="' + groupId + '"]');
+      }
+
+      if (!targetEl) return;
+
+      const noticeBarH = (noticeBar.hidden || !SETTINGS.noticeBar) ? 0 : noticeBar.offsetHeight;
+      // 搜索框吸顶，需要把它的高度算进去，另加 16px 呼吸空隙
+      const offset = 60 + noticeBarH + (navSearchEl ? navSearchEl.offsetHeight : 50) + 16;
+      
+      const rect = targetEl.getBoundingClientRect();
+      const targetY = rect.top + window.scrollY - offset;
+
+      if (Math.abs(window.scrollY - targetY) < 4) return;
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      isAutoScrolling = true;
+      clearTimeout(autoScrollTimer);
+      autoScrollTimer = setTimeout(function () {
+        isAutoScrolling = false;
+      }, reduceMotion ? 100 : 800);
+
+      window.scrollTo({ top: Math.max(0, targetY), behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  }
+
+  // ScrollSpy：右侧滑动时自动高亮左侧小类
+  function updateActiveSubTab() {
+    if (!navGroupsEl || !catNavEl) return;
+    if (window.matchMedia('(max-width: 1024px)').matches) return;
+    if (navKeyword.trim()) return;
+
+    const groups = navGroupsEl.querySelectorAll('.nav-group');
+    if (!groups.length) return;
+
+    const noticeBarH = (noticeBar.hidden || !SETTINGS.noticeBar) ? 0 : noticeBar.offsetHeight;
+    // 吸顶总高度 + 100px 判定阈值
+    const offset = 60 + noticeBarH + (navSearchEl ? navSearchEl.offsetHeight : 50) + 100;
+    
+    let currentGroupId = '';
+    for (let i = groups.length - 1; i >= 0; i--) {
+      const group = groups[i];
+      const rect = group.getBoundingClientRect();
+      if (rect.top <= offset) {
+        currentGroupId = group.dataset.groupId;
+        break;
+      }
+    }
+
+    catNavEl.querySelectorAll('.sub-tab').forEach(function (sub) {
+      sub.classList.toggle('active', sub.dataset.group === currentGroupId);
+    });
+  }
+
+  function handleScroll() {
+    hideTip();
+    updateBackTop();
+
+    if (!isAutoScrolling) {
+      clearTimeout(scrollSpyTimer);
+      scrollSpyTimer = setTimeout(updateActiveSubTab, 100);
+    }
+  }
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+
+
+  /* ============ 导航渲染 ============ */
+
+  /* 侧边栏：大类 + 折叠小类 */
   function renderCatNav() {
     let catHtml = '';
     NAV_CATEGORIES.forEach(function (cat) {
       const total = (cat.groups || []).reduce(function (sum, g) {
         return sum + ((g.items || []).length);
       }, 0);
+      const isActive = cat.id === activeCategoryId;
 
-      catHtml += '<button class="cat-tab' + (cat.id === activeCategoryId ? ' active' : '') +
+      catHtml += '<div class="cat-block">';
+      catHtml += '<button class="cat-tab' + (isActive ? ' active' : '') +
                  '" type="button" data-cat="' + esc(cat.id) + '">' +
                  '<span class="cat-tab-name">' + esc(cat.title) + '</span>' +
                  '<span class="cat-tab-count">' + total + '</span>' +
                  '</button>';
+
+      catHtml += '<div class="sub-cats-wrap' + (isActive ? ' show' : '') + '">';
+      catHtml += '<div class="sub-cats-inner">';
+      
+      (cat.groups || []).forEach(function (g) {
+        catHtml += '<button class="sub-tab' + (activeGroupId === g.id ? ' active' : '') + '" type="button" data-group="' + esc(g.id) + '">' + esc(g.title) + '</button>';
+      });
+      
+      catHtml += '</div></div>';
+      catHtml += '</div>';
     });
     catNavEl.innerHTML = catHtml;
+    bindCatEvents();
+  }
 
+  function bindCatEvents() {
     catNavEl.querySelectorAll('.cat-tab').forEach(function (tab) {
       tab.addEventListener('click', function () {
         if (activeCategoryId === tab.dataset.cat) return;
@@ -562,29 +693,50 @@
         activeGroupId = 'all';
         hideTip();
 
-        // 1) tab 复用了 DOM，必须手动同步高亮，否则选中态仍停在旧 tab 上
         catNavEl.querySelectorAll('.cat-tab').forEach(function (t) {
           t.classList.toggle('active', t === tab);
         });
 
-        // 2) 移动端横向 tab 栏：把选中的 tab 平滑滚进可视区域
-        if (window.matchMedia('(max-width: 1024px)').matches && tab.scrollIntoView) {
-          const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          tab.scrollIntoView({
-            behavior: reduceMotion ? 'auto' : 'smooth',
-            inline: 'center',
-            block: 'nearest'
-          });
+        catNavEl.querySelectorAll('.cat-block').forEach(function (block) {
+          const subWrap = block.querySelector('.sub-cats-wrap');
+          if (subWrap) {
+            const isCurrent = block.contains(tab);
+            subWrap.classList.toggle('show', isCurrent);
+            if (isCurrent) {
+              subWrap.querySelectorAll('.sub-tab').forEach(function(st) {
+                st.classList.remove('active');
+              });
+            }
+          }
+        });
+
+        if (window.matchMedia('(max-width: 1024px)').matches) {
+          if (tab.scrollIntoView) {
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            tab.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+          }
         }
 
-        // 切换大类：分组列表变了，重建分组 chips；再重渲染卡片
         renderGroupNav();
         renderCards();
+
+        if (window.matchMedia('(min-width: 1025px)').matches) {
+          scrollToGroup('all');
+        }
+      });
+    });
+
+    catNavEl.querySelectorAll('.sub-tab').forEach(function (sub) {
+      sub.addEventListener('click', function () {
+        catNavEl.querySelectorAll('.sub-tab').forEach(function (st) {
+          st.classList.toggle('active', st === sub);
+        });
+        scrollToGroup(sub.dataset.group);
       });
     });
   }
 
-  /* 只渲染分组 chips */
+  /* 中间 chips (移动端使用) */
   function renderGroupNav() {
     const currentCat = NAV_CATEGORIES.find(function (c) { return c.id === activeCategoryId; });
     const groups = currentCat ? (currentCat.groups || []) : [];
@@ -607,18 +759,19 @@
     });
   }
 
-  /* 只更新分组 chips 的 active 状态，不重建 DOM */
   function updateGroupNavActive() {
     groupNavEl.querySelectorAll('.chip').forEach(function (chip) {
       chip.classList.toggle('active', chip.dataset.group === activeGroupId);
     });
   }
 
-  /* 只渲染站点卡片 */
+  /* 卡片 */
   function renderCards() {
     const q = navKeyword.trim().toLowerCase();
     const cardTarget = SETTINGS.openInNewTab ? '_blank' : '_self';
     const cardRel = SETTINGS.openInNewTab ? 'noopener' : '';
+    
+    const isDesktop = window.matchMedia('(min-width: 1025px)').matches;
 
     const currentCat = NAV_CATEGORIES.find(function (c) { return c.id === activeCategoryId; });
     const groups = currentCat ? (currentCat.groups || []) : [];
@@ -627,11 +780,11 @@
     let shown = 0;
 
     groups.forEach(function (group) {
-      if (activeGroupId !== 'all' && activeGroupId !== group.id) return;
+      if (!isDesktop && activeGroupId !== 'all' && activeGroupId !== group.id) return;
 
       const items = (group.items || []).filter(function (it) {
         if (!q) return true;
-        return (it.name + ' ' + (it.desc || '') + ' ' + group.title)
+        return ((it.name || '') + ' ' + (it.desc || ''))
           .toLowerCase().indexOf(q) !== -1;
       });
 
@@ -639,29 +792,37 @@
       shown += items.length;
 
       const cards = items.map(function (it) {
-        const hasDesc = !!it.desc;
+        const name = it.name || '';
+        const desc = it.desc || '';
+        const hasDesc = !!desc;
         const hasIcon = !!(it.icon && it.icon.trim());
         const iconHtml = hasIcon
           ? '<img data-fallback src="' + esc(it.icon) + '" alt="">'
           : '';
+        const noLink = !it.url || it.url === '#';
 
         return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + '" ' +
-                 'href="' + esc(it.url || '#') + '" ' +
-                 'target="' + cardTarget + '" ' +
-                 (cardRel ? 'rel="' + cardRel + '" ' : '') + '>' +
+                 'href="' + (noLink ? '#' : esc(it.url)) + '" ' +
+                 (noLink
+                   ? 'data-disabled="true" aria-disabled="true" '
+                   : 'target="' + cardTarget + '" ' +
+                     (cardRel ? 'rel="' + cardRel + '" ' : '')) +
+                 '>' +
                  '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
                    '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
                  '</span>' +
                  '<span class="nav-info">' +
-                   '<span class="nav-name">' + highlight(it.name, q) + '</span>' +
-                   (hasDesc ? '<span class="nav-desc">' + highlight(it.desc, q) + '</span>' : '') +
+                   '<span class="nav-name">' + highlight(name, q) + '</span>' +
+                   (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
                  '</span>' +
-                 (hasDesc ? '<span class="nav-info-btn" role="button" aria-label="查看完整简介">i</span>' : '') +
+                 (hasDesc
+                   ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>'
+                   : '') +
                '</a>';
       }).join('');
 
-      html += '<div class="nav-group">' +
-                '<h2 class="group-title">' + highlight(group.title, q) +
+      html += '<div class="nav-group" data-group-id="' + esc(group.id) + '">' +
+                '<h2 class="group-title">' + esc(group.title || '') +
                   '<span class="group-count">' + items.length + '</span>' +
                 '</h2>' +
                 '<div class="nav-grid">' + cards + '</div>' +
@@ -671,15 +832,30 @@
     navGroupsEl.innerHTML = html;
     navEmptyEl.hidden = shown > 0;
 
+    if (shown === 0) {
+      navEmptyEl.innerHTML = '没有找到匹配的站点<br><button id="emptyClearBtn" type="button">清空搜索</button>';
+      const btn = document.getElementById('emptyClearBtn');
+      if (btn) {
+        btn.addEventListener('click', function() {
+          searchEl.value = '';
+          navKeyword = '';
+          groupNavEl.hidden = false;
+          renderCards();
+          searchEl.focus();
+        });
+      }
+    }
+
     guardImgs(navGroupsEl);
     bindNavTips();
+    bindFontsReadyMeasure();
   }
 
-  /* 全量渲染：启动 / 切大类时用 */
   function renderNav() {
     renderCatNav();
     renderGroupNav();
     renderCards();
+    setTimeout(updateActiveSubTab, 100);
   }
 
   /* ============ 友站渲染 ============ */
@@ -737,24 +913,36 @@
     barTimer = setInterval(function () {
       if (barPaused) return;
       barIndex = (barIndex + 1) % pinned.length;
-      renderNoticeBar();
+      renderNoticeBar(false);
     }, BAR_INTERVAL);
   }
 
-  function renderNoticeBar() {
-    if (!SETTINGS.noticeBar) { noticeBar.hidden = true; stopBarTimer(); return; }
+  function renderNoticeBar(restartTimer) {
+    if (!SETTINGS.noticeBar) {
+      noticeBar.hidden = true;
+      barPaused = false;
+      stopBarTimer();
+      updateNoticeBarH();
+      return;
+    }
 
     const pinned = pinnedNotices();
-    if (!pinned.length) { noticeBar.hidden = true; stopBarTimer(); return; }
+    if (!pinned.length) {
+      noticeBar.hidden = true;
+      barPaused = false;
+      stopBarTimer();
+      updateNoticeBarH();
+      return;
+    }
 
     if (barIndex >= pinned.length) barIndex = 0;
     const n = pinned[barIndex];
 
     noticeBar.hidden = false;
-    barTag.textContent = n.tag;
-    barTag.className = 'bar-tag ' + (n.tagClass || '');
-    barText.textContent = n.title;
-    barText.title = n.title;
+    barTag.textContent = n.tag || '';
+    barTag.className = ('bar-tag ' + (n.tagClass || '')).trim();
+    barText.textContent = n.title || '';
+    barText.title = n.title || '';
 
     barText.onclick = function () {
       if (n.noModal && n.links && n.links.length) {
@@ -779,7 +967,8 @@
       });
     }
 
-    startBarTimer();
+    updateNoticeBarH();
+    if (restartTimer !== false) startBarTimer();
   }
 
   noticeBar.addEventListener('mouseenter', function () { barPaused = true; });
@@ -787,11 +976,16 @@
 
   /* ============ 公告标签筛选 ============ */
   function renderNoticeTabs() {
+    if (TAGS.indexOf(noticeFilter) === -1) noticeFilter = '全部';
+    
+    noticeTabsEl.hidden = !!noticeKeyword.trim();
+
     noticeTabsEl.innerHTML = '';
     TAGS.forEach(function (tag) {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'notice-tab' + (tag === noticeFilter ? ' active' : '');
+      btn.dataset.tag = tag;
       btn.textContent = tag;
       btn.addEventListener('click', function () {
         noticeFilter = tag;
@@ -802,15 +996,19 @@
     });
   }
 
+  function updateNoticeTabsActive() {
+    noticeTabsEl.querySelectorAll('.notice-tab').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.tag === noticeFilter);
+    });
+  }
+
   /* ============ 公告列表 ============ */
   function renderNotices() {
     const q = noticeKeyword.trim().toLowerCase();
 
     let list = NOTICES.filter(function (n) {
       const okTag = noticeFilter === '全部' || n.tag === noticeFilter;
-      const okQ = !q ||
-        (n.title + ' ' + n.excerpt + ' ' + n.tag + ' ' + (n.content || '') + ' ' + JSON.stringify(n.sections || ''))
-          .toLowerCase().indexOf(q) !== -1;
+      const okQ = !q || (n._searchText || '').indexOf(q) !== -1;
       return okTag && okQ;
     });
 
@@ -821,6 +1019,7 @@
     noticeListEl.innerHTML = '';
 
     if (!list.length) {
+      noticeEmptyEl.textContent = '没有匹配的公告';
       noticeEmptyEl.hidden = false;
       return;
     }
@@ -846,15 +1045,15 @@
       }
 
       const tagEl = document.createElement('span');
-      tagEl.className = 'tag ' + (n.tagClass || '');
-      tagEl.textContent = n.tag;
+      tagEl.className = ('tag ' + (n.tagClass || '')).trim();
+      tagEl.textContent = n.tag || '';
       meta.appendChild(tagEl);
 
       const h3 = document.createElement('h3');
-      h3.innerHTML = highlight(n.title, q);
+      h3.innerHTML = highlight(n.title || '', q);
 
       const p = document.createElement('p');
-      p.innerHTML = highlight(n.excerpt, q);
+      p.innerHTML = highlight(n.excerpt || '', q);
 
       body.appendChild(meta);
       body.appendChild(h3);
@@ -992,9 +1191,9 @@
 
   /* ============ 弹窗 ============ */
   function openModal(n) {
-    modalTag.textContent = n.tag;
-    modalTag.className = 'tag ' + (n.tagClass || '');
-    modalTitle.textContent = n.title;
+    modalTag.textContent = n.tag || '';
+    modalTag.className = ('tag ' + (n.tagClass || '')).trim();
+    modalTitle.textContent = n.title || '';
 
     modalBody.innerHTML = '';
     if (n.sections && n.sections.length) {
@@ -1002,7 +1201,7 @@
       modalBody.appendChild(renderStructuredBody(n.sections));
     } else {
       modalBody.classList.add('plain');
-      modalBody.textContent = n.content || n.excerpt;
+      modalBody.textContent = n.content || n.excerpt || '';
     }
     modalBody.scrollTop = 0;
 
@@ -1032,7 +1231,9 @@
   function closeModal() {
     modalMask.classList.remove('show');
     modalMask.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('modal-open');
+    if (!lightbox || !lightbox.classList.contains('show')) {
+      document.body.classList.remove('modal-open');
+    }
     if (lastFocused && document.body.contains(lastFocused)) {
       lastFocused.focus();
     }
@@ -1065,13 +1266,24 @@
     clearTimeout(navSearchTimer);
     const value = e.target.value;
     navSearchTimer = setTimeout(function () {
-      if (!NAV_CATEGORIES.length) return;
       navKeyword = value;
-      if (navKeyword.trim() && activeGroupId !== 'all') {
+      if (!NAV_CATEGORIES.length) return;
+
+      const isSearching = !!navKeyword.trim();
+
+      groupNavEl.hidden = isSearching;
+
+      if (isSearching) {
         activeGroupId = 'all';
-        updateGroupNavActive();
+        catNavEl.querySelectorAll('.sub-tab').forEach(function(st) {
+          st.classList.remove('active');
+        });
       }
+      
+      updateGroupNavActive();
       renderCards();
+      
+      if (isSearching) scrollToResultsTop();
     }, 120);
   });
 
@@ -1082,29 +1294,61 @@
       const value = e.target.value;
       noticeSearchTimer = setTimeout(function () {
         noticeKeyword = value;
+        if (!NOTICES.length) return;
+
+        const isSearching = !!noticeKeyword.trim();
+
+        noticeTabsEl.hidden = isSearching;
+
+        if (isSearching) {
+          noticeFilter = '全部';
+        }
+
+        updateNoticeTabsActive();
         renderNotices();
       }, 120);
     });
   }
 
-  /* ============ 快捷键 / 聚焦导航搜索 ============ */
-  (function initSlashShortcut() {
+  /* ============ 快捷键 ============ */
+  (function initShortcuts() {
     document.addEventListener('keydown', function (e) {
-      if (e.key !== '/') return;
-
       const active = document.activeElement;
       const tag = (active && active.tagName) || '';
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || (active && active.isContentEditable)) {
+      const isInput = tag === 'INPUT' || tag === 'TEXTAREA' || (active && active.isContentEditable);
+
+      // 1. "/" 或 "Ctrl+K" 聚焦搜索
+      if ((e.key === '/' && !isInput) || ((e.ctrlKey || e.metaKey) && e.key === 'k')) {
+        if (modalMask && modalMask.classList.contains('show')) return;
+        if (settingsMask && settingsMask.classList.contains('show')) return;
+        if (lightbox && lightbox.classList.contains('show')) return;
+
+        e.preventDefault();
+        if (navSearchEl && !navSearchEl.hidden) {
+          searchEl.focus();
+          searchEl.select();
+        }
         return;
       }
-      if (modalMask && modalMask.classList.contains('show')) return;
-      if (settingsMask && settingsMask.classList.contains('show')) return;
-      if (lightbox && lightbox.classList.contains('show')) return;
 
-      e.preventDefault();
-      if (navSearchEl && !navSearchEl.hidden) {
-        searchEl.focus();
-        searchEl.select();
+      // 2. 上下方向键切换卡片焦点
+      if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && !isInput && !modalMask.classList.contains('show')) {
+        const cards = Array.from(navGroupsEl.querySelectorAll('.nav-card:not([data-disabled="true"])'));
+        if (!cards.length) return;
+
+        e.preventDefault();
+
+        const currentIdx = cards.indexOf(document.activeElement);
+        let nextIdx = 0;
+
+        if (e.key === 'ArrowDown') {
+          nextIdx = currentIdx === -1 || currentIdx === cards.length - 1 ? 0 : currentIdx + 1;
+        } else {
+          nextIdx = currentIdx === -1 || currentIdx === 0 ? cards.length - 1 : currentIdx - 1;
+        }
+
+        cards[nextIdx].focus();
+        cards[nextIdx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
     });
   })();
@@ -1147,6 +1391,18 @@
     if (mq.addEventListener) mq.addEventListener('change', onChange);
     else if (mq.addListener) mq.addListener(onChange);
   })();
+
+  /* ============ 监听窗口大小变化 ============ */
+  const mqLayout = window.matchMedia('(max-width: 1024px)');
+  function handleLayoutChange(e) {
+    renderCards();
+    if (!e.matches) {
+      setTimeout(updateActiveSubTab, 150);
+    }
+  }
+  if (mqLayout.addEventListener) mqLayout.addEventListener('change', handleLayoutChange);
+  else if (mqLayout.addListener) mqLayout.addListener(handleLayoutChange);
+
 
   /* ============ Toast ============ */
   let toastTimer = null;
@@ -1266,9 +1522,9 @@
     } else if (!SETTINGS.noticeBar) {
       noticeBar.hidden = true;
       stopBarTimer();
+      updateNoticeBarH();
     }
 
-    // 只重渲染卡片（打开方式可能变了），不重建大类 tab / 分组 chips
     if (NAV_CATEGORIES.length) {
       renderCards();
     }
@@ -1304,12 +1560,31 @@
 
     if (setDefaultCategoryEl) {
       const current = SETTINGS.defaultCategory || '';
-      let html = '<option value="">跟随数据</option>';
-      NAV_CATEGORIES.forEach(function (c) {
-        html += '<option value="' + esc(c.id) + '">' + esc(c.title) + '</option>';
-      });
-      setDefaultCategoryEl.innerHTML = html;
-      setDefaultCategoryEl.value = current;
+      let effective = '';
+
+      if (NAV_CATEGORIES.length) {
+        let found = NAV_CATEGORIES.find(function (c) { return c.id === current; });
+
+        if (!found && current) {
+          SETTINGS.defaultCategory = '';
+          saveSettings();
+        }
+
+        if (!found) {
+          found = NAV_CATEGORIES.find(function (c) { return c.default; }) || NAV_CATEGORIES[0];
+        }
+        effective = found ? found.id : '';
+
+        let html = '';
+        NAV_CATEGORIES.forEach(function (c) {
+          html += '<option value="' + esc(c.id) + '">' + esc(c.title) + '</option>';
+        });
+        setDefaultCategoryEl.innerHTML = html;
+      } else {
+        setDefaultCategoryEl.innerHTML = '<option value="">加载中…</option>';
+      }
+
+      setDefaultCategoryEl.value = effective;
     }
 
     if (setOpenModeEl) {
@@ -1355,7 +1630,7 @@
 
     if (setDefaultCategoryEl) {
       setDefaultCategoryEl.addEventListener('change', function () {
-        SETTINGS.defaultCategory = setDefaultCategoryEl.value || '';
+        SETTINGS.defaultCategory = setDefaultCategoryEl.value;
         saveSettings();
       });
     }
@@ -1418,11 +1693,11 @@
     backTopBtn.classList.toggle('show', window.scrollY > 400);
   }
 
-  window.addEventListener('scroll', updateBackTop, { passive: true });
-
-  backTopBtn.addEventListener('click', function () {
+  function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  }
+
+  backTopBtn.addEventListener('click', scrollToTop);
 
   /* ============ 点击品牌 ============ */
   (function initBrandHome() {
@@ -1431,7 +1706,7 @@
     brand.addEventListener('click', function (e) {
       if (window.scrollY <= 8) return;
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToTop();
     });
   })();
 
@@ -1482,7 +1757,7 @@
       } else if (navData && Array.isArray(navData.categories)) {
         NAV_CATEGORIES = navData.categories;
       } else {
-        NAV_CATEGORIES = [];
+        throw new Error('导航 JSON 结构不正确');
       }
 
       let targetCatId = '';
@@ -1512,18 +1787,33 @@
       const noticeRes = await fetchWithTimeout(NOTICE_URL);
       if (!noticeRes.ok) throw new Error('公告 JSON 加载失败：' + noticeRes.status);
 
-      NOTICES = await noticeRes.json();
-      TAGS = ['全部', ...new Set(NOTICES.map(n => n.tag))];
+      const noticeData = await noticeRes.json();
+      NOTICES = Array.isArray(noticeData) ? noticeData : [];
+
+      NOTICES.forEach(function (n) {
+        n._searchText = (
+          (n.title || '') + ' ' +
+          (n.excerpt || '') + ' ' +
+          (n.tag || '') + ' ' +
+          (n.content || '') + ' ' +
+          JSON.stringify(n.sections || '')
+        ).toLowerCase();
+      });
+
+      TAGS = ['全部', ...new Set(NOTICES.map(function (n) { return n.tag; }).filter(Boolean))];
 
       renderNoticeTabs();
       renderNotices();
       renderNoticeBar();
     } catch (err) {
       console.error(err);
+      NOTICES = [];
       noticeListEl.innerHTML = '';
-      noticeEmptyEl.hidden = false;
       noticeEmptyEl.textContent = '公告数据加载失败';
+      noticeEmptyEl.hidden = false;
       noticeBar.hidden = true;
+      stopBarTimer();
+      updateNoticeBarH();
     }
 
     try {

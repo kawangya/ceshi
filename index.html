@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="author" content="卡王 ">
+<meta name="author" content="卡王">
 <meta name="description" content="卡王的导航">
 <title>卡王的导航</title>
 <link rel="icon" href="images/favicon.ico" type="image/x-icon">
@@ -216,7 +216,7 @@
   </div>
 </div>
 
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片预览">
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="图片预览">
   <button class="lightbox-close" id="lightboxClose" type="button" aria-label="关闭">×</button>
   <img class="lightbox-img" id="lightboxImg" alt="">
   <div class="lightbox-bar">
@@ -234,7 +234,6 @@
     </div>
 
     <div class="settings-body">
-
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">主题配色</div>
@@ -271,7 +270,7 @@
           <div class="setting-desc">打开页面先展示哪个分类（下次访问生效）</div>
         </div>
         <select class="setting-select" id="setDefaultCategory">
-          <option value="">跟随数据</option>
+          <option value="">加载中…</option>
         </select>
       </div>
 
@@ -285,7 +284,6 @@
           <button type="button" data-value="self">当前页</button>
         </div>
       </div>
-
     </div>
 
     <div class="settings-foot">
