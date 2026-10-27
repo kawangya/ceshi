@@ -55,11 +55,11 @@ body.modal-open,
 body.settings-open { overflow: hidden; }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb {
   background: var(--border-strong);
   border-radius: 10px;
-  border: 3px solid var(--bg);
+  border: 2px solid var(--bg);
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-mute); }
 
@@ -204,6 +204,7 @@ body.settings-open { overflow: hidden; }
   display: flex;
   align-items: center;
   gap: 8px;
+  min-height: 30px;
 }
 .bar-tag {
   flex-shrink: 0;
@@ -431,9 +432,13 @@ body.settings-open { overflow: hidden; }
   color: inherit;
   transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease, background-color .3s ease;
   overflow: hidden;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
+}
+@media (hover: none) {
+  .nav-card {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
 }
 
 .nav-card:hover {
@@ -668,17 +673,16 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 .notice-tab:hover { background: var(--surface-2); color: var(--text-dim); }
 .notice-tab.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 
-/* 恢复极度紧凑的列表样式 */
 .notice-list { list-style: none; margin: 0; padding: 0; }
 .notice {
   display: flex;
   gap: 2px;
-  padding: 10px 8px; /* 紧凑内边距 */
+  padding: 10px 8px;
   border-radius: 10px;
   cursor: pointer;
   transition: background-color .18s ease;
 }
-.notice + .notice { margin-top: 2px; } /* 微小的间隔 */
+.notice + .notice { margin-top: 2px; }
 .notice:hover, .notice:focus-visible {
   background: var(--surface-2);
   outline: none;
@@ -707,6 +711,10 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 
 .empty { padding: 26px 12px; text-align: center; font-size: 12.5px; color: var(--text-mute); display: flex; flex-direction: column; align-items: center; justify-content: center;}
 .empty-lg { padding: 60px 20px; font-size: 13.5px; }
+
+/* 新增：解决侧边栏无数据时，提示文字被挤到最底部的问题 */
+.notice-list:empty { flex: 0 !important; padding: 0 !important; }
+.side-col .panel > .empty { flex: 1; }
 
 /* ---------- 弹窗 & 结构化内容 ---------- */
 .modal-mask {
@@ -740,16 +748,28 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 .section-title { display: flex; align-items: center; gap: 7px; margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--text); }
 .section-title::before { content: ''; width: 3px; height: 12px; border-radius: 2px; background: var(--accent); flex-shrink: 0; }
 .section-text { margin: 0; font-size: 13px; line-height: 1.75; color: var(--text-dim); }
-.section-text a, .num-list a { color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent); }
-.section-text a:hover, .num-list a:hover { border-bottom-style: solid; }
-.section-text code, .num-list code { padding: 1px 5px; border-radius: 4px; background: var(--surface-2); color: var(--text); font-family: monospace; font-size: 12px; }
+
+.section-text a, .num-list a, .kv-value a { 
+  color: var(--accent); 
+  text-decoration: none; 
+  border-bottom: 1px dashed var(--accent); 
+}
+.section-text a:hover, .num-list a:hover, .kv-value a:hover { 
+  border-bottom-style: solid; 
+}
+.section-text code, .num-list code, .kv-value code { 
+  padding: 1px 5px; 
+  border-radius: 4px; 
+  background: var(--surface-2); 
+  color: var(--text); 
+  font-family: monospace; 
+  font-size: 12px; 
+}
 
 .kv-list { display: flex; flex-direction: column; gap: 7px; margin: 0; padding: 0; list-style: none; }
 .kv-item { display: grid; grid-template-columns: 78px 1fr; gap: 10px; align-items: baseline; font-size: 13px; }
 .kv-label { color: var(--text-mute); font-weight: 500; flex-shrink: 0; font-family: monospace; font-size: 12px; }
 .kv-value { color: var(--text); min-width: 0; word-break: break-word; }
-.kv-value a { color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent); }
-.kv-value a:hover { border-bottom-style: solid; }
 .kv-note { display: block; margin-top: 1px; font-size: 12px; color: var(--text-mute); }
 
 .num-list { margin: 0; padding: 0; list-style: none; counter-reset: item; display: flex; flex-direction: column; gap: 8px; }
@@ -770,7 +790,7 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 .modal-body img { max-width: 100%; height: auto; border-radius: 8px; }
 
 /* ---------- 图片灯箱 ---------- */
-.lightbox { position: fixed; inset: 0; z-index: 120; display: flex; align-items: center; justify-content: center; padding: 40px 24px 76px; background: rgba(15, 14, 12, .88); backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: all .2s; cursor: default; overflow: hidden; }
+.lightbox { position: fixed; inset: 0; z-index: 120; display: flex; align-items: center; justify-content: center; padding: 40px 24px 76px; background: rgba(15, 14, 12, .88); backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: all .2s; cursor: default; overflow: hidden; touch-action: none; }
 .lightbox.show { opacity: 1; visibility: visible; }
 .lightbox-img { max-width: 100%; max-height: calc(100vh - 116px); object-fit: contain; border-radius: 8px; box-shadow: 0 20px 60px rgba(0, 0, 0, .55); cursor: zoom-in; user-select: none; background: #fff; transform-origin: center center; will-change: transform; touch-action: none; }
 .lightbox-img.dragging { cursor: grabbing; }
@@ -858,7 +878,7 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
   .cat-title, .cat-foot { display: none; }
   .cat-nav { flex-direction: row; overflow-x: auto; gap: 4px; padding-bottom: 1px; border-bottom: 1px solid var(--border); scrollbar-width: none; }
   .cat-nav::-webkit-scrollbar { display: none; }
-  .cat-tab { width: auto; padding: 7px 12px 9px; border-radius: 0; background: transparent; text-align: center; }
+  .cat-tab { width: auto; flex-shrink: 0; padding: 7px 12px 9px; border-radius: 0; background: transparent; text-align: center; }
   .cat-tab::before { display: none; }
   .cat-tab:hover { background: transparent; color: var(--text); }
   .cat-tab.active { background: transparent; color: var(--accent); }
@@ -882,7 +902,6 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
     margin-top: -16px;
   }
   
-  /* 左侧分类树保持粘性并允许自身滚动 */
   .cat-col {
     position: sticky;
     top: calc(84px + var(--notice-bar-h, 0px));
@@ -892,7 +911,6 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
   }
   .cat-col::-webkit-scrollbar { display: none; }
   
-  /* 右侧整体占满视口高度，完美固定 */
   .side-col {
     position: sticky;
     top: calc(84px + var(--notice-bar-h, 0px));
@@ -907,7 +925,6 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
     flex-shrink: 0;
   }
 
-  /* 公告面板自动撑满剩余高度，极其大气 */
   .side-col > .panel:last-child {
     flex: 1;
     display: flex;
@@ -919,12 +936,21 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
     flex-shrink: 0;
   }
 
-  /* 列表内部自身滚动，占据剩余所有空间 */
   .notice-list {
     flex: 1;
     overflow-y: auto;
     min-height: 0;
     padding: 4px 4px 16px 0; 
+  }
+
+  .notice-list::-webkit-scrollbar { width: 6px; }
+  .notice-list::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border: none;
+    border-radius: 6px;
+  }
+  .notice-list::-webkit-scrollbar-thumb:hover {
+    background: var(--text-mute);
   }
   
   .nav-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
@@ -964,6 +990,127 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 @media (max-width: 400px) {
   .cat-tab-count { display: none; }
 }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+
+/* 新增：骨架屏到内容的无缝淡入 */
+@keyframes fadeInContent {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
 }
+.fade-in-content {
+  animation: fadeInContent .4s cubic-bezier(.25,.46,.45,.94) forwards;
+}
+
+/* 新增：外链搜索引擎跳转 */
+.external-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+}
+.external-search p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-mute);
+}
+.ext-search-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.ext-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-size: 12.5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+.ext-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* 新增：设置面板的输入框 */
+.setting-input {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 12.5px;
+  outline: none;
+  transition: all .2s;
+}
+.setting-input:focus {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+/* 新增：编辑模式下的 UI */
+body.edit-mode .nav-card {
+  border-color: var(--accent);
+  border-style: dashed;
+  padding-right: 40px;
+}
+body.edit-mode .nav-card:hover {
+  transform: none;
+  box-shadow: none;
+}
+.edit-actions {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+}
+body.edit-mode .edit-actions { display: flex; }
+.edit-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-size: 12px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.edit-btn:hover { background: var(--accent-soft); color: var(--accent); }
+.edit-btn.del:hover { background: #C0553D; color: #fff; border-color: #C0553D; }
+
+/* 新增：右上角的保存按钮 */
+.floating-save {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 90;
+  padding: 10px 20px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(78, 114, 150, 0.4);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+body.edit-mode .floating-save { display: flex; }
+.floating-save:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(78, 114, 150, 0.5); }

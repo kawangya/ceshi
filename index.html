@@ -119,7 +119,7 @@
         </div>
         <div class="profile-meta">
           <div class="profile-name">卡王</div>
-          <div class="profile-bio">MC 资源 / 皮肤代发 / 工具推荐</div>
+          <div class="profile-bio" id="greetingText">MC 资源 / 皮肤代发 / 工具推荐</div>
         </div>
       </div>
 
@@ -264,6 +264,18 @@
         </label>
       </div>
 
+      <!-- 新增：友站开关 -->
+      <div class="setting-item">
+        <div class="setting-label">
+          <div class="setting-name">底部友站</div>
+          <div class="setting-desc">显示页面底部的友站链接</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="setShowFriends">
+          <span class="switch-track"></span>
+        </label>
+      </div>
+
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">默认大类</div>
@@ -284,6 +296,21 @@
           <button type="button" data-value="self">当前页</button>
         </div>
       </div>
+
+      <!-- 新增：GitHub 在线编辑配置 -->
+      <div class="setting-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
+        <div class="setting-label">
+          <div class="setting-name">GitHub 在线编辑</div>
+          <div class="setting-desc">自动识别当前仓库，填入 Token 即可开启</div>
+        </div>
+        <input type="text" id="ghRepo" placeholder="仓库名 (自动获取)" class="setting-input" readonly style="opacity: 0.6; cursor: not-allowed;">
+        <input type="text" id="ghPath" placeholder="文件路径 (如 data/nav.json)" class="setting-input" value="data/nav.json">
+        <input type="password" id="ghToken" placeholder="Personal Access Token (ghp_...)" class="setting-input">
+        <label class="switch" style="margin-top: 8px; align-self: flex-start;">
+          <input type="checkbox" id="setEditMode">
+          <span class="switch-track"></span>
+        </label>
+      </div>
     </div>
 
     <div class="settings-foot">
@@ -298,6 +325,26 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- 新增：卡片编辑弹窗 -->
+<div class="modal-mask" id="editModalMask" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h2 class="modal-title" id="editModalTitle" style="margin:0; padding:0;">编辑卡片</h2>
+      <button class="modal-close" id="editModalClose" type="button" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px; padding-top: 20px;">
+      <input type="text" id="editName" placeholder="站点名称" class="setting-input">
+      <input type="text" id="editUrl" placeholder="站点链接 (URL)" class="setting-input">
+      <input type="text" id="editDesc" placeholder="站点描述 (可选)" class="setting-input">
+      <input type="text" id="editLetter" placeholder="首字母 (可选，默认取名称首字)" class="setting-input">
+      <input type="text" id="editColor" placeholder="图标背景色 (如 #4E7296)" class="setting-input">
+    </div>
+    <div class="modal-actions">
+      <button class="settings-btn" id="editSaveBtn" style="background:var(--accent); color:#fff; border:none;">保存</button>
+    </div>
+  </div>
+</div>
 
 <script src="js/script.js" defer></script>
 </body>
