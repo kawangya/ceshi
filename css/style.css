@@ -1159,3 +1159,21 @@ body.edit-mode .floating-save { display: flex; }
 body.edit-mode .group-actions {
   display: flex;
 }
+
+/* 新增：左侧分类操作按钮 */
+.cat-tab { position: relative; }
+.cat-actions {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  gap: 4px;
+  z-index: 5;
+}
+body.edit-mode .cat-tab .cat-actions {
+  display: flex;
+}
+body.edit-mode .cat-tab .cat-tab-count {
+  display: none; /* 编辑时隐藏数量腾出空间 */
+} 

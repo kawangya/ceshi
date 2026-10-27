@@ -798,10 +798,22 @@
       const total = (cat.groups || []).reduce(function (sum, g) { return sum + ((g.items || []).length); }, 0);
       const isActive = cat.id === activeCategoryId;
 
+      // 新增：生成分类操作按钮
+      let catActions = '';
+      if (document.body.classList.contains('edit-mode')) {
+        catActions = `
+          <span class="cat-actions">
+            <span class="edit-btn edit-cat" role="button" data-cat="${esc(cat.id)}" title="重命名">✎</span>
+            <span class="edit-btn del-cat" role="button" data-cat="${esc(cat.id)}" title="删除分类">×</span>
+          </span>
+        `;
+      }
+
       catHtml += '<div class="cat-block">';
       catHtml += '<button class="cat-tab' + (isActive ? ' active' : '') +
                  '" type="button" data-cat="' + esc(cat.id) + '">' +
                  '<span class="cat-tab-name">' + esc(cat.title) + '</span>' +
+                 catActions +
                  '<span class="cat-tab-count">' + total + '</span>' +
                  '</button>';
 
@@ -839,7 +851,42 @@
   }
   function bindCatEvents() {
     catNavEl.querySelectorAll('.cat-tab').forEach(function (tab) {
-      tab.addEventListener('click', function () {
+      tab.addEventListener('click', function (e) {
+        // 新增：拦截分类编辑/删除
+        if (document.body.classList.contains('edit-mode')) {
+          const editBtn = e.target.closest('.edit-cat');
+          const delBtn = e.target.closest('.del-cat');
+          
+          if (editBtn || delBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const catId = (editBtn || delBtn).dataset.cat;
+            const catIdx = NAV_CATEGORIES.findIndex(c => c.id === catId);
+            if (catIdx === -1) return;
+            const cat = NAV_CATEGORIES[catIdx];
+
+            if (editBtn) {
+              const newName = prompt('请输入新的大类名称：', cat.title);
+              if (newName && newName.trim()) {
+                cat.title = newName.trim();
+                renderNav();
+                showToast('分类已重命名，请记得保存');
+              }
+            } else if (delBtn) {
+              if (confirm('确定要删除大类「' + cat.title + '」及其下的所有内容吗？')) {
+                NAV_CATEGORIES.splice(catIdx, 1);
+                // 如果删除的是当前选中的分类，切换到第一个分类
+                if (activeCategoryId === catId) {
+                  activeCategoryId = NAV_CATEGORIES[0] ? NAV_CATEGORIES[0].id : '';
+                }
+                renderNav();
+                showToast('分类已删除，请记得保存');
+              }
+            }
+            return; // 拦截后直接返回，不执行切换分类逻辑
+          }
+        }
+
         if (activeCategoryId === tab.dataset.cat) return;
         activeCategoryId = tab.dataset.cat;
         activeGroupId = 'all';
@@ -1991,9 +2038,7 @@
 
     if (settingsResetEl) {
       settingsResetEl.addEventListener('click', function () {
-        if (!confirm('确定要恢复默认设置吗？（您的 GitHub 配置将保留）')) return;
-        
-        // 备份现有的 GitHub 配置
+        // 无需确认，直接执行
         const ghConfig = {
           ghOwner: SETTINGS.ghOwner,
           ghRepo: SETTINGS.ghRepo,
@@ -2001,15 +2046,15 @@
           ghToken: SETTINGS.ghToken
         };
         
-        // 重置为默认配置，但合并备份的 GitHub 配置
         SETTINGS = Object.assign({}, DEFAULT_SETTINGS, ghConfig);
-        SETTINGS.editMode = false; // 恢复默认时自动关闭编辑模式
+        SETTINGS.editMode = false;
         
         saveSettings();
         setFollowSystem(true);
         applySettings();
         syncSettingsUI();
-        renderNav(); // 刷新页面，清除编辑状态的虚线框
+        renderNav();
+        showToast('已恢复默认设置');
       });
     }
   }
