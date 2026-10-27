@@ -301,10 +301,9 @@
       <div class="setting-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
         <div class="setting-label">
           <div class="setting-name">GitHub 在线编辑</div>
-          <div class="setting-desc">自动识别当前仓库，填入 Token 即可开启</div>
+          <div class="setting-desc">填入 Token 即可开启（仓库名可自动获取或手动修改）</div>
         </div>
-        <input type="text" id="ghRepo" placeholder="仓库名 (自动获取)" class="setting-input" readonly style="opacity: 0.6; cursor: not-allowed;">
-        <input type="text" id="ghPath" placeholder="文件路径 (如 data/nav.json)" class="setting-input" value="data/nav.json">
+        <input type="text" id="ghRepo" placeholder="仓库名 (自动获取)" class="setting-input">
         <input type="password" id="ghToken" placeholder="Personal Access Token (ghp_...)" class="setting-input">
         <label class="switch" style="margin-top: 8px; align-self: flex-start;">
           <input type="checkbox" id="setEditMode">

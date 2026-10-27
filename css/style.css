@@ -1114,3 +1114,35 @@ body.edit-mode .edit-actions { display: flex; }
 }
 body.edit-mode .floating-save { display: flex; }
 .floating-save:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(78, 114, 150, 0.5); }
+
+/* 新增：编辑模式下的“添加”按钮 */
+.add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: 1px dashed var(--accent);
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+.add-btn:hover {
+  background: var(--surface);
+  border-style: solid;
+  transform: translateY(-1px);
+}
+
+/* 左侧栏的添加按钮小一点 */
+.cat-nav .add-btn {
+  margin-top: 8px;
+  padding: 8px;
+  font-size: 12.5px;
+  border-radius: 8px;
+}

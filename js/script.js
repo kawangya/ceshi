@@ -779,10 +779,29 @@
       
       catHtml += '</div></div></div>';
     });
+
+    // 新增：如果是编辑模式，追加“添加分类”按钮
+    if (document.body.classList.contains('edit-mode')) {
+      catHtml += '<button class="add-btn" id="addCatBtn" type="button">+ 添加分类</button>';
+    }
+
     catNavEl.innerHTML = catHtml;
     bindCatEvents();
-  }
 
+    // 新增：绑定添加分类事件
+    const addCatBtn = document.getElementById('addCatBtn');
+    if (addCatBtn) {
+      addCatBtn.addEventListener('click', function() {
+        const name = prompt('请输入新分类的名称（如：影视资源）：');
+        if (!name || !name.trim()) return;
+        const id = 'cat_' + Date.now();
+        NAV_CATEGORIES.push({ id: id, title: name.trim(), groups: [] });
+        activeCategoryId = id;
+        renderNav();
+        showToast('分类已添加，请记得保存');
+      });
+    }
+  }
   function bindCatEvents() {
     catNavEl.querySelectorAll('.cat-tab').forEach(function (tab) {
       tab.addEventListener('click', function () {
@@ -910,9 +929,20 @@
 
       html += '<div class="nav-group" data-group-id="' + esc(group.id) + '">' +
                 '<h2 class="group-title">' + esc(group.title || '') + '<span class="group-count">' + items.length + '</span></h2>' +
-                '<div class="nav-grid">' + cards + '</div>' +
-              '</div>';
+                '<div class="nav-grid">' + cards;
+      
+      // 新增：在分组内追加“添加卡片”按钮
+      if (document.body.classList.contains('edit-mode')) {
+        html += '<button class="add-btn add-card-btn" type="button" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '">+ 添加卡片</button>';
+      }
+      
+      html += '</div></div>';
     });
+
+    // 新增：在内容区最下方追加“添加分组”按钮
+    if (document.body.classList.contains('edit-mode')) {
+      html += '<button class="add-btn" id="addGroupBtn" type="button" style="margin-top: 24px;" data-cat="' + esc(currentCat.id) + '">+ 添加新分组</button>';
+    }
 
     navGroupsEl.innerHTML = html;
     navEmptyEl.hidden = shown > 0;
@@ -954,6 +984,48 @@
         });
       }
     }
+
+    // 新增：绑定“添加分组”事件
+    const addGroupBtn = document.getElementById('addGroupBtn');
+    if (addGroupBtn) {
+      addGroupBtn.addEventListener('click', function() {
+        const name = prompt('请输入新分组的名称（如：常用工具）：');
+        if (!name || !name.trim()) return;
+        const id = 'group_' + Date.now();
+        const cat = NAV_CATEGORIES.find(c => c.id === currentCat.id);
+        if (cat) {
+          // 修复：如果该分类是新添加的，groups 可能不存在，需要先初始化
+          if (!cat.groups) cat.groups = [];
+          cat.groups.push({ id: id, title: name.trim(), items: [] });
+          
+          renderGroupNav(); // 手机端需要更新 chips
+          renderCards();
+          showToast('分组已添加，请记得保存');
+        }
+      });
+    }
+
+    // 新增：绑定“添加卡片”事件
+    const addCardBtns = document.querySelectorAll('.add-card-btn');
+    addCardBtns.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const catId = this.dataset.cat;
+        const groupId = this.dataset.group;
+        editTarget = { catId: catId, groupId: groupId, itemIndex: -1 }; // -1 代表新建
+        
+        // 清空表单
+        editNameEl.value = '';
+        editUrlEl.value = '';
+        editDescEl.value = '';
+        editLetterEl.value = '';
+        editColorEl.value = '#4E7296';
+        editModalTitle.textContent = '添加新卡片';
+        
+        editModalMask.classList.add('show');
+        lockBodyScroll();
+      });
+    });
 
     // 新增：无缝淡入效果
     navGroupsEl.classList.remove('fade-in-content');
@@ -1707,7 +1779,8 @@
   /* ============ 设置面板 ============ */
   function applySettings() {
     document.documentElement.dataset.themeColor = SETTINGS.themeColor || 'default';
-    document.body.classList.toggle('edit-mode', !!SETTINGS.editMode);
+    // 修复：必须同时满足开启状态且有Token，才应用编辑模式
+    document.body.classList.toggle('edit-mode', !!(SETTINGS.editMode && SETTINGS.ghToken));
 
     if (NOTICES.length) renderNoticeBar();
     else if (!SETTINGS.noticeBar) {
@@ -1839,9 +1912,20 @@
     
     if (setEditModeEl) {
       setEditModeEl.addEventListener('change', function() {
+        // 拦截：如果没有填写 Token，禁止开启
+        if (setEditModeEl.checked && !ghTokenEl.value.trim()) {
+          showToast('请先填写 Personal Access Token 才能开启', true);
+          setEditModeEl.checked = false;
+          return;
+        }
+        
         SETTINGS.editMode = setEditModeEl.checked;
         saveSettings();
         document.body.classList.toggle('edit-mode', SETTINGS.editMode);
+        
+        // 核心修复：切换编辑模式后必须重新渲染页面，否则按钮不出现
+        renderNav(); 
+        
         showToast(SETTINGS.editMode ? '已开启编辑模式' : '已关闭编辑模式');
       });
     }
