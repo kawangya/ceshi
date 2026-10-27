@@ -292,14 +292,6 @@
               "icon": "",
               "desc": "种子地图与结构查询",
               "url": "https://www.chunkbase.com/"
-            },
-            {
-              "name": "FusionApp 2.0",
-              "letter": "F",
-              "color": "#9A7250",
-              "icon": "",
-              "desc": "网页套壳生成安卓 APP",
-              "url": "#"
             }
           ]
         }
