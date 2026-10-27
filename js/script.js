@@ -561,6 +561,22 @@
         activeCategoryId = tab.dataset.cat;
         activeGroupId = 'all';
         hideTip();
+
+        // 1) tab 复用了 DOM，必须手动同步高亮，否则选中态仍停在旧 tab 上
+        catNavEl.querySelectorAll('.cat-tab').forEach(function (t) {
+          t.classList.toggle('active', t === tab);
+        });
+
+        // 2) 移动端横向 tab 栏：把选中的 tab 平滑滚进可视区域
+        if (window.matchMedia('(max-width: 1024px)').matches && tab.scrollIntoView) {
+          const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          tab.scrollIntoView({
+            behavior: reduceMotion ? 'auto' : 'smooth',
+            inline: 'center',
+            block: 'nearest'
+          });
+        }
+
         // 切换大类：分组列表变了，重建分组 chips；再重渲染卡片
         renderGroupNav();
         renderCards();
