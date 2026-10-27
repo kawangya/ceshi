@@ -1132,25 +1132,6 @@
     else if (mq.addListener) mq.addListener(onChange);
   })();
 
-  /* ============ theme-color 跟随深浅色 ============ */
-  (function initThemeColorSync() {
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta) return;
-
-    function sync() {
-      var t = document.documentElement.dataset.theme;
-      meta.content = t === 'dark' ? '#191918' : '#4E7296';
-    }
-
-    sync();
-
-    var observer = new MutationObserver(sync);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme']
-    });
-  })();
-
   /* ============ Toast ============ */
   let toastTimer = null;
   function showToast(msg, isError) {
@@ -1554,17 +1535,4 @@
   renderNavSkeleton();
   renderNoticeSkeleton();
   loadData();
-
-  /* ============ 注册 Service Worker（PWA） ============ */
-  (function initServiceWorker() {
-    if (!('serviceWorker' in navigator)) return;
-
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('./sw.js').then(function (reg) {
-        console.log('[PWA] Service Worker 已注册，作用域：', reg.scope);
-      }).catch(function (err) {
-        console.warn('[PWA] Service Worker 注册失败：', err);
-      });
-    });
-  })();
 })();
