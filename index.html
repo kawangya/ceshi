@@ -305,10 +305,13 @@
         </div>
         <input type="text" id="ghRepo" placeholder="仓库名 (自动获取)" class="setting-input">
         <input type="password" id="ghToken" placeholder="Personal Access Token (ghp_...)" class="setting-input">
-        <label class="switch" style="margin-top: 8px; align-self: flex-start;">
-          <input type="checkbox" id="setEditMode">
-          <span class="switch-track"></span>
-        </label>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
+          <span style="font-size: 13px; color: var(--text); font-weight: 500;">开启可视化编辑模式</span>
+          <label class="switch" style="margin-top: 0;">
+            <input type="checkbox" id="setEditMode">
+            <span class="switch-track"></span>
+          </label>
+        </div>
       </div>
     </div>
 

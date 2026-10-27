@@ -574,6 +574,41 @@
   navGroupsEl.addEventListener('click', function (e) {
     // 拦截编辑模式下的操作
     if (document.body.classList.contains('edit-mode')) {
+      // 新增：分组编辑/删除逻辑
+      const editGroupBtn = e.target.closest('.edit-group');
+      const delGroupBtn = e.target.closest('.del-group');
+      if (editGroupBtn || delGroupBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const catId = (editGroupBtn || delGroupBtn).dataset.cat;
+        const groupId = (editGroupBtn || delGroupBtn).dataset.group;
+        
+        const cat = NAV_CATEGORIES.find(c => c.id === catId);
+        if (!cat) return;
+        const groupIdx = cat.groups.findIndex(g => g.id === groupId);
+        if (groupIdx === -1) return;
+        const group = cat.groups[groupIdx];
+
+        if (editGroupBtn) {
+          const newName = prompt('请输入新的分组名称：', group.title);
+          if (newName && newName.trim()) {
+            group.title = newName.trim();
+            renderCards();
+            renderGroupNav(); // 手机端更新同步
+            showToast('分组已重命名，请记得保存');
+          }
+        } else if (delGroupBtn) {
+          if (confirm('确定要删除分组「' + group.title + '」及其下的所有卡片吗？')) {
+            cat.groups.splice(groupIdx, 1);
+            renderCards();
+            renderGroupNav();
+            showToast('分组已删除，请记得保存');
+          }
+        }
+        return;
+      }
+
+      // 卡片编辑/删除逻辑（原代码）
       const editBtn = e.target.closest('.edit-btn.edit');
       const delBtn = e.target.closest('.edit-btn.del');
       const card = e.target.closest('.nav-card');
@@ -927,8 +962,19 @@
                '</a>';
       }).join('');
 
+      // 新增：如果是编辑模式，生成分组操作按钮
+      let groupActions = '';
+      if (document.body.classList.contains('edit-mode')) {
+        groupActions = `
+          <div class="group-actions">
+            <button class="edit-btn edit-group" type="button" title="修改分组名" data-cat="${esc(currentCat.id)}" data-group="${esc(group.id)}" style="width:20px; height:20px;">✎</button>
+            <button class="edit-btn del del-group" type="button" title="删除分组" data-cat="${esc(currentCat.id)}" data-group="${esc(group.id)}" style="width:20px; height:20px;">×</button>
+          </div>
+        `;
+      }
+
       html += '<div class="nav-group" data-group-id="' + esc(group.id) + '">' +
-                '<h2 class="group-title">' + esc(group.title || '') + '<span class="group-count">' + items.length + '</span></h2>' +
+                '<h2 class="group-title">' + esc(group.title || '') + '<span class="group-count">' + items.length + '</span>' + groupActions + '</h2>' +
                 '<div class="nav-grid">' + cards;
       
       // 新增：在分组内追加“添加卡片”按钮
@@ -1945,11 +1991,25 @@
 
     if (settingsResetEl) {
       settingsResetEl.addEventListener('click', function () {
-        SETTINGS = Object.assign({}, DEFAULT_SETTINGS);
+        if (!confirm('确定要恢复默认设置吗？（您的 GitHub 配置将保留）')) return;
+        
+        // 备份现有的 GitHub 配置
+        const ghConfig = {
+          ghOwner: SETTINGS.ghOwner,
+          ghRepo: SETTINGS.ghRepo,
+          ghPath: SETTINGS.ghPath,
+          ghToken: SETTINGS.ghToken
+        };
+        
+        // 重置为默认配置，但合并备份的 GitHub 配置
+        SETTINGS = Object.assign({}, DEFAULT_SETTINGS, ghConfig);
+        SETTINGS.editMode = false; // 恢复默认时自动关闭编辑模式
+        
         saveSettings();
         setFollowSystem(true);
         applySettings();
         syncSettingsUI();
+        renderNav(); // 刷新页面，清除编辑状态的虚线框
       });
     }
   }

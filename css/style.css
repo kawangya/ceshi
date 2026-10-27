@@ -1146,3 +1146,16 @@ body.edit-mode .floating-save { display: flex; }
   font-size: 12.5px;
   border-radius: 8px;
 }
+
+/* 新增：分组标题右侧的操作按钮 */
+.group-title {
+  position: relative; /* 确保内部绝对定位生效，或保持 flex 排版 */
+}
+.group-actions {
+  display: none;
+  margin-left: auto;
+  gap: 6px;
+}
+body.edit-mode .group-actions {
+  display: flex;
+}
