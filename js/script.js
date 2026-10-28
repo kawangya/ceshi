@@ -26,9 +26,15 @@
   };
 
   const THEME_COLORS = [
-    { id: 'default', name: '默认', dot: '#4E7296' }
+    { id: 'default', name: '海蓝 (默认)', dot: '#3F729B' },
+    { id: 'green', name: '护眼绿', dot: '#5C8D76' },
+    { id: 'orange', name: '暖阳橘', dot: '#C07B57' },
+    { id: 'purple', name: '极客紫', dot: '#7E6B8F' },
+    { id: 'pink', name: '樱花粉', dot: '#B26A76' },
+    { id: 'cyan', name: '抹茶青', dot: '#3E8A7B' },
+    { id: 'gray', name: '晨雾灰', dot: '#595959' },
+    { id: 'indigo', name: '石墨蓝', dot: '#465E7B' }
   ];
-
   let SETTINGS = loadSettings();
   let editTarget = { catId: '', groupId: '', itemIndex: -1 }; 
 
