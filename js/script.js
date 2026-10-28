@@ -1787,11 +1787,19 @@
     var themeVal = 'system';
     try { themeVal = localStorage.getItem('site.theme') || 'system'; } catch (e) {}
 
+    // 新增：克隆设置对象并剔除 GitHub 敏感信息
+    const safeSettings = Object.assign({}, SETTINGS);
+    delete safeSettings.ghOwner;
+    delete safeSettings.ghRepo;
+    delete safeSettings.ghPath;
+    delete safeSettings.ghToken;
+    delete safeSettings.editMode;
+
     var data = {
       version: 1,
       exportedAt: new Date().toISOString(),
       theme: themeVal,
-      settings: SETTINGS
+      settings: safeSettings
     };
 
     var json = JSON.stringify(data, null, 2);
@@ -1835,6 +1843,15 @@
 
         var merged = Object.assign({}, DEFAULT_SETTINGS);
 
+        // 新增：备份当前的 GitHub 配置，防止被导入的旧配置覆盖
+        const currentGhConfig = {
+          ghOwner: SETTINGS.ghOwner,
+          ghRepo: SETTINGS.ghRepo,
+          ghPath: SETTINGS.ghPath,
+          ghToken: SETTINGS.ghToken,
+          editMode: SETTINGS.editMode
+        };
+
         if (typeof incoming.themeColor === 'string') {
           if (THEME_COLORS.some(function (c) { return c.id === incoming.themeColor; })) {
             merged.themeColor = incoming.themeColor;
@@ -1844,6 +1861,9 @@
         if (typeof incoming.showFriends === 'boolean') merged.showFriends = incoming.showFriends;
         if (typeof incoming.openInNewTab === 'boolean') merged.openInNewTab = incoming.openInNewTab;
         if (typeof incoming.defaultCategory === 'string') merged.defaultCategory = incoming.defaultCategory;
+
+        // 新增：强制恢复本地的 GitHub 配置
+        Object.assign(merged, currentGhConfig);
 
         SETTINGS = merged;
         saveSettings();
