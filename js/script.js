@@ -1,5 +1,5 @@
 /* =========================================================
-   卡王的导航 - 主脚本 (终极整合版)
+   卡王的导航 - 主脚本 (最终清理版)
    ========================================================= */
 
 (function () {
@@ -30,7 +30,7 @@
   ];
 
   let SETTINGS = loadSettings();
-  let editTarget = { catId: '', groupId: '', itemIndex: -1 }; // 保存当前正在编辑的卡片信息
+  let editTarget = { catId: '', groupId: '', itemIndex: -1 }; 
 
   function loadSettings() {
     try {
@@ -83,7 +83,6 @@
   let activeGroupId = 'all';
   let lastFocused = null;
 
-  // 滚动相关状态
   let isAutoScrolling = false;
   let autoScrollTimer = null;
   let scrollSpyTimer = null;
@@ -154,9 +153,7 @@
   const settingsFileEl   = document.getElementById('settingsFile');
   const toastEl          = document.getElementById('toast');
   
-  // GitHub 编辑相关 DOM
   const ghRepoEl = document.getElementById('ghRepo');
-  const ghPathEl = document.getElementById('ghPath');
   const ghTokenEl = document.getElementById('ghToken');
   const setEditModeEl = document.getElementById('setEditMode');
   
@@ -218,7 +215,7 @@
     document.documentElement.style.setProperty('--notice-bar-h', h + 'px');
   }
 
-  /* ---------- 页面滚动锁 / 修复抖动核心逻辑 ---------- */
+  /* ---------- 页面滚动锁 ---------- */
   function lockBodyScroll() {
     document.body.classList.add('modal-open');
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -553,7 +550,6 @@
     hideTip();
   }, true);
 
-  /* 统一事件委托替代循环绑定 */
   navGroupsEl.addEventListener('mouseover', function (e) {
     if (IS_TOUCH) return;
     const card = e.target.closest('.nav-card');
@@ -571,18 +567,29 @@
     if (e.target.closest('.nav-card')) hideTip();
   });
 
+  /* =========================================================
+     统一事件委托：合并了卡片编辑、分组操作、无链接提示、简介展示
+     ========================================================= */
   navGroupsEl.addEventListener('click', function (e) {
-    // 拦截编辑模式下的操作
+    // 1. 处理无链接卡片拦截 (非编辑模式下)
+    if (!document.body.classList.contains('edit-mode')) {
+      const disabledCard = e.target.closest('.nav-card[data-disabled="true"]');
+      if (disabledCard) {
+        e.preventDefault();
+        showToast('该站点暂未提供链接');
+        return;
+      }
+    }
+
+    // 2. 编辑模式下的操作拦截
     if (document.body.classList.contains('edit-mode')) {
-      // 新增：分组编辑/删除逻辑
+      // 编辑/删除分组
       const editGroupBtn = e.target.closest('.edit-group');
       const delGroupBtn = e.target.closest('.del-group');
       if (editGroupBtn || delGroupBtn) {
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         const catId = (editGroupBtn || delGroupBtn).dataset.cat;
         const groupId = (editGroupBtn || delGroupBtn).dataset.group;
-        
         const cat = NAV_CATEGORIES.find(c => c.id === catId);
         if (!cat) return;
         const groupIdx = cat.groups.findIndex(g => g.id === groupId);
@@ -593,36 +600,31 @@
           const newName = prompt('请输入新的分组名称：', group.title);
           if (newName && newName.trim()) {
             group.title = newName.trim();
-            renderCards();
-            renderGroupNav(); // 手机端更新同步
+            renderCards(); renderGroupNav();
             showToast('分组已重命名，请记得保存');
           }
         } else if (delGroupBtn) {
           if (confirm('确定要删除分组「' + group.title + '」及其下的所有卡片吗？')) {
             cat.groups.splice(groupIdx, 1);
-            renderCards();
-            renderGroupNav();
+            renderCards(); renderGroupNav();
             showToast('分组已删除，请记得保存');
           }
         }
         return;
       }
 
-      // 卡片编辑/删除逻辑（原代码）
+      // 编辑/删除卡片
       const editBtn = e.target.closest('.edit-btn.edit');
       const delBtn = e.target.closest('.edit-btn.del');
       const card = e.target.closest('.nav-card');
-      
       if (card && (editBtn || delBtn)) {
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault(); e.stopPropagation();
         const catId = card.dataset.cat;
         const groupId = card.dataset.group;
         const idx = parseInt(card.dataset.idx, 10);
-        
         const cat = NAV_CATEGORIES.find(c => c.id === catId);
         const group = cat.groups.find(g => g.id === groupId);
-        
+
         if (editBtn) {
           editTarget = { catId, groupId, itemIndex: idx };
           const it = group.items[idx];
@@ -645,26 +647,17 @@
       }
     }
 
-    // 原有的简介提示逻辑
-    const btn = e.target.closest('.nav-info-btn');
-    if (!btn) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const card = btn.closest('.nav-card');
-    if (!card) return;
-    const descEl = card.querySelector('.nav-desc');
-    if (!descEl) return;
-    if (tipCard === card) hideTip();
-    else showTip(card, descEl.textContent.trim());
-  });
-
-  /* 无链接卡片拦截 */
-  navGroupsEl.addEventListener('click', function (e) {
-    if (document.body.classList.contains('edit-mode')) return;
-    const card = e.target.closest('.nav-card[data-disabled="true"]');
-    if (!card) return;
-    e.preventDefault();
-    showToast('该站点暂未提供链接');
+    // 3. 正常模式下，显示简介提示
+    const infoBtn = e.target.closest('.nav-info-btn');
+    if (infoBtn) {
+      e.preventDefault(); e.stopPropagation();
+      const card = infoBtn.closest('.nav-card');
+      const descEl = card.querySelector('.nav-desc');
+      if (!descEl) return;
+      if (tipCard === card) hideTip();
+      else showTip(card, descEl.textContent.trim());
+      return;
+    }
   });
 
   navGroupsEl.addEventListener('keydown', function (e) {
@@ -798,7 +791,7 @@
       const total = (cat.groups || []).reduce(function (sum, g) { return sum + ((g.items || []).length); }, 0);
       const isActive = cat.id === activeCategoryId;
 
-      // 新增：生成分类操作按钮
+      // 分类操作按钮
       let catActions = '';
       if (document.body.classList.contains('edit-mode')) {
         catActions = `
@@ -827,7 +820,6 @@
       catHtml += '</div></div></div>';
     });
 
-    // 新增：如果是编辑模式，追加“添加分类”按钮
     if (document.body.classList.contains('edit-mode')) {
       catHtml += '<button class="add-btn" id="addCatBtn" type="button">+ 添加分类</button>';
     }
@@ -835,7 +827,6 @@
     catNavEl.innerHTML = catHtml;
     bindCatEvents();
 
-    // 新增：绑定添加分类事件
     const addCatBtn = document.getElementById('addCatBtn');
     if (addCatBtn) {
       addCatBtn.addEventListener('click', function() {
@@ -849,89 +840,83 @@
       });
     }
   }
+
   function bindCatEvents() {
-    catNavEl.querySelectorAll('.cat-tab').forEach(function (tab) {
-      tab.addEventListener('click', function (e) {
-        // 新增：拦截分类编辑/删除
-        if (document.body.classList.contains('edit-mode')) {
-          const editBtn = e.target.closest('.edit-cat');
-          const delBtn = e.target.closest('.del-cat');
-          
-          if (editBtn || delBtn) {
-            e.preventDefault();
-            e.stopPropagation();
-            const catId = (editBtn || delBtn).dataset.cat;
-            const catIdx = NAV_CATEGORIES.findIndex(c => c.id === catId);
-            if (catIdx === -1) return;
-            const cat = NAV_CATEGORIES[catIdx];
+    catNavEl.onclick = function (e) {
+      const tab = e.target.closest('.cat-tab');
+      if (!tab) return;
 
-            if (editBtn) {
-              const newName = prompt('请输入新的大类名称：', cat.title);
-              if (newName && newName.trim()) {
-                cat.title = newName.trim();
-                renderNav();
-                showToast('分类已重命名，请记得保存');
-              }
-            } else if (delBtn) {
-              if (confirm('确定要删除大类「' + cat.title + '」及其下的所有内容吗？')) {
-                NAV_CATEGORIES.splice(catIdx, 1);
-                // 如果删除的是当前选中的分类，切换到第一个分类
-                if (activeCategoryId === catId) {
-                  activeCategoryId = NAV_CATEGORIES[0] ? NAV_CATEGORIES[0].id : '';
-                }
-                renderNav();
-                showToast('分类已删除，请记得保存');
-              }
+      // 处理分类编辑/删除
+      if (document.body.classList.contains('edit-mode')) {
+        const editBtn = e.target.closest('.edit-cat');
+        const delBtn = e.target.closest('.del-cat');
+        if (editBtn || delBtn) {
+          e.preventDefault(); e.stopPropagation();
+          const catId = (editBtn || delBtn).dataset.cat;
+          const catIdx = NAV_CATEGORIES.findIndex(c => c.id === catId);
+          if (catIdx === -1) return;
+          const cat = NAV_CATEGORIES[catIdx];
+
+          if (editBtn) {
+            const newName = prompt('请输入新的大类名称：', cat.title);
+            if (newName && newName.trim()) {
+              cat.title = newName.trim();
+              renderNav();
+              showToast('分类已重命名，请记得保存');
             }
-            return; // 拦截后直接返回，不执行切换分类逻辑
-          }
-        }
-
-        if (activeCategoryId === tab.dataset.cat) return;
-        activeCategoryId = tab.dataset.cat;
-        activeGroupId = 'all';
-        hideTip();
-
-        catNavEl.querySelectorAll('.cat-tab').forEach(function (t) {
-          t.classList.toggle('active', t === tab);
-        });
-
-        catNavEl.querySelectorAll('.cat-block').forEach(function (block) {
-          const subWrap = block.querySelector('.sub-cats-wrap');
-          if (subWrap) {
-            const isCurrent = block.contains(tab);
-            subWrap.classList.toggle('show', isCurrent);
-            if (isCurrent) {
-              subWrap.querySelectorAll('.sub-tab').forEach(function(st) { st.classList.remove('active'); });
+          } else if (delBtn) {
+            if (confirm('确定要删除大类「' + cat.title + '」及其下的所有内容吗？')) {
+              NAV_CATEGORIES.splice(catIdx, 1);
+              if (activeCategoryId === catId) activeCategoryId = NAV_CATEGORIES[0] ? NAV_CATEGORIES[0].id : '';
+              renderNav();
+              showToast('分类已删除，请记得保存');
             }
           }
-        });
+          return;
+        }
+      }
 
-        if (window.matchMedia('(max-width: 1024px)').matches) {
-          if (tab.scrollIntoView) {
-            tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      // 处理切换分类
+      if (activeCategoryId === tab.dataset.cat) return;
+      activeCategoryId = tab.dataset.cat;
+      activeGroupId = 'all';
+      hideTip();
+
+      catNavEl.querySelectorAll('.cat-tab').forEach(t => t.classList.toggle('active', t === tab));
+      catNavEl.querySelectorAll('.cat-block').forEach(block => {
+        const subWrap = block.querySelector('.sub-cats-wrap');
+        if (subWrap) {
+          const isCurrent = block.contains(tab);
+          subWrap.classList.toggle('show', isCurrent);
+          if (isCurrent) {
+            subWrap.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
           }
         }
-
-        renderGroupNav();
-        renderCards();
-
-        if (window.matchMedia('(min-width: 1025px)').matches) {
-          scrollToGroup('all');
-        }
       });
-    });
 
-    catNavEl.querySelectorAll('.sub-tab').forEach(function (sub) {
-      sub.addEventListener('click', function () {
-        catNavEl.querySelectorAll('.sub-tab').forEach(function (st) { st.classList.toggle('active', st === sub); });
-        scrollToGroup(sub.dataset.group);
-      });
+      if (window.matchMedia('(max-width: 1024px)').matches) {
+        if (tab.scrollIntoView) tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      renderGroupNav();
+      renderCards();
+
+      if (window.matchMedia('(min-width: 1025px)').matches) {
+        scrollToGroup('all');
+      }
+    };
+    
+    // 保留子分类点击
+    catNavEl.addEventListener('click', function(e) {
+      const sub = e.target.closest('.sub-tab');
+      if (!sub) return;
+      catNavEl.querySelectorAll('.sub-tab').forEach(st => st.classList.toggle('active', st === sub));
+      scrollToGroup(sub.dataset.group);
     });
   }
 
   function renderGroupNav() {
-    const currentCat = NAV_CATEGORIES.find(function (c) { return c.id === activeCategoryId; });
+    const currentCat = NAV_CATEGORIES.find(c => c.id === activeCategoryId);
     const groups = currentCat ? (currentCat.groups || []) : [];
 
     let chips = '<button class="chip' + (activeGroupId === 'all' ? ' active' : '') + '" type="button" data-group="all">全部</button>';
@@ -1009,7 +994,7 @@
                '</a>';
       }).join('');
 
-      // 新增：如果是编辑模式，生成分组操作按钮
+      // 分组操作按钮
       let groupActions = '';
       if (document.body.classList.contains('edit-mode')) {
         groupActions = `
@@ -1024,7 +1009,6 @@
                 '<h2 class="group-title">' + esc(group.title || '') + '<span class="group-count">' + items.length + '</span>' + groupActions + '</h2>' +
                 '<div class="nav-grid">' + cards;
       
-      // 新增：在分组内追加“添加卡片”按钮
       if (document.body.classList.contains('edit-mode')) {
         html += '<button class="add-btn add-card-btn" type="button" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '">+ 添加卡片</button>';
       }
@@ -1032,7 +1016,6 @@
       html += '</div></div>';
     });
 
-    // 新增：在内容区最下方追加“添加分组”按钮
     if (document.body.classList.contains('edit-mode')) {
       html += '<button class="add-btn" id="addGroupBtn" type="button" style="margin-top: 24px;" data-cat="' + esc(currentCat.id) + '">+ 添加新分组</button>';
     }
@@ -1041,7 +1024,6 @@
     navEmptyEl.hidden = shown > 0;
 
     if (shown === 0) {
-      // 智能识别：如果输入的是纯数字，生成直达 Steam 物品的按钮
       let steamIdBtn = '';
       if (/^\d+$/.test(q)) {
         steamIdBtn = `<button class="ext-btn" onclick="window.open('https://steamcommunity.com/sharedfiles/filedetails/?id=' + encodeURIComponent('${esc(q)}'), '_blank')">Steam 搜创意工坊</button>`;
@@ -1078,7 +1060,6 @@
       }
     }
 
-    // 新增：绑定“添加分组”事件
     const addGroupBtn = document.getElementById('addGroupBtn');
     if (addGroupBtn) {
       addGroupBtn.addEventListener('click', function() {
@@ -1087,27 +1068,23 @@
         const id = 'group_' + Date.now();
         const cat = NAV_CATEGORIES.find(c => c.id === currentCat.id);
         if (cat) {
-          // 修复：如果该分类是新添加的，groups 可能不存在，需要先初始化
           if (!cat.groups) cat.groups = [];
           cat.groups.push({ id: id, title: name.trim(), items: [] });
-          
-          renderGroupNav(); // 手机端需要更新 chips
+          renderGroupNav(); 
           renderCards();
           showToast('分组已添加，请记得保存');
         }
       });
     }
 
-    // 新增：绑定“添加卡片”事件
     const addCardBtns = document.querySelectorAll('.add-card-btn');
     addCardBtns.forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.preventDefault();
         const catId = this.dataset.cat;
         const groupId = this.dataset.group;
-        editTarget = { catId: catId, groupId: groupId, itemIndex: -1 }; // -1 代表新建
+        editTarget = { catId: catId, groupId: groupId, itemIndex: -1 }; 
         
-        // 清空表单
         editNameEl.value = '';
         editUrlEl.value = '';
         editDescEl.value = '';
@@ -1120,7 +1097,6 @@
       });
     });
 
-    // 新增：无缝淡入效果
     navGroupsEl.classList.remove('fade-in-content');
     void navGroupsEl.offsetWidth;
     navGroupsEl.classList.add('fade-in-content');
@@ -1254,7 +1230,6 @@
   noticeBar.addEventListener('mouseenter', function () { barPaused = true; });
   noticeBar.addEventListener('mouseleave', function () { barPaused = false; });
 
-  /* ============ 公告标签筛选 ============ */
   function renderNoticeTabs() {
     if (TAGS.indexOf(noticeFilter) === -1) noticeFilter = '全部';
     noticeTabsEl.hidden = !!noticeKeyword.trim();
@@ -1281,7 +1256,6 @@
     });
   }
 
-  /* ============ 公告列表 ============ */
   function renderNotices() {
     const q = noticeKeyword.trim().toLowerCase();
 
@@ -1532,7 +1506,6 @@
   });
 
   /* ============ GitHub API 在线编辑 ============ */
-  
   if (editModalClose) {
     editModalClose.addEventListener('click', function() {
       editModalMask.classList.remove('show');
@@ -1690,10 +1663,8 @@
         active.isContentEditable
       );
 
-      // "/" 或 "Ctrl+K" 聚焦搜索
       if ((e.key === '/' && !isInput) || ((e.ctrlKey || e.metaKey) && e.key === 'k' && !isInput)) {
-        if (document.body.classList.contains('modal-open') || document.body.classList.contains('settings-open')) return;
-
+        if (document.body.classList.contains('modal-open')) return;
         e.preventDefault();
         if (navSearchEl && !navSearchEl.hidden) {
           searchEl.focus();
@@ -1702,22 +1673,17 @@
         return;
       }
 
-      // 上下方向键切换卡片焦点
       if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && !isInput && !modalMask.classList.contains('show')) {
         const cards = Array.from(navGroupsEl.querySelectorAll('.nav-card:not([data-disabled="true"])'));
         if (!cards.length) return;
-
         e.preventDefault();
-
         const currentIdx = cards.indexOf(document.activeElement);
         let nextIdx = 0;
-
         if (e.key === 'ArrowDown') {
           nextIdx = currentIdx === -1 || currentIdx === cards.length - 1 ? 0 : currentIdx + 1;
         } else {
           nextIdx = currentIdx === -1 || currentIdx === 0 ? cards.length - 1 : currentIdx - 1;
         }
-
         cards[nextIdx].focus();
         cards[nextIdx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
@@ -1761,7 +1727,6 @@
     else if (mq.addListener) mq.addListener(onChange);
   })();
 
-  /* ============ 监听窗口大小变化 ============ */
   const mqLayout = window.matchMedia('(max-width: 1024px)');
   function handleLayoutChange(e) {
     renderCards();
@@ -1769,7 +1734,6 @@
   }
   if (mqLayout.addEventListener) mqLayout.addEventListener('change', handleLayoutChange);
   else if (mqLayout.addListener) mqLayout.addListener(handleLayoutChange);
-
 
   /* ============ Toast ============ */
   let toastTimer = null;
@@ -1787,7 +1751,6 @@
     var themeVal = 'system';
     try { themeVal = localStorage.getItem('site.theme') || 'system'; } catch (e) {}
 
-    // 新增：克隆设置对象并剔除 GitHub 敏感信息
     const safeSettings = Object.assign({}, SETTINGS);
     delete safeSettings.ghOwner;
     delete safeSettings.ghRepo;
@@ -1843,7 +1806,6 @@
 
         var merged = Object.assign({}, DEFAULT_SETTINGS);
 
-        // 新增：备份当前的 GitHub 配置，防止被导入的旧配置覆盖
         const currentGhConfig = {
           ghOwner: SETTINGS.ghOwner,
           ghRepo: SETTINGS.ghRepo,
@@ -1862,7 +1824,6 @@
         if (typeof incoming.openInNewTab === 'boolean') merged.openInNewTab = incoming.openInNewTab;
         if (typeof incoming.defaultCategory === 'string') merged.defaultCategory = incoming.defaultCategory;
 
-        // 新增：强制恢复本地的 GitHub 配置
         Object.assign(merged, currentGhConfig);
 
         SETTINGS = merged;
@@ -1892,7 +1853,6 @@
   /* ============ 设置面板 ============ */
   function applySettings() {
     document.documentElement.dataset.themeColor = SETTINGS.themeColor || 'default';
-    // 修复：必须同时满足开启状态且有Token，才应用编辑模式
     document.body.classList.toggle('edit-mode', !!(SETTINGS.editMode && SETTINGS.ghToken));
 
     if (NOTICES.length) renderNoticeBar();
@@ -1955,7 +1915,6 @@
     }
 
     if (ghRepoEl) ghRepoEl.value = SETTINGS.ghRepo || '';
-    if (ghPathEl) ghPathEl.value = SETTINGS.ghPath || 'data/nav.json';
     if (ghTokenEl) ghTokenEl.value = SETTINGS.ghToken || '';
     if (setEditModeEl) setEditModeEl.checked = !!SETTINGS.editMode;
 
@@ -2020,25 +1979,20 @@
       });
     }
 
-    if (ghPathEl) ghPathEl.addEventListener('input', e => { SETTINGS.ghPath = e.target.value.trim(); saveSettings(); });
+    if (ghRepoEl) ghRepoEl.addEventListener('input', e => { SETTINGS.ghRepo = e.target.value.trim(); saveSettings(); });
     if (ghTokenEl) ghTokenEl.addEventListener('input', e => { SETTINGS.ghToken = e.target.value.trim(); saveSettings(); });
     
     if (setEditModeEl) {
       setEditModeEl.addEventListener('change', function() {
-        // 拦截：如果没有填写 Token，禁止开启
         if (setEditModeEl.checked && !ghTokenEl.value.trim()) {
           showToast('请先填写 Personal Access Token 才能开启', true);
           setEditModeEl.checked = false;
           return;
         }
-        
         SETTINGS.editMode = setEditModeEl.checked;
         saveSettings();
         document.body.classList.toggle('edit-mode', SETTINGS.editMode);
-        
-        // 核心修复：切换编辑模式后必须重新渲染页面，否则按钮不出现
         renderNav(); 
-        
         showToast(SETTINGS.editMode ? '已开启编辑模式' : '已关闭编辑模式');
       });
     }
@@ -2058,7 +2012,6 @@
 
     if (settingsResetEl) {
       settingsResetEl.addEventListener('click', function () {
-        // 无需确认，直接执行
         const ghConfig = {
           ghOwner: SETTINGS.ghOwner,
           ghRepo: SETTINGS.ghRepo,
@@ -2084,7 +2037,6 @@
     syncSettingsUI();
     settingsMask.classList.add('show');
     settingsMask.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('settings-open');
     lockBodyScroll();
   }
 
@@ -2092,7 +2044,6 @@
     if (!settingsMask) return;
     settingsMask.classList.remove('show');
     settingsMask.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('settings-open');
     if (!modalMask.classList.contains('show') && !lightbox.classList.contains('show')) {
       unlockBodyScroll();
     }
