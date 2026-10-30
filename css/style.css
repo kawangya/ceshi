@@ -1207,7 +1207,8 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 body.edit-mode .nav-card {
   border-color: var(--accent);
   border-style: dashed;
-  padding-right: 40px;
+  padding-right: 80px; /* 留出四个按钮的空间 */
+  padding-bottom: 36px;
 }
 body.edit-mode .nav-card:hover {
   transform: none;
@@ -1216,12 +1217,13 @@ body.edit-mode .nav-card:hover {
 .edit-actions {
   position: absolute;
   right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 8px;
   display: none;
-  flex-direction: column;
+  flex-wrap: wrap; /* 允许换行 */
+  justify-content: flex-end;
   gap: 4px;
   z-index: 10;
+  max-width: 80px; /* 限制宽度，迫使4个按钮变成2x2排列 */
 }
 body.edit-mode .edit-actions { display: flex; }
 .edit-btn {
@@ -1298,12 +1300,17 @@ body.edit-mode .group-actions { display: flex; }
 .cat-tab { position: relative; }
 .cat-actions {
   position: absolute;
-  right: 8px;
+  right: 4px;
   top: 50%;
   transform: translateY(-50%);
   display: none;
-  gap: 4px;
+  gap: 2px;
   z-index: 5;
+}
+.cat-actions .edit-btn {
+  width: 18px; /* 分类按钮小一点 */
+  height: 18px;
+  font-size: 10px;
 }
 body.edit-mode .cat-tab .cat-actions { display: flex; }
 body.edit-mode .cat-tab .cat-tab-count { display: none; }

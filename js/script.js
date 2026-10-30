@@ -589,6 +589,34 @@
 
     // 2. 编辑模式下的操作拦截
     if (document.body.classList.contains('edit-mode')) {
+      // 移动分组
+      const moveGroupBtn = e.target.closest('.move-group');
+      if (moveGroupBtn) {
+        e.preventDefault(); e.stopPropagation();
+        const catId = moveGroupBtn.dataset.cat;
+        const groupId = moveGroupBtn.dataset.group;
+        const dir = moveGroupBtn.dataset.dir;
+        const cat = NAV_CATEGORIES.find(c => c.id === catId);
+        if (!cat || !cat.groups) return;
+        const idx = cat.groups.findIndex(g => g.id === groupId);
+        if (idx === -1) return;
+
+        if (dir === 'up' && idx > 0) {
+          const temp = cat.groups[idx];
+          cat.groups[idx] = cat.groups[idx - 1];
+          cat.groups[idx - 1] = temp;
+          renderGroupNav(); renderCards();
+          showToast('分组已上移，请记得保存');
+        } else if (dir === 'down' && idx < cat.groups.length - 1) {
+          const temp = cat.groups[idx];
+          cat.groups[idx] = cat.groups[idx + 1];
+          cat.groups[idx + 1] = temp;
+          renderGroupNav(); renderCards();
+          showToast('分组已下移，请记得保存');
+        }
+        return;
+      }
+
       // 编辑/删除分组
       const editGroupBtn = e.target.closest('.edit-group');
       const delGroupBtn = e.target.closest('.del-group');
@@ -615,6 +643,36 @@
             renderCards(); renderGroupNav();
             showToast('分组已删除，请记得保存');
           }
+        }
+        return;
+      }
+
+      // 移动卡片
+      const moveItemBtn = e.target.closest('.move-item');
+      if (moveItemBtn) {
+        e.preventDefault(); e.stopPropagation();
+        const card = moveItemBtn.closest('.nav-card');
+        const catId = card.dataset.cat;
+        const groupId = card.dataset.group;
+        const idx = parseInt(card.dataset.idx, 10);
+        const dir = moveItemBtn.dataset.dir;
+        
+        const cat = NAV_CATEGORIES.find(c => c.id === catId);
+        const group = cat.groups.find(g => g.id === groupId);
+        if (!group || !group.items) return;
+        
+        if (dir === 'up' && idx > 0) {
+          const temp = group.items[idx];
+          group.items[idx] = group.items[idx - 1];
+          group.items[idx - 1] = temp;
+          renderCards();
+          showToast('卡片已上移，请记得保存');
+        } else if (dir === 'down' && idx < group.items.length - 1) {
+          const temp = group.items[idx];
+          group.items[idx] = group.items[idx + 1];
+          group.items[idx + 1] = temp;
+          renderCards();
+          showToast('卡片已下移，请记得保存');
         }
         return;
       }
@@ -802,6 +860,8 @@
       if (document.body.classList.contains('edit-mode')) {
         catActions = `
           <span class="cat-actions">
+            <span class="edit-btn move-cat" role="button" data-cat="${esc(cat.id)}" data-dir="up" title="上移">↑</span>
+            <span class="edit-btn move-cat" role="button" data-cat="${esc(cat.id)}" data-dir="down" title="下移">↓</span>
             <span class="edit-btn edit-cat" role="button" data-cat="${esc(cat.id)}" title="重命名">✎</span>
             <span class="edit-btn del-cat" role="button" data-cat="${esc(cat.id)}" title="删除分类">×</span>
           </span>
@@ -854,8 +914,33 @@
 
       // 处理分类编辑/删除
       if (document.body.classList.contains('edit-mode')) {
+        const moveBtn = e.target.closest('.move-cat');
         const editBtn = e.target.closest('.edit-cat');
         const delBtn = e.target.closest('.del-cat');
+        
+        if (moveBtn) {
+          e.preventDefault(); e.stopPropagation();
+          const catId = moveBtn.dataset.cat;
+          const dir = moveBtn.dataset.dir;
+          const idx = NAV_CATEGORIES.findIndex(c => c.id === catId);
+          if (idx === -1) return;
+          
+          if (dir === 'up' && idx > 0) {
+            const temp = NAV_CATEGORIES[idx];
+            NAV_CATEGORIES[idx] = NAV_CATEGORIES[idx - 1];
+            NAV_CATEGORIES[idx - 1] = temp;
+            renderNav();
+            showToast('分类已上移，请记得保存');
+          } else if (dir === 'down' && idx < NAV_CATEGORIES.length - 1) {
+            const temp = NAV_CATEGORIES[idx];
+            NAV_CATEGORIES[idx] = NAV_CATEGORIES[idx + 1];
+            NAV_CATEGORIES[idx + 1] = temp;
+            renderNav();
+            showToast('分类已下移，请记得保存');
+          }
+          return;
+        }
+
         if (editBtn || delBtn) {
           e.preventDefault(); e.stopPropagation();
           const catId = (editBtn || delBtn).dataset.cat;
@@ -994,6 +1079,8 @@
                  '</span>' +
                  (hasDesc ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>' : '') +
                  '<div class="edit-actions">' +
+                   '<button class="edit-btn move-item" type="button" data-dir="up" title="上移">↑</button>' +
+                   '<button class="edit-btn move-item" type="button" data-dir="down" title="下移">↓</button>' +
                    '<button class="edit-btn edit" type="button" title="编辑">✎</button>' +
                    '<button class="edit-btn del" type="button" title="删除">×</button>' +
                  '</div>' +
@@ -1005,6 +1092,8 @@
       if (document.body.classList.contains('edit-mode')) {
         groupActions = `
           <div class="group-actions">
+            <button class="edit-btn move-group" type="button" title="上移分组" data-cat="${esc(currentCat.id)}" data-group="${esc(group.id)}" data-dir="up" style="width:20px; height:20px;">↑</button>
+            <button class="edit-btn move-group" type="button" title="下移分组" data-cat="${esc(currentCat.id)}" data-group="${esc(group.id)}" data-dir="down" style="width:20px; height:20px;">↓</button>
             <button class="edit-btn edit-group" type="button" title="修改分组名" data-cat="${esc(currentCat.id)}" data-group="${esc(group.id)}" style="width:20px; height:20px;">✎</button>
             <button class="edit-btn del del-group" type="button" title="删除分组" data-cat="${esc(currentCat.id)}" data-group="${esc(group.id)}" style="width:20px; height:20px;">×</button>
           </div>
