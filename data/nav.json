@@ -10,20 +10,20 @@
           "title": "导航聚合",
           "items": [
             {
-              "name": "MCNav 导航",
+              "name": "MCNav",
+              "url": "https://www.mcnav.net/",
+              "desc": "Minecraft 综合导航站，汇总官方入口、资源下载、开服工具、启动器、皮肤、地图与各类实用 MC 工具，方便玩家一站式查找。",
               "letter": "M",
               "color": "#4E7296",
-              "icon": "",
-              "desc": "综合 MC 资源导航站",
-              "url": "https://www.mcnav.net/"
+              "icon": ""
             },
             {
-              "name": "所见皆是 MC",
+              "name": "MCiSEE",
+              "url": "https://mcisee.top/",
+              "desc": "Minecraft 综合导航站，汇总启动器、模组、资源包、皮肤、开服工具与查询工具，覆盖 Java 版和基岩版，方便玩家一站式查找 MC 资源。",
               "letter": "所",
               "color": "#5F8468",
-              "icon": "",
-              "desc": "MC 主题资源聚合",
-              "url": "https://mcisee.top/"
+              "icon": ""
             }
           ]
         },
