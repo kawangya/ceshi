@@ -1037,6 +1037,7 @@
     const cardTarget = SETTINGS.openInNewTab ? '_blank' : '_self';
     const cardRel = SETTINGS.openInNewTab ? 'noopener' : '';
     const isDesktop = window.matchMedia('(min-width: 1025px)').matches;
+    const isEditMode = document.body.classList.contains('edit-mode');   // ← 新增
 
     const currentCat = NAV_CATEGORIES.find(function (c) { return c.id === activeCategoryId; });
     const groups = currentCat ? (currentCat.groups || []) : [];
@@ -1052,8 +1053,11 @@
         return ((it.name || '') + ' ' + (it.desc || '')).toLowerCase().indexOf(q) !== -1;
       });
 
-      if (!items.length) return;
-      shown += items.length;
+      if (!items.length) {
+        if (!isEditMode || q) return;   // 非编辑模式 / 搜索中 仍然跳过
+      } else {
+        shown += items.length;
+      }
 
       const cards = items.map(function (it, idx) {
         const name = it.name || '';
@@ -1116,9 +1120,12 @@
     }
 
     navGroupsEl.innerHTML = html;
-    navEmptyEl.hidden = shown > 0;
 
-    if (shown === 0) {
+    // 编辑模式下（未搜索时）不显示空态，避免遮住"添加分组/添加卡片"入口
+    const showEmptyState = shown === 0 && !(isEditMode && !q);
+    navEmptyEl.hidden = !showEmptyState;
+
+    if (showEmptyState) {
       let steamIdBtn = '';
       if (/^\d+$/.test(q)) {
         steamIdBtn = `<button class="ext-btn" onclick="window.open('https://steamcommunity.com/sharedfiles/filedetails/?id=' + encodeURIComponent('${esc(q)}'), '_blank')">Steam 搜创意工坊</button>`;
