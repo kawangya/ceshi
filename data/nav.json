@@ -123,11 +123,7 @@
               "color": "#4E7296",
               "icon": "",
               "desc": "模组、教程、工具中文百科",
-              "url": "https://www.mcmod.cn/",
-              "links": [
-               { "text": "镜像站", "url": "https://mirror.minecraft.wiki/" },
-               { "text": "GitHub", "url": "https://github.com/minecraft-wiki" }
-               ]
+              "url": "https://www.mcmod.cn/"
             },
             {
               "name": "MineBBS",
