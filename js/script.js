@@ -1,6 +1,5 @@
 /* =========================================================
    卡王的导航 - 主脚本
-   - 多链接：点击卡片在正下方内联展开链接列表（非弹窗）
    ========================================================= */
 
 (function () {
@@ -12,9 +11,10 @@
 
   const SETTINGS_KEY = 'site.settings';
   const DEFAULT_SETTINGS = {
-    themeColor: 'default',
+    themeColor: 'orange', // 改为默认 orange
     noticeBar: true,
     showFriends: true,
+    enableMultiLinks: false, // 默认关闭多链接
     defaultCategory: '',
     openInNewTab: true,
     ghOwner: '',
@@ -24,10 +24,11 @@
     editMode: false
   };
 
+  // 暖阳橘排在第一位
   const THEME_COLORS = [
-    { id: 'default', name: '海蓝 (默认)', dot: '#3F729B' },
+    { id: 'orange', name: '暖阳橘 (默认)', dot: '#C07B57' },
+    { id: 'default', name: '海蓝', dot: '#3F729B' },
     { id: 'green', name: '护眼绿', dot: '#5C8D76' },
-    { id: 'orange', name: '暖阳橘', dot: '#C07B57' },
     { id: 'purple', name: '极客紫', dot: '#7E6B8F' },
     { id: 'pink', name: '樱花粉', dot: '#B26A76' },
     { id: 'cyan', name: '抹茶青', dot: '#3E8A7B' },
@@ -146,6 +147,7 @@
   const setFollowSystemEl = document.getElementById('setFollowSystem');
   const setNoticeBarEl  = document.getElementById('setNoticeBar');
   const setShowFriendsEl = document.getElementById('setShowFriends');
+  const setEnableMultiLinksEl = document.getElementById('setEnableMultiLinks');
   const setDefaultCategoryEl = document.getElementById('setDefaultCategory');
   const setOpenModeEl   = document.getElementById('setOpenMode');
   const settingsResetEl = document.getElementById('settingsReset');
@@ -545,9 +547,8 @@
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
-    // ★ 修复：直接用卡片宽度，不再强制至少 240px
     let width = rect.width;
-    if (width > vw - 24) width = vw - 24; // 防止超出屏幕
+    if (width > vw - 24) width = vw - 24;
 
     let left = rect.left;
     if (left + width > vw - 12) left = vw - width - 12;
@@ -578,17 +579,15 @@
 
     links.forEach(function (l, i) {
       const a = document.createElement('a');
-      a.className = 'inline-link'; // 移除 primary 类，统一颜色
+      a.className = 'inline-link';
       a.href = l.url;
       if (SETTINGS.openInNewTab) {
         a.target = '_blank';
         a.rel = 'noopener';
       }
 
-      // 主链接 → 卡片名；附加链接 → 用户设定的标题
       const label = i === 0 ? (item.name || '主链接') : (l.text || '链接');
       
-      // 主链接后面加上“主”字徽章
       if (i === 0) {
         a.innerHTML = '<span class="inline-link-text">' + esc(label) + '</span>' +
                       '<span class="inline-link-badge">主</span>';
@@ -606,11 +605,9 @@
     inlineDropdown = dropdown;
     inlineDropdownAnchor = card;
 
-    // 定位后触发过渡
     positionInlineDropdown(card, dropdown);
     void dropdown.offsetWidth;
     dropdown.classList.add('show');
-    // 卡片加 active 状态
     card.classList.add('dropdown-open');
   }
 
@@ -627,7 +624,6 @@
     }, 160);
   }
 
-  // 点外部关闭（捕获阶段，卡片本身的 click 会先 toggle，这里处理其他位置）
   document.addEventListener('click', function (e) {
     if (!inlineDropdown) return;
     if (inlineDropdown.contains(e.target)) return;
@@ -637,7 +633,7 @@
 
   /* ============ 统一事件委托：卡片交互 ============ */
   navGroupsEl.addEventListener('click', function (e) {
-    /* 0. 多链接卡片 —— 在卡片正下方展开/收起链接列表 */
+    /* 0. 多链接卡片 */
     const multiCard = e.target.closest('.nav-card[data-multi="true"]');
     if (multiCard &&
         !e.target.closest('.nav-info-btn') &&
@@ -1123,7 +1119,8 @@
         const allLinks   = getItemLinks(it);
         const primaryUrl = allLinks[0] ? allLinks[0].url : '';
         const noLink     = !primaryUrl;
-        const multiLinks = allLinks.length > 1;
+        // ★ 根据设置判断是否开启多链接交互
+        const multiLinks = SETTINGS.enableMultiLinks && allLinks.length > 1;
 
         let cardHref, cardAttrs;
         if (multiLinks) {
@@ -1145,10 +1142,10 @@
                  '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
                    '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
                  '</span>' +
-'<span class="nav-info">' +
-  '<span class="nav-name">' + highlight(name, q) + '</span>' +
-  (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
-'</span>' +
+                 '<span class="nav-info">' +
+                   '<span class="nav-name">' + highlight(name, q) + '</span>' +
+                   (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
+                 '</span>' +
                  (hasDesc ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>' : '') +
                  '<div class="edit-actions">' +
                    '<button class="edit-btn move-item" type="button" data-dir="up"   title="上移">↑</button>' +
@@ -1622,7 +1619,7 @@
     if (modalMask.classList.contains('show')) closeModal();
   });
 
-  /* ============ 卡片编辑弹窗（含多链接） ============ */
+  /* ============ 卡片编辑弹窗 ============ */
   function addEditLinkRow(text, url) {
     if (!editLinksList) return null;
     const row = document.createElement('div');
@@ -1641,6 +1638,12 @@
   function openEditModal(catId, groupId, itemIndex) {
     editTarget = { catId: catId, groupId: groupId, itemIndex: itemIndex };
     if (editLinksList) editLinksList.innerHTML = '';
+
+    // ★ 如果未开启多链接功能，隐藏附加链接设置区
+    const editLinksSection = document.querySelector('.edit-links-section');
+    if (editLinksSection) {
+      editLinksSection.style.display = SETTINGS.enableMultiLinks ? '' : 'none';
+    }
 
     const cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
     const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === groupId; });
@@ -1691,7 +1694,7 @@
       if (!group || !group.items) return;
 
       const extras = [];
-      if (editLinksList) {
+      if (editLinksList && SETTINGS.enableMultiLinks) {
         editLinksList.querySelectorAll('.edit-link-row').forEach(function (row) {
           const t = row.querySelector('.edit-link-text').value.trim();
           const u = row.querySelector('.edit-link-url').value.trim();
@@ -1707,7 +1710,14 @@
         color: editColorEl.value.trim() || '#4E7296',
         icon: ''
       };
-      if (extras.length) newItem.links = extras;
+      // 只有在开启多链接且填了附加链接时才保存（或保留原有数据）
+      if (extras.length) {
+        newItem.links = extras;
+      } else if (editTarget.itemIndex > -1 && group.items[editTarget.itemIndex].links) {
+        // 如果关闭了功能而之前有附加链接数据，这里为了避免误删，保留原本存在的 links。
+        // 如果是新建就不管了。
+        newItem.links = group.items[editTarget.itemIndex].links;
+      }
 
       if (editTarget.itemIndex > -1) {
         group.items[editTarget.itemIndex] = newItem;
@@ -1970,6 +1980,7 @@
         }
         if (typeof incoming.noticeBar === 'boolean') merged.noticeBar = incoming.noticeBar;
         if (typeof incoming.showFriends === 'boolean') merged.showFriends = incoming.showFriends;
+        if (typeof incoming.enableMultiLinks === 'boolean') merged.enableMultiLinks = incoming.enableMultiLinks;
         if (typeof incoming.openInNewTab === 'boolean') merged.openInNewTab = incoming.openInNewTab;
         if (typeof incoming.defaultCategory === 'string') merged.defaultCategory = incoming.defaultCategory;
 
@@ -2000,7 +2011,7 @@
 
   /* ============ 设置面板 ============ */
   function applySettings() {
-    document.documentElement.dataset.themeColor = SETTINGS.themeColor || 'default';
+    document.documentElement.dataset.themeColor = SETTINGS.themeColor || 'orange'; // 改默认
     document.body.classList.toggle('edit-mode', !!(SETTINGS.editMode && SETTINGS.ghToken));
 
     if (NOTICES.length) renderNoticeBar();
@@ -2037,6 +2048,7 @@
     if (setFollowSystemEl) setFollowSystemEl.checked = isFollowSystem();
     if (setNoticeBarEl) setNoticeBarEl.checked = !!SETTINGS.noticeBar;
     if (setShowFriendsEl) setShowFriendsEl.checked = !!SETTINGS.showFriends;
+    if (setEnableMultiLinksEl) setEnableMultiLinksEl.checked = !!SETTINGS.enableMultiLinks;
 
     if (setDefaultCategoryEl) {
       const current = SETTINGS.defaultCategory || '';
@@ -2097,6 +2109,15 @@
         SETTINGS.showFriends = !!setShowFriendsEl.checked;
         saveSettings();
         renderFriends();
+      });
+    }
+    // 监听多链接开关
+    if (setEnableMultiLinksEl) {
+      setEnableMultiLinksEl.addEventListener('change', function () {
+        SETTINGS.enableMultiLinks = !!setEnableMultiLinksEl.checked;
+        saveSettings();
+        if (NAV_CATEGORIES.length) renderCards();
+        showToast(SETTINGS.enableMultiLinks ? '已开启多链接下拉' : '已关闭多链接下拉');
       });
     }
     if (setDefaultCategoryEl) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light" data-theme-color="default">
+<html lang="zh-CN" data-theme="light" data-theme-color="orange">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,7 +34,7 @@
         } catch (e) {}
       }
       if (!document.documentElement.dataset.themeColor) {
-        document.documentElement.dataset.themeColor = 'default';
+        document.documentElement.dataset.themeColor = 'orange';
       }
     } catch (e) {}
   })();
@@ -275,6 +275,18 @@
         </label>
       </div>
 
+      <!-- 新增：多链接下拉开关 -->
+      <div class="setting-item">
+        <div class="setting-label">
+          <div class="setting-name">多链接下拉</div>
+          <div class="setting-desc">部分导航的多个链接展开</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="setEnableMultiLinks">
+          <span class="switch-track"></span>
+        </label>
+      </div>
+
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">默认大类</div>
@@ -326,7 +338,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<!-- 卡片编辑弹窗（含附加链接维护） -->
 <div class="modal-mask" id="editModalMask" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modal-head">
