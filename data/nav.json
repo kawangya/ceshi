@@ -24,6 +24,54 @@
               "letter": "B",
               "color": "#4E7296",
               "icon": ""
+            },
+            {
+              "name": "Oracle",
+              "url": "https://www.oracle.com/cn/java/technologies/downloads/",
+              "desc": "Oracle 官方 Java 下载页，提供各版本 JDK/JRE 下载，适合开发与运行 Java 应用，生产及商业用途需注意许可条款。",
+              "letter": "O",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "清华开源镜像站",
+              "url": "https://mirrors.tuna.tsinghua.edu.cn/Adoptium/",
+              "desc": "清华开源镜像站的 Adoptium 仓库，提供 Eclipse Temurin JDK/JRE 国内加速下载，适合替代官方源拉取各版本安装包。",
+              "letter": "清",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "Azul",
+              "url": "https://www.azul.com/downloads/",
+              "desc": "Azul 下载页，提供 Zulu 等 OpenJDK 构建，覆盖多版本、多平台，含开源发行版、商业优化版及运行时性能分析工具。",
+              "letter": "A",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "GraalVM",
+              "url": "https://www.graalvm.org/downloads/",
+              "desc": "GraalVM 官方下载页，提供高性能 OpenJDK 构建，支持原生镜像与多平台，适合微服务和云原生场景。",
+              "letter": "G",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "IBM Semeru",
+              "url": "https://developer.ibm.com/languages/java/semeru-runtimes/downloads/",
+              "desc": "IBM Semeru Runtime 下载页，提供基于 OpenJDK 的预构建 Java 运行时，支持多版本多平台，含 jextract 与原生接口工具。",
+              "letter": "I",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "Amazon Corretto",
+              "url": "https://aws.amazon.com/cn/corretto/",
+              "desc": "Amazon Corretto 是 AWS 推出的免费、生产就绪 OpenJDK 发行版，跨平台、长期支持，含性能优化与安全修复，适合开发与生产环境。",
+              "letter": "A",
+              "color": "#4E7296",
+              "icon": ""
             }
           ]
         },
