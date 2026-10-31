@@ -400,16 +400,18 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
   line-height: 1.5;
 }
 
-/* ★ 手机端精简压缩内联下拉 */
+/* ★ 手机端：宽度自适应，高度舒适易点 */
 @media (max-width: 640px) {
   .inline-links {
-    padding: 3px; /* 缩小外框内边距 */
+    padding: 5px; 
   }
   .inline-link { 
-    padding: 5px 9px; /* 缩小上下左右内边距 */
-    font-size: 12.5px; 
-    line-height: 1.35;
-    /* 移除 min-height，让高度完全由文字和 padding 撑开 */
+    padding: 9px 12px; /* 恢复高度 */
+    font-size: 13.5px; 
+    line-height: 1.4;
+    min-height: 38px; /* 舒适点击区域 */
+    display: flex;
+    align-items: center;
   }
 }
 

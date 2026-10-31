@@ -545,17 +545,15 @@
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
-    // 宽度：以卡片宽度为准，至少 240，不超出视口
-    let width = Math.max(rect.width, 240);
-    if (width > vw - 24) width = vw - 24;
+    // ★ 修复：直接用卡片宽度，不再强制至少 240px
+    let width = rect.width;
+    if (width > vw - 24) width = vw - 24; // 防止超出屏幕
 
     let left = rect.left;
     if (left + width > vw - 12) left = vw - width - 12;
     if (left < 12) left = 12;
 
-    // 默认显示在卡片下方
     let top = rect.bottom + gap;
-    // 下方空间不足时改到上方
     if (top + dRect.height > vh - 12) {
       const upTop = rect.top - gap - dRect.height;
       top = upTop >= 12 ? upTop : Math.max(12, vh - dRect.height - 12);
