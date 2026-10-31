@@ -1,21 +1,15 @@
 /* =========================================================
-   卡王的导航 - 主脚本 (完整版)
-   - 修复：编辑模式空分组不渲染
-   - 修复：搜索状态下编辑卡片索引错位
-   - 修复：分类事件监听重复绑定
-   - 清理：冗余判断、sha 按需附加、保存按钮缓存
-   - 新增：多链接（移动端友好）—— 整卡点击弹选择抽屉
+   卡王的导航 - 主脚本
+   - 多链接：点击卡片在正下方内联展开链接列表（非弹窗）
    ========================================================= */
 
 (function () {
   'use strict';
 
-  /* ============ 远程 JSON 地址 ============ */
   const NAV_URL = './data/nav.json';
   const NOTICE_URL = './data/notices.json';
   const FRIENDS_URL = './data/friends.json';
 
-  /* ============ 设置存储 ============ */
   const SETTINGS_KEY = 'site.settings';
   const DEFAULT_SETTINGS = {
     themeColor: 'default',
@@ -61,16 +55,13 @@
     }
   }
 
-  // 自动识别 GitHub 仓库信息
   (function autoDetectGitHub() {
     const host = window.location.hostname;
     const path = window.location.pathname;
-
     if (host.endsWith('.github.io')) {
       const owner = host.split('.')[0];
       const repoSegments = path.split('/').filter(Boolean);
       const repo = repoSegments.length > 0 ? repoSegments[0] : host;
-
       if (owner && repo) {
         if (SETTINGS.ghOwner !== owner || SETTINGS.ghRepo !== repo) {
           SETTINGS.ghOwner = owner;
@@ -81,13 +72,11 @@
     }
   })();
 
-  /* ============ 数据容器 ============ */
   let NAV_CATEGORIES = [];
   let NOTICES = [];
   let FRIENDS = [];
   let TAGS = ['全部'];
 
-  /* ============ 状态 ============ */
   let navKeyword = '';
   let noticeKeyword = '';
   let noticeFilter = '全部';
@@ -179,13 +168,8 @@
   const editColorEl    = document.getElementById('editColor');
   const editSaveBtn    = document.getElementById('editSaveBtn');
 
-  // 多链接编辑与选择
   const editLinksList  = document.getElementById('editLinksList');
   const editLinksAdd   = document.getElementById('editLinksAdd');
-  const linksSheet       = document.getElementById('linksSheet');
-  const linksSheetTitle  = document.getElementById('linksSheetTitle');
-  const linksSheetBody   = document.getElementById('linksSheetBody');
-  const linksSheetClose  = document.getElementById('linksSheetClose');
 
   /* ============ 工具 ============ */
   function esc(str) {
@@ -235,7 +219,6 @@
     document.documentElement.style.setProperty('--notice-bar-h', h + 'px');
   }
 
-  /* ---------- 页面滚动锁 ---------- */
   function lockBodyScroll() {
     document.body.classList.add('modal-open');
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -253,7 +236,6 @@
   function makeQRCode(seed) {
     const SIZE = 25;
     const finders = [[0, 0], [SIZE - 7, 0], [0, SIZE - 7]];
-
     function inFinder(x, y) {
       for (let i = 0; i < finders.length; i++) {
         const fx = finders[i][0], fy = finders[i][1];
@@ -261,13 +243,11 @@
       }
       return false;
     }
-
     let s = seed >>> 0;
     function rnd() {
       s = (s * 1664525 + 1013904223) >>> 0;
       return s / 4294967296;
     }
-
     let path = '';
     for (let y = 0; y < SIZE; y++) {
       for (let x = 0; x < SIZE; x++) {
@@ -275,7 +255,6 @@
         if (rnd() > 0.55) path += 'M' + x + ' ' + y + 'h1v1h-1z';
       }
     }
-
     let finderSvg = '';
     for (let i = 0; i < finders.length; i++) {
       const fx = finders[i][0], fy = finders[i][1];
@@ -283,42 +262,28 @@
       finderSvg += '<rect x="' + (fx + 1) + '" y="' + (fy + 1) + '" width="5" height="5" fill="#fff"/>';
       finderSvg += '<rect x="' + (fx + 2) + '" y="' + (fy + 2) + '" width="3" height="3"/>';
     }
-
     return '<svg viewBox="-1 -1 ' + (SIZE + 2) + ' ' + (SIZE + 2) + '" ' +
            'xmlns="http://www.w3.org/2000/svg" fill="#2B2B2B" shape-rendering="crispEdges">' +
            '<path d="' + path + '"/>' + finderSvg + '</svg>';
   }
 
   /* ============ 图片灯箱 ============ */
-  let lbScale = 1;
-  let lbTx = 0;
-  let lbTy = 0;
-  let lbDragging = false;
-  let lbMoved = false;
-  let lbStartX = 0, lbStartY = 0;
-  let lbStartTx = 0, lbStartTy = 0;
-  let lbPinchDist = 0;
-  let lbPinchScale = 1;
+  let lbScale = 1, lbTx = 0, lbTy = 0;
+  let lbDragging = false, lbMoved = false;
+  let lbStartX = 0, lbStartY = 0, lbStartTx = 0, lbStartTy = 0;
+  let lbPinchDist = 0, lbPinchScale = 1;
   let lbLastDragEnd = 0;
 
   function applyLightboxTransform() {
     if (!lightboxImg) return;
     lightboxImg.style.transform =
       'translate(' + lbTx + 'px,' + lbTy + 'px) scale(' + lbScale + ')';
-    if (lightboxZoom) {
-      lightboxZoom.textContent = Math.round(lbScale * 100) + '%';
-    }
-    if (lbScale > 1.01) {
-      lightboxImg.style.cursor = lbDragging ? 'grabbing' : 'grab';
-    } else {
-      lightboxImg.style.cursor = 'zoom-in';
-    }
+    if (lightboxZoom) lightboxZoom.textContent = Math.round(lbScale * 100) + '%';
+    lightboxImg.style.cursor = lbScale > 1.01 ? (lbDragging ? 'grabbing' : 'grab') : 'zoom-in';
   }
 
   function resetLightboxTransform() {
-    lbScale = 1;
-    lbTx = 0;
-    lbTy = 0;
+    lbScale = 1; lbTx = 0; lbTy = 0;
     if (lightboxImg) lightboxImg.classList.remove('dragging');
     applyLightboxTransform();
   }
@@ -340,14 +305,10 @@
     lightbox.setAttribute('aria-hidden', 'true');
     lightboxImg.removeAttribute('src');
     resetLightboxTransform();
-    if (!modalMask.classList.contains('show') && !linksSheet.classList.contains('show')) {
-      unlockBodyScroll();
-    }
+    if (!modalMask.classList.contains('show')) unlockBodyScroll();
   }
 
-  if (lightboxClose) {
-    lightboxClose.addEventListener('click', closeLightbox);
-  }
+  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
 
   if (lightbox) {
     lightbox.addEventListener('click', function (e) {
@@ -358,51 +319,36 @@
     lightbox.addEventListener('wheel', function (e) {
       if (!lightbox.classList.contains('show')) return;
       e.preventDefault();
-
       const rect = lightboxImg.getBoundingClientRect();
       const imgCx = rect.left + rect.width / 2;
       const imgCy = rect.top + rect.height / 2;
       const dx = e.clientX - imgCx;
       const dy = e.clientY - imgCy;
-
       const oldScale = lbScale;
       const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
       lbScale = Math.min(5, Math.max(0.5, lbScale * factor));
-
       const ratio = lbScale / oldScale;
       lbTx = dx - (dx - lbTx) * ratio;
       lbTy = dy - (dy - lbTy) * ratio;
-
       applyLightboxTransform();
     }, { passive: false });
 
     if (lightboxImg) {
       lightboxImg.addEventListener('dblclick', function (e) {
         e.stopPropagation();
-        if (lbScale > 1.01) {
-          resetLightboxTransform();
-          return;
-        }
+        if (lbScale > 1.01) { resetLightboxTransform(); return; }
         const rect = lightboxImg.getBoundingClientRect();
-        const imgCx = rect.left + rect.width / 2;
-        const imgCy = rect.top + rect.height / 2;
-        const dx = e.clientX - imgCx;
-        const dy = e.clientY - imgCy;
-        lbScale = 2;
-        lbTx = dx - dx * 2;
-        lbTy = dy - dy * 2;
+        const dx = e.clientX - (rect.left + rect.width / 2);
+        const dy = e.clientY - (rect.top + rect.height / 2);
+        lbScale = 2; lbTx = dx - dx * 2; lbTy = dy - dy * 2;
         applyLightboxTransform();
       });
 
       lightboxImg.addEventListener('mousedown', function (e) {
-        if (e.button !== 0) return;
-        if (lbScale <= 1.01) return;
-        lbDragging = true;
-        lbMoved = false;
-        lbStartX = e.clientX;
-        lbStartY = e.clientY;
-        lbStartTx = lbTx;
-        lbStartTy = lbTy;
+        if (e.button !== 0 || lbScale <= 1.01) return;
+        lbDragging = true; lbMoved = false;
+        lbStartX = e.clientX; lbStartY = e.clientY;
+        lbStartTx = lbTx; lbStartTy = lbTy;
         lightboxImg.classList.add('dragging');
         applyLightboxTransform();
         e.preventDefault();
@@ -410,12 +356,10 @@
 
       lightboxImg.addEventListener('touchstart', function (e) {
         if (e.touches.length === 1 && lbScale > 1.01) {
-          lbDragging = true;
-          lbMoved = false;
+          lbDragging = true; lbMoved = false;
           lbStartX = e.touches[0].clientX;
           lbStartY = e.touches[0].clientY;
-          lbStartTx = lbTx;
-          lbStartTy = lbTy;
+          lbStartTx = lbTx; lbStartTy = lbTy;
           lightboxImg.classList.add('dragging');
           applyLightboxTransform();
         } else if (e.touches.length === 2) {
@@ -452,9 +396,7 @@
           lightboxImg.classList.remove('dragging');
           applyLightboxTransform();
         }
-        if (e.touches.length < 2) {
-          lbPinchDist = 0;
-        }
+        if (e.touches.length < 2) lbPinchDist = 0;
       });
     }
 
@@ -494,31 +436,23 @@
     navTipEl.textContent = text;
     navTipEl.classList.add('show');
     positionTip(card);
-    if (IS_TOUCH) {
-      tipAutoHideTimer = setTimeout(hideTip, 4000);
-    }
+    if (IS_TOUCH) tipAutoHideTimer = setTimeout(hideTip, 4000);
   }
 
   function positionTip(card) {
     const rect = card.getBoundingClientRect();
     const tipRect = navTipEl.getBoundingClientRect();
     const gap = 8;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-
+    const vw = window.innerWidth, vh = window.innerHeight;
     let top = rect.bottom + gap;
     let left = rect.left;
-
     if (left + tipRect.width > vw - 12) left = vw - tipRect.width - 12;
     if (left < 12) left = 12;
-
     if (top + tipRect.height > vh - 12 && rect.top - gap - tipRect.height >= 12) {
       top = rect.top - gap - tipRect.height;
     }
-
     if (top + tipRect.height > vh - 12) top = vh - tipRect.height - 12;
     if (top < 12) top = 12;
-
     navTipEl.style.left = left + 'px';
     navTipEl.style.top = top + 'px';
   }
@@ -552,7 +486,7 @@
   let measureResizeTimer = null;
   window.addEventListener('resize', function () {
     hideTip();
-    if (linksSheet && linksSheet.classList.contains('show')) closeLinksSheet();
+    closeInlineDropdown();
     clearTimeout(measureResizeTimer);
     measureResizeTimer = setTimeout(function () {
       measureCardTruncation();
@@ -600,93 +534,128 @@
     return arr;
   }
 
-  /* ============ 链接选择弹层（桌面弹窗 / 手机底部抽屉） ============ */
-  let lastSheetFocused = null;
+  /* ============ 内联下拉（卡片正下方） ============ */
+  let inlineDropdown = null;
+  let inlineDropdownAnchor = null;
 
-  function openLinksSheet(item) {
-    if (!linksSheet || !item) return;
+  function positionInlineDropdown(card, dropdown) {
+    const rect = card.getBoundingClientRect();
+    const dRect = dropdown.getBoundingClientRect();
+    const gap = 6;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    // 宽度：以卡片宽度为准，至少 240，不超出视口
+    let width = Math.max(rect.width, 240);
+    if (width > vw - 24) width = vw - 24;
+
+    let left = rect.left;
+    if (left + width > vw - 12) left = vw - width - 12;
+    if (left < 12) left = 12;
+
+    // 默认显示在卡片下方
+    let top = rect.bottom + gap;
+    // 下方空间不足时改到上方
+    if (top + dRect.height > vh - 12) {
+      const upTop = rect.top - gap - dRect.height;
+      top = upTop >= 12 ? upTop : Math.max(12, vh - dRect.height - 12);
+    }
+
+    dropdown.style.left = left + 'px';
+    dropdown.style.top = top + 'px';
+    dropdown.style.width = width + 'px';
+  }
+
+  function openInlineDropdown(card, item) {
+    if (!card || !item) return;
     const links = getItemLinks(item);
     if (links.length < 2) return;
 
-    linksSheetTitle.textContent = item.name || '选择链接';
-    linksSheetBody.innerHTML = '';
+    closeInlineDropdown();
+
+    const dropdown = document.createElement('div');
+    dropdown.className = 'inline-links';
+    dropdown.setAttribute('role', 'menu');
+    dropdown.setAttribute('aria-label', item.name || '选择链接');
 
     links.forEach(function (l, i) {
       const a = document.createElement('a');
-      a.className = 'links-sheet-item' + (i === 0 ? ' primary' : '');
+      a.className = 'inline-link' + (i === 0 ? ' primary' : '');
       a.href = l.url;
       if (SETTINGS.openInNewTab) {
         a.target = '_blank';
         a.rel = 'noopener';
       }
-
       const label = l.text || (i === 0 ? (item.name || '主链接') : '链接');
-      const letter = label.trim().charAt(0) || '链';
-
       a.innerHTML =
-        '<span class="links-sheet-ico">' + esc(letter) + '</span>' +
-        '<span class="links-sheet-info">' +
-          '<span class="links-sheet-name">' +
-            esc(label) +
-            (i === 0 ? '<span class="links-sheet-badge">主</span>' : '') +
-          '</span>' +
-          '<span class="links-sheet-url">' + esc(l.url) + '</span>' +
-        '</span>';
-
+        '<span class="inline-link-name">' + esc(label) +
+          (i === 0 ? '<span class="inline-link-badge">主</span>' : '') +
+        '</span>' +
+        '<span class="inline-link-url">' + esc(l.url) + '</span>';
       a.addEventListener('click', function () {
-        setTimeout(closeLinksSheet, 0);
+        closeInlineDropdown();
       });
-      linksSheetBody.appendChild(a);
+      dropdown.appendChild(a);
     });
 
-    lastSheetFocused = document.activeElement;
-    linksSheet.classList.add('show');
-    linksSheet.setAttribute('aria-hidden', 'false');
-    lockBodyScroll();
-    if (linksSheetClose) linksSheetClose.focus();
+    document.body.appendChild(dropdown);
+    inlineDropdown = dropdown;
+    inlineDropdownAnchor = card;
+
+    // 定位后触发过渡
+    positionInlineDropdown(card, dropdown);
+    void dropdown.offsetWidth;
+    dropdown.classList.add('show');
+    // 卡片加 active 状态
+    card.classList.add('dropdown-open');
   }
 
-  function closeLinksSheet() {
-    if (!linksSheet || !linksSheet.classList.contains('show')) return;
-    linksSheet.classList.remove('show');
-    linksSheet.setAttribute('aria-hidden', 'true');
-    if (!modalMask.classList.contains('show') &&
-        !lightbox.classList.contains('show') &&
-        !(editModalMask && editModalMask.classList.contains('show'))) {
-      unlockBodyScroll();
-    }
-    if (lastSheetFocused && document.body.contains(lastSheetFocused)) {
-      lastSheetFocused.focus();
-    }
-    lastSheetFocused = null;
+  function closeInlineDropdown() {
+    if (!inlineDropdown) return;
+    const el = inlineDropdown;
+    const anchor = inlineDropdownAnchor;
+    inlineDropdown = null;
+    inlineDropdownAnchor = null;
+    el.classList.remove('show');
+    if (anchor) anchor.classList.remove('dropdown-open');
+    setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 160);
   }
 
-  if (linksSheetClose) linksSheetClose.addEventListener('click', closeLinksSheet);
-  if (linksSheet) {
-    linksSheet.addEventListener('click', function (e) {
-      if (e.target === linksSheet) closeLinksSheet();
-    });
-  }
+  // 点外部关闭（捕获阶段，卡片本身的 click 会先 toggle，这里处理其他位置）
+  document.addEventListener('click', function (e) {
+    if (!inlineDropdown) return;
+    if (inlineDropdown.contains(e.target)) return;
+    if (e.target.closest('.nav-card')) return;
+    closeInlineDropdown();
+  }, true);
 
   /* ============ 统一事件委托：卡片交互 ============ */
   navGroupsEl.addEventListener('click', function (e) {
-    /* 0. 多链接卡片 —— 点击整卡弹出选择抽屉
-          注意：点简介按钮 (i) 时不应弹抽屉，让后面的简介逻辑处理 */
+    /* 0. 多链接卡片 —— 在卡片正下方展开/收起链接列表 */
     const multiCard = e.target.closest('.nav-card[data-multi="true"]');
     if (multiCard &&
         !e.target.closest('.nav-info-btn') &&
         !document.body.classList.contains('edit-mode')) {
       e.preventDefault();
+      e.stopPropagation();
+      if (inlineDropdownAnchor === multiCard) {
+        closeInlineDropdown();
+        return;
+      }
       const catId = multiCard.dataset.cat;
       const groupId = multiCard.dataset.group;
       const idx = parseInt(multiCard.dataset.idx, 10);
       const cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
       const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === groupId; });
-      if (group && group.items && group.items[idx]) openLinksSheet(group.items[idx]);
+      if (group && group.items && group.items[idx]) {
+        openInlineDropdown(multiCard, group.items[idx]);
+      }
       return;
     }
 
-    /* 1. 无链接卡片拦截（非编辑模式） */
+    /* 1. 无链接卡片拦截 */
     if (!document.body.classList.contains('edit-mode')) {
       const disabledCard = e.target.closest('.nav-card[data-disabled="true"]');
       if (disabledCard) {
@@ -698,7 +667,6 @@
 
     /* 2. 编辑模式下的操作拦截 */
     if (document.body.classList.contains('edit-mode')) {
-      // 移动分组
       const moveGroupBtn = e.target.closest('.move-group');
       if (moveGroupBtn) {
         e.preventDefault(); e.stopPropagation();
@@ -709,7 +677,6 @@
         if (!cat || !cat.groups) return;
         const idx = cat.groups.findIndex(g => g.id === groupId);
         if (idx === -1) return;
-
         if (dir === 'up' && idx > 0) {
           const temp = cat.groups[idx];
           cat.groups[idx] = cat.groups[idx - 1];
@@ -726,7 +693,6 @@
         return;
       }
 
-      // 编辑/删除分组
       const editGroupBtn = e.target.closest('.edit-group');
       const delGroupBtn = e.target.closest('.del-group');
       if (editGroupBtn || delGroupBtn) {
@@ -738,7 +704,6 @@
         const groupIdx = cat.groups.findIndex(g => g.id === groupId);
         if (groupIdx === -1) return;
         const group = cat.groups[groupIdx];
-
         if (editGroupBtn) {
           const newName = prompt('请输入新的分组名称：', group.title);
           if (newName && newName.trim()) {
@@ -756,7 +721,6 @@
         return;
       }
 
-      // 移动卡片
       const moveItemBtn = e.target.closest('.move-item');
       if (moveItemBtn) {
         e.preventDefault(); e.stopPropagation();
@@ -765,11 +729,9 @@
         const groupId = card.dataset.group;
         const idx = parseInt(card.dataset.idx, 10);
         const dir = moveItemBtn.dataset.dir;
-
         const cat = NAV_CATEGORIES.find(c => c.id === catId);
         const group = cat && cat.groups && cat.groups.find(g => g.id === groupId);
         if (!group || !group.items) return;
-
         if (dir === 'up' && idx > 0) {
           const temp = group.items[idx];
           group.items[idx] = group.items[idx - 1];
@@ -786,7 +748,6 @@
         return;
       }
 
-      // 编辑/删除卡片
       const editBtn = e.target.closest('.edit-btn.edit');
       const delBtn = e.target.closest('.edit-btn.del');
       const card = e.target.closest('.nav-card');
@@ -798,7 +759,6 @@
         const cat = NAV_CATEGORIES.find(c => c.id === catId);
         const group = cat && cat.groups && cat.groups.find(g => g.id === groupId);
         if (!group || !group.items) return;
-
         if (editBtn) {
           openEditModal(catId, groupId, idx);
         } else if (delBtn) {
@@ -812,7 +772,7 @@
       }
     }
 
-    /* 3. 正常模式下，显示简介提示 */
+    /* 3. 简介提示 */
     const infoBtn = e.target.closest('.nav-info-btn');
     if (infoBtn) {
       e.preventDefault(); e.stopPropagation();
@@ -829,20 +789,22 @@
     if (e.key !== 'Enter' && e.key !== ' ') return;
     if (document.body.classList.contains('edit-mode')) return;
 
-    // 多链接卡片：Enter / Space 打开选择抽屉
     const multiCard = e.target.closest('.nav-card[data-multi="true"]');
     if (multiCard) {
       e.preventDefault();
+      if (inlineDropdownAnchor === multiCard) {
+        closeInlineDropdown();
+        return;
+      }
       const catId = multiCard.dataset.cat;
       const groupId = multiCard.dataset.group;
       const idx = parseInt(multiCard.dataset.idx, 10);
       const cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
       const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === groupId; });
-      if (group && group.items && group.items[idx]) openLinksSheet(group.items[idx]);
+      if (group && group.items && group.items[idx]) openInlineDropdown(multiCard, group.items[idx]);
       return;
     }
 
-    // 无链接卡片
     const card = e.target.closest('.nav-card[data-disabled="true"]');
     if (!card) return;
     e.preventDefault();
@@ -866,7 +828,7 @@
     noticeListEl.innerHTML = items;
   }
 
-  /* ============ 左侧底部：随机逛逛 ============ */
+  /* ============ 随机逛逛 ============ */
   function collectSitesInCategory(catId) {
     var cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
     if (!cat) return [];
@@ -885,11 +847,8 @@
       var list = collectSitesInCategory(activeCategoryId);
       if (!list.length) return;
       var pick = list[Math.floor(Math.random() * list.length)];
-      if (SETTINGS.openInNewTab) {
-        window.open(pick.url, '_blank', 'noopener');
-      } else {
-        window.location.href = pick.url;
-      }
+      if (SETTINGS.openInNewTab) window.open(pick.url, '_blank', 'noopener');
+      else window.location.href = pick.url;
     });
   }
 
@@ -900,30 +859,23 @@
     const offset = 60 + noticeBarH + (navSearchEl ? navSearchEl.offsetHeight : 50) + 8;
     const rect = navGroupsEl.getBoundingClientRect();
     const targetY = Math.max(0, rect.top + window.scrollY - offset);
-
     if (Math.abs(window.scrollY - targetY) < 4) return;
     window.scrollTo({ top: targetY, behavior: 'smooth' });
   }
 
   function scrollToGroup(groupId) {
     if (!navGroupsEl) return;
-
     requestAnimationFrame(function () {
       let targetEl = navGroupsEl.querySelector(groupId === 'all' ? '.nav-group' : '.nav-group[data-group-id="' + groupId + '"]');
       if (!targetEl) return;
-
       const noticeBarH = (noticeBar.hidden || !SETTINGS.noticeBar) ? 0 : noticeBar.offsetHeight;
       const offset = 60 + noticeBarH + (navSearchEl ? navSearchEl.offsetHeight : 50) + 16;
-
       const rect = targetEl.getBoundingClientRect();
       const targetY = rect.top + window.scrollY - offset;
-
       if (Math.abs(window.scrollY - targetY) < 4) return;
-
       isAutoScrolling = true;
       clearTimeout(autoScrollTimer);
       autoScrollTimer = setTimeout(function () { isAutoScrolling = false; }, 800);
-
       window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
     });
   }
@@ -932,13 +884,10 @@
     if (!navGroupsEl || !catNavEl) return;
     if (window.matchMedia('(max-width: 1024px)').matches) return;
     if (navKeyword.trim()) return;
-
     const groups = navGroupsEl.querySelectorAll('.nav-group');
     if (!groups.length) return;
-
     const noticeBarH = (noticeBar.hidden || !SETTINGS.noticeBar) ? 0 : noticeBar.offsetHeight;
     const offset = 60 + noticeBarH + (navSearchEl ? navSearchEl.offsetHeight : 50) + 60;
-
     let currentGroupId = '';
     for (let i = groups.length - 1; i >= 0; i--) {
       if (groups[i].getBoundingClientRect().top <= offset) {
@@ -946,7 +895,6 @@
         break;
       }
     }
-
     catNavEl.querySelectorAll('.sub-tab').forEach(function (sub) {
       sub.classList.toggle('active', sub.dataset.group === currentGroupId);
     });
@@ -954,8 +902,8 @@
 
   function handleScroll() {
     hideTip();
+    if (inlineDropdown) closeInlineDropdown();
     updateBackTop();
-
     if (!isAutoScrolling) {
       clearTimeout(scrollSpyTimer);
       scrollSpyTimer = setTimeout(updateActiveSubTab, 100);
@@ -993,11 +941,9 @@
 
       catHtml += '<div class="sub-cats-wrap' + (isActive ? ' show' : '') + '">';
       catHtml += '<div class="sub-cats-inner">';
-
       (cat.groups || []).forEach(function (g) {
         catHtml += '<button class="sub-tab' + (activeGroupId === g.id ? ' active' : '') + '" type="button" data-group="' + esc(g.id) + '">' + esc(g.title) + '</button>';
       });
-
       catHtml += '</div></div></div>';
     });
 
@@ -1023,9 +969,7 @@
   }
 
   function bindCatEvents() {
-    // 覆盖式绑定，避免每次渲染累积监听
     catNavEl.onclick = function (e) {
-      // 子分类点击（优先）
       const sub = e.target.closest('.sub-tab');
       if (sub) {
         catNavEl.querySelectorAll('.sub-tab').forEach(st => st.classList.toggle('active', st === sub));
@@ -1036,7 +980,6 @@
       const tab = e.target.closest('.cat-tab');
       if (!tab) return;
 
-      // 分类编辑 / 移动 / 删除
       if (document.body.classList.contains('edit-mode')) {
         const moveBtn = e.target.closest('.move-cat');
         const editBtn = e.target.closest('.edit-cat');
@@ -1064,7 +1007,6 @@
           const catIdx = NAV_CATEGORIES.findIndex(c => c.id === catId);
           if (catIdx === -1) return;
           const cat = NAV_CATEGORIES[catIdx];
-
           if (editBtn) {
             const newName = prompt('请输入新的大类名称：', cat.title);
             if (newName && newName.trim()) {
@@ -1084,11 +1026,11 @@
         }
       }
 
-      // 切换分类
       if (activeCategoryId === tab.dataset.cat) return;
       activeCategoryId = tab.dataset.cat;
       activeGroupId = 'all';
       hideTip();
+      closeInlineDropdown();
 
       catNavEl.querySelectorAll('.cat-tab').forEach(t => t.classList.toggle('active', t === tab));
       catNavEl.querySelectorAll('.cat-block').forEach(block => {
@@ -1096,9 +1038,7 @@
         if (!subWrap) return;
         const isCurrent = block.contains(tab);
         subWrap.classList.toggle('show', isCurrent);
-        if (isCurrent) {
-          subWrap.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
-        }
+        if (isCurrent) subWrap.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
       });
 
       if (window.matchMedia('(max-width: 1024px)').matches && tab.scrollIntoView) {
@@ -1108,22 +1048,18 @@
       renderGroupNav();
       renderCards();
 
-      if (window.matchMedia('(min-width: 1025px)').matches) {
-        scrollToGroup('all');
-      }
+      if (window.matchMedia('(min-width: 1025px)').matches) scrollToGroup('all');
     };
   }
 
   function renderGroupNav() {
     const currentCat = NAV_CATEGORIES.find(c => c.id === activeCategoryId);
     const groups = currentCat ? (currentCat.groups || []) : [];
-
     let chips = '<button class="chip' + (activeGroupId === 'all' ? ' active' : '') + '" type="button" data-group="all">全部</button>';
     groups.forEach(function (g) {
       chips += '<button class="chip' + (activeGroupId === g.id ? ' active' : '') + '" type="button" data-group="' + esc(g.id) + '">' + esc(g.title) + '</button>';
     });
     groupNavEl.innerHTML = chips;
-
     groupNavEl.querySelectorAll('.chip').forEach(function (chip) {
       chip.addEventListener('click', function () {
         if (activeGroupId === chip.dataset.group) return;
@@ -1141,6 +1077,8 @@
   }
 
   function renderCards() {
+    closeInlineDropdown();
+
     const q          = navKeyword.trim().toLowerCase();
     const cardTarget = SETTINGS.openInNewTab ? '_blank' : '_self';
     const cardRel    = SETTINGS.openInNewTab ? 'noopener' : '';
@@ -1156,7 +1094,6 @@
     groups.forEach(function (group) {
       if (!isDesktop && activeGroupId !== 'all' && activeGroupId !== group.id) return;
 
-      // 保留原始索引，避免搜索过滤后编辑/删除错位
       const filtered = (group.items || [])
         .map((it, i) => ({ it, i }))
         .filter(o => {
@@ -1164,7 +1101,6 @@
           return ((o.it.name || '') + ' ' + (o.it.desc || '')).toLowerCase().indexOf(q) !== -1;
         });
 
-      // 编辑模式下即使分组无卡片也要渲染，否则新建空分组会“消失”
       if (!filtered.length) {
         if (!isEditMode || q) return;
       } else {
@@ -1185,11 +1121,10 @@
         const noLink     = !primaryUrl;
         const multiLinks = allLinks.length > 1;
 
-        // 多链接：整卡点击弹抽屉；单链接：直接跳转；无链接：拦截提示
         let cardHref, cardAttrs;
         if (multiLinks) {
           cardHref  = 'javascript:void(0)';
-          cardAttrs = 'data-multi="true" role="button" tabindex="0" ';
+          cardAttrs = 'data-multi="true" role="button" tabindex="0" aria-haspopup="menu" ';
         } else if (noLink) {
           cardHref  = 'javascript:void(0)';
           cardAttrs = 'data-disabled="true" aria-disabled="true" tabindex="0" ';
@@ -1223,7 +1158,6 @@
                '</a>';
       }).join('');
 
-      // 分组操作按钮
       let groupActions = '';
       if (isEditMode) {
         groupActions =
@@ -1254,7 +1188,6 @@
 
     navGroupsEl.innerHTML = html;
 
-    // 编辑模式下（未搜索时）不显示空态，避免遮住添加入口
     const showEmptyState = shown === 0 && !(isEditMode && !q);
     navEmptyEl.hidden = !showEmptyState;
 
@@ -1263,7 +1196,6 @@
       if (/^\d+$/.test(q)) {
         steamIdBtn = `<button class="ext-btn" onclick="window.open('https://steamcommunity.com/sharedfiles/filedetails/?id=' + encodeURIComponent('${esc(q)}'), '_blank')">Steam 搜创意工坊</button>`;
       }
-
       navEmptyEl.innerHTML = `
         <div class="external-search">
           <p>没有找到匹配的站点，去搜索引擎看看？</p>
@@ -1336,19 +1268,13 @@
   /* ============ 友站渲染 ============ */
   function renderFriends() {
     if (!friendsSectionEl || !friendsGridEl) return;
-
-    if (!SETTINGS.showFriends) {
-      friendsSectionEl.hidden = true;
-      return;
-    }
-
+    if (!SETTINGS.showFriends) { friendsSectionEl.hidden = true; return; }
     const visible = (FRIENDS || []).filter(function (f) { return f && f.hidden !== true; });
     if (!visible.length) {
       friendsSectionEl.hidden = true;
       friendsGridEl.innerHTML = '';
       return;
     }
-
     friendsSectionEl.hidden = false;
     friendsGridEl.innerHTML = visible.map(function (f) {
       const hasIcon = !!(f.icon && f.icon.trim());
@@ -1360,7 +1286,6 @@
                '<span class="friend-name">' + esc(f.name || '') + '</span>' +
              '</a>';
     }).join('');
-
     guardImgs(friendsGridEl);
   }
 
@@ -1377,7 +1302,6 @@
     stopBarTimer();
     const pinned = pinnedNotices();
     if (pinned.length < 2) return;
-
     barTimer = setInterval(function () {
       if (barPaused) return;
       barIndex = (barIndex + 1) % pinned.length;
@@ -1393,7 +1317,6 @@
       updateNoticeBarH();
       return;
     }
-
     const pinned = pinnedNotices();
     if (!pinned.length) {
       noticeBar.hidden = true;
@@ -1402,7 +1325,6 @@
       updateNoticeBarH();
       return;
     }
-
     if (barIndex >= pinned.length) barIndex = 0;
     const n = pinned[barIndex];
 
@@ -1411,7 +1333,6 @@
     barTag.className = ('bar-tag ' + (n.tagClass || '')).trim();
     barText.textContent = n.title || '';
     barText.title = n.title || '';
-
     barText.onclick = function () {
       if (n.noModal && n.links && n.links.length) {
         openExternal(n.links[0].url);
@@ -1441,7 +1362,6 @@
     } else {
       barDots.innerHTML = '';
     }
-
     updateNoticeBarH();
     if (restartTimer !== false) startBarTimer();
   }
@@ -1452,7 +1372,6 @@
   function renderNoticeTabs() {
     if (TAGS.indexOf(noticeFilter) === -1) noticeFilter = '全部';
     noticeTabsEl.hidden = !!noticeKeyword.trim();
-
     noticeTabsEl.innerHTML = '';
     TAGS.forEach(function (tag) {
       const btn = document.createElement('button');
@@ -1477,17 +1396,14 @@
 
   function renderNotices() {
     const q = noticeKeyword.trim().toLowerCase();
-
     let list = NOTICES.filter(function (n) {
       const okTag = noticeFilter === '全部' || n.tag === noticeFilter;
       const okQ = !q || (n._searchText || '').indexOf(q) !== -1;
       return okTag && okQ;
     });
-
     list = list.sort(function (a, b) { return (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0); });
 
     noticeListEl.innerHTML = '';
-
     if (!list.length) {
       noticeEmptyEl.textContent = '没有匹配的公告';
       noticeEmptyEl.hidden = false;
@@ -1513,7 +1429,6 @@
         pin.textContent = '置顶';
         meta.appendChild(pin);
       }
-
       const tagEl = document.createElement('span');
       tagEl.className = ('tag ' + (n.tagClass || '')).trim();
       tagEl.textContent = n.tag || '';
@@ -1521,7 +1436,6 @@
 
       const h3 = document.createElement('h3');
       h3.innerHTML = highlight(n.title || '', q);
-
       const p = document.createElement('p');
       p.innerHTML = highlight(n.excerpt || '', q);
 
@@ -1557,7 +1471,6 @@
   /* ============ 结构化内容渲染 ============ */
   function renderStructuredBody(sections) {
     const frag = document.createDocumentFragment();
-
     sections.forEach(function (sec) {
       const wrap = document.createElement('div');
       wrap.className = 'section';
@@ -1572,7 +1485,6 @@
       if (sec.type === 'image') {
         const fig = document.createElement('figure');
         fig.className = 'section-figure';
-
         const src = sec.src || '';
         if (src) {
           const a = document.createElement('a');
@@ -1580,60 +1492,49 @@
           a.target = '_blank';
           a.rel = 'noopener';
           a.title = sec.alt || sec.caption || '点击查看大图';
-
           const img = document.createElement('img');
           img.src = src;
           img.alt = sec.alt || sec.caption || '';
           img.loading = 'lazy';
           if (sec.maxWidth) img.style.maxWidth = sec.maxWidth + 'px';
-
           img.addEventListener('error', function () {
             const ph = document.createElement('div');
             ph.className = 'section-img-fail';
             ph.textContent = '图片加载失败';
             a.replaceWith(ph);
           }, { once: true });
-
           a.addEventListener('click', function (e) {
             e.preventDefault();
             openLightbox(src, img.alt);
           });
-
           a.appendChild(img);
           fig.appendChild(a);
         }
-
         if (sec.caption) {
           const cap = document.createElement('figcaption');
           cap.textContent = sec.caption;
           fig.appendChild(cap);
         }
-
         wrap.appendChild(fig);
-
       } else if (sec.type === 'kv') {
         const ul = document.createElement('ul');
         ul.className = 'kv-list';
         (sec.items || []).forEach(function (it) {
           const li = document.createElement('li');
           li.className = 'kv-item';
-
           const label = document.createElement('span');
           label.className = 'kv-label';
           label.textContent = it.label;
-
           const value = document.createElement('span');
           value.className = 'kv-value';
           if (it.valueHtml) value.innerHTML = it.valueHtml;
           else value.innerHTML = highlight(it.value || '', '');
-
           if (it.note) {
             const note = document.createElement('span');
             note.className = 'kv-note';
             note.textContent = it.note;
             value.appendChild(note);
           }
-
           li.appendChild(label);
           li.appendChild(value);
           ul.appendChild(li);
@@ -1654,10 +1555,8 @@
         p.innerHTML = sec.text || '';
         wrap.appendChild(p);
       }
-
       frag.appendChild(wrap);
     });
-
     return frag;
   }
 
@@ -1676,7 +1575,6 @@
       modalBody.textContent = n.content || n.excerpt || '';
     }
     modalBody.scrollTop = 0;
-
     guardImgs(modalBody);
 
     modalActions.innerHTML = '';
@@ -1703,11 +1601,7 @@
   function closeModal() {
     modalMask.classList.remove('show');
     modalMask.setAttribute('aria-hidden', 'true');
-    if (!lightbox || !lightbox.classList.contains('show')) {
-      if (!linksSheet || !linksSheet.classList.contains('show')) {
-        unlockBodyScroll();
-      }
-    }
+    if (!lightbox || !lightbox.classList.contains('show')) unlockBodyScroll();
     if (lastFocused && document.body.contains(lastFocused)) lastFocused.focus();
   }
 
@@ -1716,7 +1610,7 @@
 
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
-    if (linksSheet && linksSheet.classList.contains('show')) { closeLinksSheet(); return; }
+    if (inlineDropdown) { closeInlineDropdown(); return; }
     if (lightbox && lightbox.classList.contains('show')) { closeLightbox(); return; }
     if (settingsMask && settingsMask.classList.contains('show')) { closeSettings(); return; }
     if (editModalMask && editModalMask.classList.contains('show')) {
@@ -1795,7 +1689,6 @@
       const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === editTarget.groupId; });
       if (!group || !group.items) return;
 
-      // 收集附加链接
       const extras = [];
       if (editLinksList) {
         editLinksList.querySelectorAll('.edit-link-row').forEach(function (row) {
@@ -1813,7 +1706,6 @@
         color: editColorEl.value.trim() || '#4E7296',
         icon: ''
       };
-      // 只有填写了附加链接才写入 links，保持单链接数据干净
       if (extras.length) newItem.links = extras;
 
       if (editTarget.itemIndex > -1) {
@@ -1829,12 +1721,11 @@
     });
   }
 
-  /* ============ GitHub API 在线编辑 ============ */
+  /* ============ GitHub 保存 ============ */
   async function saveToGitHub() {
     if (!SETTINGS.ghOwner || !SETTINGS.ghRepo || !SETTINGS.ghToken || !SETTINGS.ghPath) {
       return showToast('请先在设置中填写完整的 GitHub 配置', true);
     }
-
     const btn = floatingSaveBtn;
     if (!btn) return;
     const oldText = btn.textContent;
@@ -1851,11 +1742,8 @@
     try {
       const getRes = await fetch(url, { headers, method: 'GET' });
       let sha = '';
-      if (getRes.ok) {
-        sha = (await getRes.json()).sha;
-      } else if (getRes.status !== 404) {
-        throw new Error('获取文件信息失败，请检查仓库是否存在或 Token 是否有权限');
-      }
+      if (getRes.ok) sha = (await getRes.json()).sha;
+      else if (getRes.status !== 404) throw new Error('获取文件信息失败，请检查仓库是否存在或 Token 是否有权限');
 
       const contentStr = JSON.stringify({ categories: NAV_CATEGORIES }, null, 2);
       const contentBase64 = btoa(unescape(encodeURIComponent(contentStr)));
@@ -1863,17 +1751,11 @@
       const putBody = { message: 'Update nav.json via web editor', content: contentBase64 };
       if (sha) putBody.sha = sha;
 
-      const putRes = await fetch(url, {
-        method: 'PUT',
-        headers,
-        body: JSON.stringify(putBody)
-      });
-
+      const putRes = await fetch(url, { method: 'PUT', headers, body: JSON.stringify(putBody) });
       if (!putRes.ok) {
         const errData = await putRes.json();
         throw new Error(errData.message || '保存失败');
       }
-
       showToast('🎉 保存成功！稍等片刻 GitHub Pages 即可生效');
     } catch (err) {
       console.error(err);
@@ -1900,18 +1782,14 @@
     navSearchTimer = setTimeout(function () {
       navKeyword = value;
       if (!NAV_CATEGORIES.length) return;
-
       const isSearching = !!navKeyword.trim();
       groupNavEl.hidden = isSearching;
-
       if (isSearching) {
         activeGroupId = 'all';
         catNavEl.querySelectorAll('.sub-tab').forEach(function(st) { st.classList.remove('active'); });
       }
-
       updateGroupNavActive();
       renderCards();
-
       if (isSearching) scrollToResultsTop();
     }, 120);
   });
@@ -1924,12 +1802,9 @@
       noticeSearchTimer = setTimeout(function () {
         noticeKeyword = value;
         if (!NOTICES.length) return;
-
         const isSearching = !!noticeKeyword.trim();
         noticeTabsEl.hidden = isSearching;
-
         if (isSearching) noticeFilter = '全部';
-
         updateNoticeTabsActive();
         renderNotices();
       }, 120);
@@ -2041,13 +1916,7 @@
     delete safeSettings.ghToken;
     delete safeSettings.editMode;
 
-    var data = {
-      version: 1,
-      exportedAt: new Date().toISOString(),
-      theme: themeVal,
-      settings: safeSettings
-    };
-
+    var data = { version: 1, exportedAt: new Date().toISOString(), theme: themeVal, settings: safeSettings };
     var json = JSON.stringify(data, null, 2);
     var blob = new Blob([json], { type: 'application/json' });
     var url = URL.createObjectURL(blob);
@@ -2063,13 +1932,11 @@
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-
     showToast('配置已导出');
   }
 
   function importSettingsFromFile(file) {
     if (!file) return;
-
     var reader = new FileReader();
     reader.onload = function (e) {
       try {
@@ -2078,7 +1945,6 @@
 
         var incoming = {};
         var incomingTheme = null;
-
         if (data.settings && typeof data.settings === 'object') {
           incoming = data.settings;
           if (typeof data.theme === 'string') incomingTheme = data.theme;
@@ -2088,7 +1954,6 @@
         }
 
         var merged = Object.assign({}, DEFAULT_SETTINGS);
-
         const currentGhConfig = {
           ghOwner: SETTINGS.ghOwner,
           ghRepo: SETTINGS.ghRepo,
@@ -2108,7 +1973,6 @@
         if (typeof incoming.defaultCategory === 'string') merged.defaultCategory = incoming.defaultCategory;
 
         Object.assign(merged, currentGhConfig);
-
         SETTINGS = merged;
         saveSettings();
 
@@ -2145,10 +2009,7 @@
       updateNoticeBarH();
     }
 
-    if (NAV_CATEGORIES.length) {
-      renderCards();
-    }
-
+    if (NAV_CATEGORIES.length) renderCards();
     renderFriends();
   }
 
@@ -2179,13 +2040,11 @@
     if (setDefaultCategoryEl) {
       const current = SETTINGS.defaultCategory || '';
       let effective = '';
-
       if (NAV_CATEGORIES.length) {
         let found = NAV_CATEGORIES.find(function (c) { return c.id === current; });
         if (!found && current) { SETTINGS.defaultCategory = ''; saveSettings(); }
         if (!found) found = NAV_CATEGORIES.find(function (c) { return c.default; }) || NAV_CATEGORIES[0];
         effective = found ? found.id : '';
-
         let html = '';
         NAV_CATEGORIES.forEach(function (c) {
           html += '<option value="' + esc(c.id) + '">' + esc(c.title) + '</option>';
@@ -2216,7 +2075,6 @@
         else openSettings();
       });
     }
-
     if (settingsClose) settingsClose.addEventListener('click', closeSettings);
     if (settingsMask) settingsMask.addEventListener('click', function (e) { if (e.target === settingsMask) closeSettings(); });
 
@@ -2226,7 +2084,6 @@
         syncSettingsUI();
       });
     }
-
     if (setNoticeBarEl) {
       setNoticeBarEl.addEventListener('change', function () {
         SETTINGS.noticeBar = !!setNoticeBarEl.checked;
@@ -2234,7 +2091,6 @@
         applySettings();
       });
     }
-
     if (setShowFriendsEl) {
       setShowFriendsEl.addEventListener('change', function () {
         SETTINGS.showFriends = !!setShowFriendsEl.checked;
@@ -2242,14 +2098,12 @@
         renderFriends();
       });
     }
-
     if (setDefaultCategoryEl) {
       setDefaultCategoryEl.addEventListener('change', function () {
         SETTINGS.defaultCategory = setDefaultCategoryEl.value;
         saveSettings();
       });
     }
-
     if (setOpenModeEl) {
       setOpenModeEl.querySelectorAll('button').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -2301,10 +2155,8 @@
           ghPath: SETTINGS.ghPath,
           ghToken: SETTINGS.ghToken
         };
-
         SETTINGS = Object.assign({}, DEFAULT_SETTINGS, ghConfig);
         SETTINGS.editMode = false;
-
         saveSettings();
         setFollowSystem(true);
         applySettings();
@@ -2327,9 +2179,7 @@
     if (!settingsMask) return;
     settingsMask.classList.remove('show');
     settingsMask.setAttribute('aria-hidden', 'true');
-    if (!modalMask.classList.contains('show') &&
-        !lightbox.classList.contains('show') &&
-        !(linksSheet && linksSheet.classList.contains('show'))) {
+    if (!modalMask.classList.contains('show') && !lightbox.classList.contains('show')) {
       unlockBodyScroll();
     }
   }
@@ -2360,9 +2210,7 @@
     const qrEl = document.getElementById('qrCode');
     if (!qrEl) return;
     const img = qrEl.querySelector('img');
-
     if (!img) { qrEl.innerHTML = makeQRCode(20241018); return; }
-
     function fallback() {
       qrEl.removeAttribute('href');
       qrEl.removeAttribute('target');
@@ -2370,22 +2218,19 @@
       qrEl.style.cursor = 'default';
       qrEl.innerHTML = makeQRCode(20241018);
     }
-
     qrEl.addEventListener('click', function (e) {
       if (!img.isConnected) return;
       e.preventDefault();
       openLightbox(img.src, img.alt || '公众号二维码');
     });
-
     if (img.complete && img.naturalWidth === 0) { fallback(); return; }
     img.addEventListener('error', fallback, { once: true });
   }
 
-  /* ============ 时光问候模块 ============ */
+  /* ============ 时光问候 ============ */
   function initGreeting() {
     const greetingEl = document.getElementById('greetingText');
     if (!greetingEl) return;
-
     function updateGreeting() {
       const hour = new Date().getHours();
       let text = '';
@@ -2395,10 +2240,8 @@
       else if (hour >= 14 && hour < 18) text = '下午好，喝杯水吧 🍵';
       else if (hour >= 18 && hour < 24) text = '晚上好，辛苦一天了 🌙';
       else text = '夜深了，注意身体早点休息 🌛';
-
       greetingEl.textContent = text;
     }
-
     updateGreeting();
     setInterval(updateGreeting, 600000);
   }
@@ -2408,9 +2251,7 @@
     try {
       const navRes = await fetchWithTimeout(NAV_URL);
       if (!navRes.ok) throw new Error('导航 JSON 加载失败：' + navRes.status);
-
       const navData = await navRes.json();
-
       if (Array.isArray(navData)) {
         NAV_CATEGORIES = [{ id: 'all', title: '全部导航', default: true, groups: navData }];
       } else if (navData && Array.isArray(navData.categories)) {
@@ -2434,7 +2275,6 @@
 
       if (catFootEl) catFootEl.hidden = false;
       renderNav();
-
     } catch (err) {
       console.error(err);
       if (navSearchEl) navSearchEl.hidden = true;
@@ -2447,7 +2287,6 @@
     try {
       const noticeRes = await fetchWithTimeout(NOTICE_URL);
       if (!noticeRes.ok) throw new Error('公告 JSON 加载失败：' + noticeRes.status);
-
       const noticeData = await noticeRes.json();
       NOTICES = Array.isArray(noticeData) ? noticeData : [];
 
