@@ -578,22 +578,31 @@
     dropdown.setAttribute('role', 'menu');
     dropdown.setAttribute('aria-label', item.name || '选择链接');
 
-links.forEach(function (l, i) {
-  const a = document.createElement('a');
-  a.className = 'inline-link' + (i === 0 ? ' primary' : '');
-  a.href = l.url;
-  if (SETTINGS.openInNewTab) {
-    a.target = '_blank';
-    a.rel = 'noopener';
-  }
-  // 主链接 → 卡片名；附加链接 → 用户设定的标题
-  const label = i === 0 ? (item.name || '主链接') : (l.text || '链接');
-  a.textContent = label;
-  a.addEventListener('click', function () {
-    closeInlineDropdown();
-  });
-  dropdown.appendChild(a);
-});
+    links.forEach(function (l, i) {
+      const a = document.createElement('a');
+      a.className = 'inline-link'; // 移除 primary 类，统一颜色
+      a.href = l.url;
+      if (SETTINGS.openInNewTab) {
+        a.target = '_blank';
+        a.rel = 'noopener';
+      }
+
+      // 主链接 → 卡片名；附加链接 → 用户设定的标题
+      const label = i === 0 ? (item.name || '主链接') : (l.text || '链接');
+      
+      // 主链接后面加上“主”字徽章
+      if (i === 0) {
+        a.innerHTML = '<span class="inline-link-text">' + esc(label) + '</span>' +
+                      '<span class="inline-link-badge">主</span>';
+      } else {
+        a.innerHTML = '<span class="inline-link-text">' + esc(label) + '</span>';
+      }
+
+      a.addEventListener('click', function () {
+        closeInlineDropdown();
+      });
+      dropdown.appendChild(a);
+    });
 
     document.body.appendChild(dropdown);
     inlineDropdown = dropdown;

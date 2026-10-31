@@ -36,7 +36,7 @@
   --shadow-hover: 0 2px 4px rgba(0, 0, 0, .45), 0 10px 26px rgba(0, 0, 0, .35);
 }
 
-/* 护眼主题 */
+/* ============ 护眼主题扩展 ============ */
 [data-theme-color="green"] { --bg:#F3F5F1; --bg-blur:rgba(243,245,241,.82); --surface:#FFFFFF; --surface-2:#F0F3EE; --border:#E2E7DF; --border-strong:#CDD5C8; --text:#2E362F; --text-dim:#6B766D; --text-mute:#98A69B; --accent:#5C8D76; --accent-soft:#E6F0EA; --dot:#5C8D76; }
 [data-theme="dark"][data-theme-color="green"] { --bg:#181B19; --bg-blur:rgba(24,27,25,.82); --surface:#202421; --surface-2:#262B27; --border:#303732; --border-strong:#424B44; --text:#E2E5E3; --text-dim:#909A93; --text-mute:#68716B; --accent:#7BB391; --accent-soft:#26342B; }
 
@@ -79,7 +79,7 @@ body.modal-open { overflow: hidden; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; border: 2px solid var(--bg); }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-mute); }
 
-/* 图标容器通用 */
+/* 图片图标通用规则 */
 .brand-mark, .avatar, .acc-ico, .nav-ico, .friend-ico {
   position: relative; overflow: hidden; flex-shrink: 0;
 }
@@ -255,7 +255,7 @@ body.modal-open { overflow: hidden; }
 .group-title::before { content: ''; width: 3px; height: 11px; border-radius: 2px; background: var(--border-strong); }
 .group-count { font-weight: 400; font-size: 11.5px; color: var(--text-mute); opacity: .75; }
 
-/* ★ 卡片网格：恢复原始尺寸 */
+/* 导航卡片网格 */
 .nav-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -263,7 +263,7 @@ body.modal-open { overflow: hidden; }
   align-items: stretch;
 }
 
-/* ★ 导航主卡片：恢复原始尺寸 */
+/* 导航主卡片 */
 .nav-card {
   position: relative;
   display: flex;
@@ -316,29 +316,6 @@ body.modal-open { overflow: hidden; }
   text-overflow: ellipsis;
 }
 
-/* 多链接卡片：右侧小下拉三角（替代数字徽章） */
-.nav-card.has-multi { padding-right: 20px; }
-.nav-card.has-multi::after {
-  content: '';
-  position: absolute;
-  right: 9px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-left: 3.5px solid transparent;
-  border-right: 3.5px solid transparent;
-  border-top: 4px solid var(--text-mute);
-  opacity: .55;
-  transition: transform .15s ease, opacity .15s ease;
-  pointer-events: none;
-}
-.nav-card.has-multi.dropdown-open::after {
-  opacity: 1;
-  transform: translateY(-50%) rotate(180deg);
-}
-body.edit-mode .nav-card.has-multi::after { display: none; }
-
 /* 简介按钮（触屏 + 截断时） */
 .nav-info-btn {
   display: none; position: absolute; right: 8px; bottom: 8px;
@@ -355,13 +332,13 @@ body.edit-mode .nav-card.has-multi::after { display: none; }
 }
 mark { background: transparent; color: var(--accent); font-weight: 700; padding: 0; }
 
-/* 展开时高亮 */
+/* 卡片展开时的高亮状态 */
 .nav-card.dropdown-open {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-/* ============ 内联下拉（★ 缩小版，仅名称） ============ */
+/* ============ 内联下拉（多链接展开列表） ============ */
 .inline-links {
   position: fixed;
   z-index: 85;
@@ -382,9 +359,11 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 .inline-links.show { opacity: 1; transform: none; }
 [data-theme="dark"] .inline-links { box-shadow: 0 8px 24px rgba(0, 0, 0, .55), 0 2px 6px rgba(0, 0, 0, .3); }
 
-/* 链接项：紧凑，只显示文字 */
+/* 链接项：统一样式，无特殊强调色 */
 .inline-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 6px 10px;
   border-radius: 6px;
   text-decoration: none;
@@ -392,9 +371,6 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
   font-size: 12.5px;
   font-weight: 500;
   line-height: 1.4;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   cursor: pointer;
   transition: background-color .15s ease, color .15s ease;
 }
@@ -404,12 +380,28 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
   color: var(--accent);
   outline: none;
 }
-.inline-link.primary { font-weight: 600; color: var(--accent); }
-.inline-link.primary:hover { color: var(--accent); }
+
+/* 链接文字（超长省略） */
+.inline-link-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 红色“主”字徽章 */
+.inline-link-badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--dot);
+  color: #fff;
+  line-height: 1.5;
+}
 
 @media (max-width: 640px) {
-  /* 手机端略微放大但依然小巧，32px 高度左右 */
-  .inline-link { padding: 8px 11px; font-size: 13px; min-height: 34px; display: flex; align-items: center; }
+  .inline-link { padding: 8px 11px; font-size: 13px; min-height: 34px; }
 }
 
 /* 导航提示浮层 */
@@ -586,7 +578,7 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 .section-img-fail { padding: 26px 12px; text-align: center; font-size: 12px; color: var(--text-mute); background: var(--surface-2); border: 1px dashed var(--border-strong); border-radius: 10px; }
 .modal-body img { max-width: 100%; height: auto; border-radius: 8px; }
 
-/* 灯箱 */
+/* 图片灯箱 */
 .lightbox { position: fixed; inset: 0; z-index: 120; display: flex; align-items: center; justify-content: center; padding: 40px 24px 76px; background: rgba(15, 14, 12, .88); backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: all .2s; cursor: default; overflow: hidden; touch-action: none; }
 .lightbox.show { opacity: 1; visibility: visible; }
 .lightbox-img { max-width: 100%; max-height: calc(100vh - 116px); object-fit: contain; border-radius: 8px; box-shadow: 0 20px 60px rgba(0, 0, 0, .55); cursor: zoom-in; user-select: none; background: #fff; transform-origin: center center; will-change: transform; touch-action: none; }
@@ -701,10 +693,8 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
   .notice-list::-webkit-scrollbar-thumb { background: var(--border-strong); border: none; border-radius: 6px; }
   .notice-list::-webkit-scrollbar-thumb:hover { background: var(--text-mute); }
 
-  /* ★ 桌面导航网格恢复原状 */
   .nav-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
   .nav-card { padding: 10px 12px; }
-  .nav-card.has-multi { padding-right: 20px; }
 }
 
 @media (max-width: 640px) {
@@ -716,10 +706,8 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
   .nav-search .search-wrap input { height: 36px; font-size: 13px; padding: 0 12px 0 36px; }
   .nav-search .search-icon { left: 12px; width: 14px; height: 14px; }
   .cat-tab { padding: 6px 8px 8px 10px; font-size: 13px; }
-  /* ★ 移动端导航网格恢复原状 */
   .nav-grid { grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); }
   .nav-card { padding: 11px 12px; }
-  .nav-card.has-multi { padding-right: 18px; }
   .nav-ico { width: 30px; height: 30px; font-size: 12px; border-radius: 8px; }
   .modal-mask { padding: 14px; }
   .modal { max-height: 88vh; }
