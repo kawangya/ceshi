@@ -4,14 +4,14 @@
     "hidden": true,
     "name": "示例友站",
     "url": "https://example.com",
-    "icon": "images/friends/example.png",
+    "icon": "images/apple-touch-icon.png",
     "letter": "友",
     "color": "#4E7296"
   },
   {
     "name": "示例友站",
     "url": "https://example.com",
-    "icon": "images/friends/example.png",
+    "icon": "images/apple-touch-icon.png",
     "letter": "友",
     "color": "#4E7296"
   }
