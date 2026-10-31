@@ -1,5 +1,10 @@
 /* =========================================================
-   卡王的导航 - 主脚本 (最终清理版，无底部占位)
+   卡王的导航 - 主脚本 (完整版)
+   - 修复：编辑模式空分组不渲染
+   - 修复：搜索状态下编辑卡片索引错位
+   - 修复：分类事件监听重复绑定
+   - 清理：无冗余判断、sah 字段按需附加、按钮缓存
+   - 新增：多链接支持（角标 + 弹层 + 编辑行）
    ========================================================= */
 
 (function () {
@@ -37,6 +42,7 @@
   ];
   let SETTINGS = loadSettings();
   let editTarget = { catId: '', groupId: '', itemIndex: -1 };
+  let floatingSaveBtn = null;
 
   function loadSettings() {
     try {
@@ -105,73 +111,78 @@
   })();
 
   /* ============ 元素 ============ */
-  const navGroupsEl = document.getElementById('navGroups');
-  const navEmptyEl = document.getElementById('navEmpty');
-  const navSearchEl = document.getElementById('navSearch');
-  const catNavEl = document.getElementById('catNav');
-  const catFootEl = document.getElementById('catFoot');
-  const catRandomEl = document.getElementById('catRandom');
-  const groupNavEl = document.getElementById('groupNav');
-  const navTipEl = document.getElementById('navTip');
+  const navGroupsEl   = document.getElementById('navGroups');
+  const navEmptyEl    = document.getElementById('navEmpty');
+  const navSearchEl   = document.getElementById('navSearch');
+  const catNavEl      = document.getElementById('catNav');
+  const catFootEl     = document.getElementById('catFoot');
+  const catRandomEl   = document.getElementById('catRandom');
+  const groupNavEl    = document.getElementById('groupNav');
+  const navTipEl      = document.getElementById('navTip');
 
   const friendsSectionEl = document.getElementById('friendsSection');
-  const friendsGridEl = document.getElementById('friendsGrid');
+  const friendsGridEl    = document.getElementById('friendsGrid');
 
-  const noticeBar = document.getElementById('noticeBar');
-  const barTag = document.getElementById('barTag');
-  const barText = document.getElementById('barText');
-  const barDots = document.getElementById('barDots');
+  const noticeBar     = document.getElementById('noticeBar');
+  const barTag        = document.getElementById('barTag');
+  const barText       = document.getElementById('barText');
+  const barDots       = document.getElementById('barDots');
 
-  const noticeListEl = document.getElementById('noticeList');
-  const noticeEmptyEl = document.getElementById('noticeEmpty');
-  const noticeTabsEl = document.getElementById('noticeTabs');
+  const noticeListEl   = document.getElementById('noticeList');
+  const noticeEmptyEl  = document.getElementById('noticeEmpty');
+  const noticeTabsEl   = document.getElementById('noticeTabs');
   const noticeSearchEl = document.getElementById('noticeSearch');
 
-  const searchEl = document.getElementById('search');
-  const themeBtn = document.getElementById('themeBtn');
-  const settingsBtn = document.getElementById('settingsBtn');
-  const backTopBtn = document.getElementById('backTop');
+  const searchEl      = document.getElementById('search');
+  const themeBtn      = document.getElementById('themeBtn');
+  const settingsBtn   = document.getElementById('settingsBtn');
+  const backTopBtn    = document.getElementById('backTop');
 
-  const modalMask = document.getElementById('modalMask');
-  const modalTag = document.getElementById('modalTag');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = document.getElementById('modalBody');
-  const modalActions = document.getElementById('modalActions');
-  const modalClose = document.getElementById('modalClose');
+  const modalMask     = document.getElementById('modalMask');
+  const modalTag      = document.getElementById('modalTag');
+  const modalTitle    = document.getElementById('modalTitle');
+  const modalBody     = document.getElementById('modalBody');
+  const modalActions  = document.getElementById('modalActions');
+  const modalClose    = document.getElementById('modalClose');
 
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
+  const lightbox      = document.getElementById('lightbox');
+  const lightboxImg   = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
-  const lightboxOpen = document.getElementById('lightboxOpen');
-  const lightboxZoom = document.getElementById('lightboxZoom');
+  const lightboxOpen  = document.getElementById('lightboxOpen');
+  const lightboxZoom  = document.getElementById('lightboxZoom');
 
-  const settingsMask = document.getElementById('settingsMask');
-  const settingsClose = document.getElementById('settingsClose');
-  const themeColorsEl = document.getElementById('themeColors');
+  const settingsMask    = document.getElementById('settingsMask');
+  const settingsClose   = document.getElementById('settingsClose');
+  const themeColorsEl   = document.getElementById('themeColors');
   const setFollowSystemEl = document.getElementById('setFollowSystem');
-  const setNoticeBarEl = document.getElementById('setNoticeBar');
+  const setNoticeBarEl  = document.getElementById('setNoticeBar');
   const setShowFriendsEl = document.getElementById('setShowFriends');
   const setDefaultCategoryEl = document.getElementById('setDefaultCategory');
-  const setOpenModeEl = document.getElementById('setOpenMode');
+  const setOpenModeEl   = document.getElementById('setOpenMode');
   const settingsResetEl = document.getElementById('settingsReset');
   const settingsExportEl = document.getElementById('settingsExport');
   const settingsImportEl = document.getElementById('settingsImport');
-  const settingsFileEl = document.getElementById('settingsFile');
-  const toastEl = document.getElementById('toast');
+  const settingsFileEl   = document.getElementById('settingsFile');
+  const toastEl          = document.getElementById('toast');
 
   const ghRepoEl = document.getElementById('ghRepo');
   const ghTokenEl = document.getElementById('ghToken');
   const setEditModeEl = document.getElementById('setEditMode');
 
-  const editModalMask = document.getElementById('editModalMask');
+  const editModalMask  = document.getElementById('editModalMask');
   const editModalTitle = document.getElementById('editModalTitle');
   const editModalClose = document.getElementById('editModalClose');
-  const editNameEl = document.getElementById('editName');
-  const editUrlEl = document.getElementById('editUrl');
-  const editDescEl = document.getElementById('editDesc');
-  const editLetterEl = document.getElementById('editLetter');
-  const editColorEl = document.getElementById('editColor');
-  const editSaveBtn = document.getElementById('editSaveBtn');
+  const editNameEl     = document.getElementById('editName');
+  const editUrlEl      = document.getElementById('editUrl');
+  const editDescEl     = document.getElementById('editDesc');
+  const editLetterEl   = document.getElementById('editLetter');
+  const editColorEl    = document.getElementById('editColor');
+  const editSaveBtn    = document.getElementById('editSaveBtn');
+
+  // 多链接相关
+  const editLinksList = document.getElementById('editLinksList');
+  const editLinksAdd  = document.getElementById('editLinksAdd');
+  const linksPopover  = document.getElementById('linksPopover');
 
   /* ============ 工具 ============ */
   function esc(str) {
@@ -271,8 +282,8 @@
     }
 
     return '<svg viewBox="-1 -1 ' + (SIZE + 2) + ' ' + (SIZE + 2) + '" ' +
-      'xmlns="http://www.w3.org/2000/svg" fill="#2B2B2B" shape-rendering="crispEdges">' +
-      '<path d="' + path + '"/>' + finderSvg + '</svg>';
+           'xmlns="http://www.w3.org/2000/svg" fill="#2B2B2B" shape-rendering="crispEdges">' +
+           '<path d="' + path + '"/>' + finderSvg + '</svg>';
   }
 
   /* ============ 图片灯箱 ============ */
@@ -531,13 +542,14 @@
     if (fontsReadyBound) return;
     fontsReadyBound = true;
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(measureCardTruncation).catch(function () { });
+      document.fonts.ready.then(measureCardTruncation).catch(function () {});
     }
   }
 
   let measureResizeTimer = null;
   window.addEventListener('resize', function () {
     hideTip();
+    closeLinksPopover();
     clearTimeout(measureResizeTimer);
     measureResizeTimer = setTimeout(function () {
       measureCardTruncation();
@@ -573,11 +585,128 @@
     if (e.target.closest('.nav-card')) hideTip();
   });
 
-  /* =========================================================
-     统一事件委托：合并了卡片编辑、分组操作、无链接提示、简介展示
-     ========================================================= */
+  /* ============ 多链接辅助 ============ */
+  function getItemLinks(it) {
+    const arr = [];
+    if (it.url && it.url !== '#' && it.url !== 'javascript:void(0)') {
+      arr.push({ text: '', url: it.url, primary: true });
+    }
+    (it.links || []).forEach(function (l) {
+      if (l && l.url && l.url !== '#') arr.push({ text: l.text || '', url: l.url });
+    });
+    return arr;
+  }
+
+  /* ============ 多链接弹层 ============ */
+  let linksPopoverAnchor = null;
+
+  function openLinksPopover(anchor, links) {
+    if (!linksPopover) return;
+
+    // 若已打开则先关掉（避免叠加）
+    if (!linksPopover.hidden) {
+      linksPopover.hidden = true;
+      linksPopover.classList.remove('show');
+      linksPopover.innerHTML = '';
+      linksPopoverAnchor = null;
+    }
+
+    linksPopover.innerHTML = '';
+    links.forEach(function (l) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'links-popover-item' + (l.text ? '' : ' no-text');
+      btn.setAttribute('role', 'menuitem');
+      btn.innerHTML =
+        '<span class="links-popover-text">' + esc(l.text || '') + '</span>' +
+        '<span class="links-popover-url">' + esc(l.url) + '</span>';
+      btn.addEventListener('click', function () {
+        if (SETTINGS.openInNewTab) {
+          window.open(l.url, '_blank', 'noopener');
+        } else {
+          window.location.href = l.url;
+        }
+        closeLinksPopover();
+      });
+      linksPopover.appendChild(btn);
+    });
+
+    linksPopoverAnchor = anchor;
+
+    // 先显示再测量，然后再定位（避免抖动）
+    linksPopover.hidden = false;
+    linksPopover.style.visibility = 'hidden';
+    linksPopover.style.left = '0px';
+    linksPopover.style.top = '0px';
+    linksPopover.classList.add('show');
+
+    const rect = anchor.getBoundingClientRect();
+    const popRect = linksPopover.getBoundingClientRect();
+    const gap = 6;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    let left = rect.left;
+    if (left + popRect.width > vw - 12) left = vw - popRect.width - 12;
+    if (left < 12) left = 12;
+
+    let top = rect.bottom + gap;
+    if (top + popRect.height > vh - 12) {
+      if (rect.top - gap - popRect.height >= 12) {
+        top = rect.top - gap - popRect.height;
+      } else {
+        top = Math.max(12, vh - popRect.height - 12);
+      }
+    }
+
+    linksPopover.style.left = left + 'px';
+    linksPopover.style.top = top + 'px';
+    linksPopover.style.visibility = '';
+
+    const first = linksPopover.querySelector('.links-popover-item');
+    if (first) first.focus();
+  }
+
+  function closeLinksPopover() {
+    if (!linksPopover || linksPopover.hidden) return;
+    linksPopover.classList.remove('show');
+    linksPopover.hidden = true;
+    linksPopover.innerHTML = '';
+    if (linksPopoverAnchor && document.body.contains(linksPopoverAnchor)) {
+      linksPopoverAnchor.focus();
+    }
+    linksPopoverAnchor = null;
+  }
+
+  document.addEventListener('click', function (e) {
+    if (!linksPopover || linksPopover.hidden) return;
+    if (linksPopover.contains(e.target)) return;
+    if (e.target.closest('.nav-links-badge')) return;
+    closeLinksPopover();
+  }, true);
+
+  /* ============ 统一事件委托：卡片交互 ============ */
   navGroupsEl.addEventListener('click', function (e) {
-    // 1. 处理无链接卡片拦截 (非编辑模式下)
+    /* 0. 多链接角标（优先级最高，且编辑模式下不触发） */
+    const linkBadge = e.target.closest('.nav-links-badge');
+    if (linkBadge && !document.body.classList.contains('edit-mode')) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (linksPopoverAnchor === linkBadge) { closeLinksPopover(); return; }
+
+      const card = linkBadge.closest('.nav-card');
+      const catId = card.dataset.cat;
+      const groupId = card.dataset.group;
+      const idx = parseInt(card.dataset.idx, 10);
+      const cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
+      const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === groupId; });
+      if (!group || !group.items || !group.items[idx]) return;
+      const links = getItemLinks(group.items[idx]);
+      if (links.length > 1) openLinksPopover(linkBadge, links);
+      return;
+    }
+
+    /* 1. 无链接卡片拦截（非编辑模式） */
     if (!document.body.classList.contains('edit-mode')) {
       const disabledCard = e.target.closest('.nav-card[data-disabled="true"]');
       if (disabledCard) {
@@ -587,7 +716,7 @@
       }
     }
 
-    // 2. 编辑模式下的操作拦截
+    /* 2. 编辑模式下的操作拦截 */
     if (document.body.classList.contains('edit-mode')) {
       // 移动分组
       const moveGroupBtn = e.target.closest('.move-group');
@@ -658,7 +787,7 @@
         const dir = moveItemBtn.dataset.dir;
 
         const cat = NAV_CATEGORIES.find(c => c.id === catId);
-        const group = cat.groups.find(g => g.id === groupId);
+        const group = cat && cat.groups && cat.groups.find(g => g.id === groupId);
         if (!group || !group.items) return;
 
         if (dir === 'up' && idx > 0) {
@@ -687,19 +816,11 @@
         const groupId = card.dataset.group;
         const idx = parseInt(card.dataset.idx, 10);
         const cat = NAV_CATEGORIES.find(c => c.id === catId);
-        const group = cat.groups.find(g => g.id === groupId);
+        const group = cat && cat.groups && cat.groups.find(g => g.id === groupId);
+        if (!group || !group.items) return;
 
         if (editBtn) {
-          editTarget = { catId, groupId, itemIndex: idx };
-          const it = group.items[idx];
-          editNameEl.value = it.name || '';
-          editUrlEl.value = it.url || '';
-          editDescEl.value = it.desc || '';
-          editLetterEl.value = it.letter || '';
-          editColorEl.value = it.color || '#4E7296';
-          editModalTitle.textContent = '编辑卡片';
-          editModalMask.classList.add('show');
-          lockBodyScroll();
+          openEditModal(catId, groupId, idx);
         } else if (delBtn) {
           if (confirm('确定要删除「' + group.items[idx].name + '」吗？')) {
             group.items.splice(idx, 1);
@@ -711,7 +832,7 @@
       }
     }
 
-    // 3. 正常模式下，显示简介提示
+    /* 3. 正常模式下，显示简介提示 */
     const infoBtn = e.target.closest('.nav-info-btn');
     if (infoBtn) {
       e.preventDefault(); e.stopPropagation();
@@ -739,8 +860,8 @@
     for (var i = 0; i < 6; i++) cards += '<div class="skeleton skeleton-card"></div>';
     navGroupsEl.innerHTML =
       '<div class="nav-group">' +
-      '<div class="skeleton skeleton-group-title"></div>' +
-      '<div class="nav-grid">' + cards + '</div>' +
+        '<div class="skeleton skeleton-group-title"></div>' +
+        '<div class="nav-grid">' + cards + '</div>' +
       '</div>';
   }
 
@@ -838,6 +959,7 @@
 
   function handleScroll() {
     hideTip();
+    closeLinksPopover();
     updateBackTop();
 
     if (!isAutoScrolling) {
@@ -855,7 +977,6 @@
       const total = (cat.groups || []).reduce(function (sum, g) { return sum + ((g.items || []).length); }, 0);
       const isActive = cat.id === activeCategoryId;
 
-      // 分类操作按钮
       let catActions = '';
       if (document.body.classList.contains('edit-mode')) {
         catActions = `
@@ -870,11 +991,11 @@
 
       catHtml += '<div class="cat-block">';
       catHtml += '<button class="cat-tab' + (isActive ? ' active' : '') +
-        '" type="button" data-cat="' + esc(cat.id) + '">' +
-        '<span class="cat-tab-name">' + esc(cat.title) + '</span>' +
-        catActions +
-        '<span class="cat-tab-count">' + total + '</span>' +
-        '</button>';
+                 '" type="button" data-cat="' + esc(cat.id) + '">' +
+                 '<span class="cat-tab-name">' + esc(cat.title) + '</span>' +
+                 catActions +
+                 '<span class="cat-tab-count">' + total + '</span>' +
+                 '</button>';
 
       catHtml += '<div class="sub-cats-wrap' + (isActive ? ' show' : '') + '">';
       catHtml += '<div class="sub-cats-inner">';
@@ -895,7 +1016,7 @@
 
     const addCatBtn = document.getElementById('addCatBtn');
     if (addCatBtn) {
-      addCatBtn.addEventListener('click', function () {
+      addCatBtn.addEventListener('click', function() {
         const name = prompt('请输入新分类的名称（如：影视资源）：');
         if (!name || !name.trim()) return;
         const id = 'cat_' + Date.now();
@@ -908,8 +1029,9 @@
   }
 
   function bindCatEvents() {
+    // 覆盖式绑定，避免累积
     catNavEl.onclick = function (e) {
-      // 优先处理子分类点击（合并原 addEventListener，避免每次渲染重复绑定）
+      // 子分类点击（优先）
       const sub = e.target.closest('.sub-tab');
       if (sub) {
         catNavEl.querySelectorAll('.sub-tab').forEach(st => st.classList.toggle('active', st === sub));
@@ -920,17 +1042,17 @@
       const tab = e.target.closest('.cat-tab');
       if (!tab) return;
 
-      // 处理分类编辑 / 移动 / 删除
+      // 分类编辑 / 移动 / 删除
       if (document.body.classList.contains('edit-mode')) {
         const moveBtn = e.target.closest('.move-cat');
         const editBtn = e.target.closest('.edit-cat');
-        const delBtn = e.target.closest('.del-cat');
+        const delBtn  = e.target.closest('.del-cat');
 
         if (moveBtn) {
           e.preventDefault(); e.stopPropagation();
           const catId = moveBtn.dataset.cat;
-          const dir = moveBtn.dataset.dir;
-          const idx = NAV_CATEGORIES.findIndex(c => c.id === catId);
+          const dir   = moveBtn.dataset.dir;
+          const idx   = NAV_CATEGORIES.findIndex(c => c.id === catId);
           if (idx === -1) return;
           if (dir === 'up' && idx > 0) {
             const t = NAV_CATEGORIES[idx]; NAV_CATEGORIES[idx] = NAV_CATEGORIES[idx - 1]; NAV_CATEGORIES[idx - 1] = t;
@@ -944,20 +1066,24 @@
 
         if (editBtn || delBtn) {
           e.preventDefault(); e.stopPropagation();
-          const catId = (editBtn || delBtn).dataset.cat;
+          const catId  = (editBtn || delBtn).dataset.cat;
           const catIdx = NAV_CATEGORIES.findIndex(c => c.id === catId);
           if (catIdx === -1) return;
           const cat = NAV_CATEGORIES[catIdx];
+
           if (editBtn) {
             const newName = prompt('请输入新的大类名称：', cat.title);
             if (newName && newName.trim()) {
-              cat.title = newName.trim(); renderNav(); showToast('分类已重命名，请记得保存');
+              cat.title = newName.trim();
+              renderNav();
+              showToast('分类已重命名，请记得保存');
             }
           } else {
             if (confirm('确定要删除大类「' + cat.title + '」及其下的所有内容吗？')) {
               NAV_CATEGORIES.splice(catIdx, 1);
               if (activeCategoryId === catId) activeCategoryId = NAV_CATEGORIES[0] ? NAV_CATEGORIES[0].id : '';
-              renderNav(); showToast('分类已删除，请记得保存');
+              renderNav();
+              showToast('分类已删除，请记得保存');
             }
           }
           return;
@@ -976,7 +1102,9 @@
         if (!subWrap) return;
         const isCurrent = block.contains(tab);
         subWrap.classList.toggle('show', isCurrent);
-        if (isCurrent) subWrap.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
+        if (isCurrent) {
+          subWrap.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
+        }
       });
 
       if (window.matchMedia('(max-width: 1024px)').matches && tab.scrollIntoView) {
@@ -986,7 +1114,9 @@
       renderGroupNav();
       renderCards();
 
-      if (window.matchMedia('(min-width: 1025px)').matches) scrollToGroup('all');
+      if (window.matchMedia('(min-width: 1025px)').matches) {
+        scrollToGroup('all');
+      }
     };
   }
 
@@ -1017,11 +1147,11 @@
   }
 
   function renderCards() {
-    const q = navKeyword.trim().toLowerCase();
-    const cardTarget = SETTINGS.openInNewTab ? '_blank' : '_self';
-    const cardRel = SETTINGS.openInNewTab ? 'noopener' : '';
-    const isDesktop = window.matchMedia('(min-width: 1025px)').matches;
-    const isEditMode = document.body.classList.contains('edit-mode');   // ★ 新增
+    const q           = navKeyword.trim().toLowerCase();
+    const cardTarget  = SETTINGS.openInNewTab ? '_blank' : '_self';
+    const cardRel     = SETTINGS.openInNewTab ? 'noopener' : '';
+    const isDesktop   = window.matchMedia('(min-width: 1025px)').matches;
+    const isEditMode  = document.body.classList.contains('edit-mode');
 
     const currentCat = NAV_CATEGORIES.find(c => c.id === activeCategoryId);
     const groups = currentCat ? (currentCat.groups || []) : [];
@@ -1032,7 +1162,7 @@
     groups.forEach(function (group) {
       if (!isDesktop && activeGroupId !== 'all' && activeGroupId !== group.id) return;
 
-      // ★ 修复：保留原始索引，避免搜索过滤后编辑/删除错位
+      // 保留原始索引，避免搜索过滤后编辑/删除错位
       const filtered = (group.items || [])
         .map((it, i) => ({ it, i }))
         .filter(o => {
@@ -1040,7 +1170,7 @@
           return ((o.it.name || '') + ' ' + (o.it.desc || '')).toLowerCase().indexOf(q) !== -1;
         });
 
-      // ★ 修复：编辑模式下即使分组无卡片也要渲染，否则新建空分组会消失
+      // 编辑模式下即使分组无卡片也要渲染，否则新建空分组会“消失”
       if (!filtered.length) {
         if (!isEditMode || q) return;
       } else {
@@ -1055,48 +1185,56 @@
         const hasDesc = !!desc;
         const hasIcon = !!(it.icon && it.icon.trim());
         const iconHtml = hasIcon ? '<img data-fallback src="' + esc(it.icon) + '" alt="">' : '';
-        const noLink = !it.url || it.url === '#';
+
+        const allLinks   = getItemLinks(it);
+        const primaryUrl = allLinks[0] ? allLinks[0].url : '';
+        const noLink     = !primaryUrl;
+        const multiLinks = allLinks.length > 1;
 
         return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + '" ' +
-          'href="' + (noLink ? 'javascript:void(0)' : esc(it.url)) + '" ' +
-          (noLink
-            ? 'data-disabled="true" aria-disabled="true" tabindex="0" '
-            : 'target="' + cardTarget + '" ' + (cardRel ? 'rel="' + cardRel + '" ' : '')) +
-          'data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-idx="' + originalIdx + '" ' +
-          '>' +
-          '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
-          '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
-          '</span>' +
-          '<span class="nav-info">' +
-          '<span class="nav-name">' + highlight(name, q) + '</span>' +
-          (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
-          '</span>' +
-          (hasDesc ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>' : '') +
-          '<div class="edit-actions">' +
-          '<button class="edit-btn move-item" type="button" data-dir="up"   title="上移">↑</button>' +
-          '<button class="edit-btn move-item" type="button" data-dir="down" title="下移">↓</button>' +
-          '<button class="edit-btn edit"      type="button" title="编辑">✎</button>' +
-          '<button class="edit-btn del"       type="button" title="删除">×</button>' +
-          '</div>' +
-          '</a>';
+                 'href="' + (noLink ? 'javascript:void(0)' : esc(primaryUrl)) + '" ' +
+                 (noLink
+                   ? 'data-disabled="true" aria-disabled="true" tabindex="0" '
+                   : 'target="' + cardTarget + '" ' + (cardRel ? 'rel="' + cardRel + '" ' : '')) +
+                 'data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-idx="' + originalIdx + '" ' +
+                 '>' +
+                 '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
+                   '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
+                 '</span>' +
+                 '<span class="nav-info">' +
+                   '<span class="nav-name">' + highlight(name, q) + '</span>' +
+                   (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
+                 '</span>' +
+                 (multiLinks
+                   ? '<span class="nav-links-badge" role="button" tabindex="-1" title="' + allLinks.length + ' 个链接" aria-label="查看全部 ' + allLinks.length + ' 个链接">' + allLinks.length + '</span>'
+                   : '') +
+                 (hasDesc ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>' : '') +
+                 '<div class="edit-actions">' +
+                   '<button class="edit-btn move-item" type="button" data-dir="up"   title="上移">↑</button>' +
+                   '<button class="edit-btn move-item" type="button" data-dir="down" title="下移">↓</button>' +
+                   '<button class="edit-btn edit"      type="button" title="编辑">✎</button>' +
+                   '<button class="edit-btn del"       type="button" title="删除">×</button>' +
+                 '</div>' +
+               '</a>';
       }).join('');
 
+      // 分组操作按钮
       let groupActions = '';
       if (isEditMode) {
         groupActions =
           '<div class="group-actions">' +
-          '<button class="edit-btn move-group" type="button" title="上移分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-dir="up"   style="width:20px;height:20px;">↑</button>' +
-          '<button class="edit-btn move-group" type="button" title="下移分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-dir="down" style="width:20px;height:20px;">↓</button>' +
-          '<button class="edit-btn edit-group" type="button" title="修改分组名" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" style="width:20px;height:20px;">✎</button>' +
-          '<button class="edit-btn del del-group" type="button" title="删除分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" style="width:20px;height:20px;">×</button>' +
+            '<button class="edit-btn move-group" type="button" title="上移分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-dir="up"   style="width:20px;height:20px;">↑</button>' +
+            '<button class="edit-btn move-group" type="button" title="下移分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-dir="down" style="width:20px;height:20px;">↓</button>' +
+            '<button class="edit-btn edit-group" type="button" title="修改分组名" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" style="width:20px;height:20px;">✎</button>' +
+            '<button class="edit-btn del del-group" type="button" title="删除分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" style="width:20px;height:20px;">×</button>' +
           '</div>';
       }
 
       html += '<div class="nav-group" data-group-id="' + esc(group.id) + '">' +
-        '<h2 class="group-title">' + esc(group.title || '') +
-        '<span class="group-count">' + filtered.length + '</span>' + groupActions +
-        '</h2>' +
-        '<div class="nav-grid">' + cards;
+                '<h2 class="group-title">' + esc(group.title || '') +
+                  '<span class="group-count">' + filtered.length + '</span>' + groupActions +
+                '</h2>' +
+                '<div class="nav-grid">' + cards;
 
       if (isEditMode) {
         html += '<button class="add-btn add-card-btn" type="button" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '">+ 添加卡片</button>';
@@ -1111,7 +1249,7 @@
 
     navGroupsEl.innerHTML = html;
 
-    // ★ 修复：编辑模式下（未搜索时）不显示外部搜索空态，避免遮住“添加分组/卡片”入口
+    // 编辑模式下（未搜索时）不显示空态，避免遮住添加入口
     const showEmptyState = shown === 0 && !(isEditMode && !q);
     navEmptyEl.hidden = !showEmptyState;
 
@@ -1120,6 +1258,7 @@
       if (/^\d+$/.test(q)) {
         steamIdBtn = `<button class="ext-btn" onclick="window.open('https://steamcommunity.com/sharedfiles/filedetails/?id=' + encodeURIComponent('${esc(q)}'), '_blank')">Steam 搜创意工坊</button>`;
       }
+
       navEmptyEl.innerHTML = `
         <div class="external-search">
           <p>没有找到匹配的站点，去搜索引擎看看？</p>
@@ -1134,14 +1273,16 @@
             <button class="ext-btn" onclick="window.open('https://store.steampowered.com/search/?term=' + encodeURIComponent('${esc(q)}'), '_blank')">Steam 搜游戏</button>
             ${steamIdBtn}
           </div>
-          <p style="margin-top:16px; font-size:12px; color:var(--text-mute);">
+          <p style="margin-top: 16px; font-size: 12px; color: var(--text-mute);">
             或 <button id="emptyClearBtn" type="button" style="background:none; border:none; padding:0; color:var(--accent); text-decoration:underline; cursor:pointer; font-family:inherit; font-size:inherit;">清空关键词</button> 重新查找
           </p>
-        </div>`;
-      const clearBtn = document.getElementById('emptyClearBtn');
-      if (clearBtn) {
-        clearBtn.addEventListener('click', function () {
-          searchEl.value = ''; navKeyword = '';
+        </div>
+      `;
+      const btn = document.getElementById('emptyClearBtn');
+      if (btn) {
+        btn.addEventListener('click', function() {
+          searchEl.value = '';
+          navKeyword = '';
           groupNavEl.hidden = false;
           renderCards();
           if (!IS_TOUCH) searchEl.focus();
@@ -1151,14 +1292,15 @@
 
     const addGroupBtn = document.getElementById('addGroupBtn');
     if (addGroupBtn) {
-      addGroupBtn.addEventListener('click', function () {
+      addGroupBtn.addEventListener('click', function() {
         const name = prompt('请输入新分组的名称（如：常用工具）：');
         if (!name || !name.trim()) return;
         const cat = NAV_CATEGORIES.find(c => c.id === activeCategoryId);
         if (!cat) return;
         if (!cat.groups) cat.groups = [];
         cat.groups.push({ id: 'group_' + Date.now(), title: name.trim(), items: [] });
-        renderGroupNav(); renderCards();
+        renderGroupNav();
+        renderCards();
         showToast('分组已添加，请记得保存');
       });
     }
@@ -1166,12 +1308,7 @@
     document.querySelectorAll('.add-card-btn').forEach(btn => {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
-        editTarget = { catId: this.dataset.cat, groupId: this.dataset.group, itemIndex: -1 };
-        editNameEl.value = ''; editUrlEl.value = ''; editDescEl.value = '';
-        editLetterEl.value = ''; editColorEl.value = '#4E7296';
-        editModalTitle.textContent = '添加新卡片';
-        editModalMask.classList.add('show');
-        lockBodyScroll();
+        openEditModal(this.dataset.cat, this.dataset.group, -1);
       });
     });
 
@@ -1212,11 +1349,11 @@
       const hasIcon = !!(f.icon && f.icon.trim());
       const iconHtml = hasIcon ? '<img data-fallback src="' + esc(f.icon) + '" alt="">' : '';
       return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener" title="' + esc(f.name || '') + '">' +
-        '<span class="friend-ico" style="background:' + esc(f.color || '#4E7296') + '">' +
-        '<span>' + esc(f.letter || '友') + '</span>' + iconHtml +
-        '</span>' +
-        '<span class="friend-name">' + esc(f.name || '') + '</span>' +
-        '</a>';
+               '<span class="friend-ico" style="background:' + esc(f.color || '#4E7296') + '">' +
+                 '<span>' + esc(f.letter || '友') + '</span>' + iconHtml +
+               '</span>' +
+               '<span class="friend-name">' + esc(f.name || '') + '</span>' +
+             '</a>';
     }).join('');
 
     guardImgs(friendsGridEl);
@@ -1301,7 +1438,6 @@
     }
 
     updateNoticeBarH();
-    requestAnimationFrame(updateNoticeBarH);
     if (restartTimer !== false) startBarTimer();
   }
 
@@ -1573,6 +1709,7 @@
 
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
+    if (linksPopover && !linksPopover.hidden) { closeLinksPopover(); return; }
     if (lightbox && lightbox.classList.contains('show')) { closeLightbox(); return; }
     if (settingsMask && settingsMask.classList.contains('show')) { closeSettings(); return; }
     if (editModalMask && editModalMask.classList.contains('show')) {
@@ -1583,7 +1720,50 @@
     if (modalMask.classList.contains('show')) closeModal();
   });
 
-  /* ============ GitHub API 在线编辑 ============ */
+  /* ============ 卡片编辑弹窗（含多链接） ============ */
+  function addEditLinkRow(text, url) {
+    if (!editLinksList) return null;
+    const row = document.createElement('div');
+    row.className = 'edit-link-row';
+    row.innerHTML =
+      '<input type="text" class="setting-input edit-link-text" placeholder="名称（可选）">' +
+      '<input type="text" class="setting-input edit-link-url" placeholder="URL">' +
+      '<button type="button" class="edit-link-del" aria-label="删除">×</button>';
+    row.querySelector('.edit-link-text').value = text || '';
+    row.querySelector('.edit-link-url').value = url || '';
+    row.querySelector('.edit-link-del').addEventListener('click', function () { row.remove(); });
+    editLinksList.appendChild(row);
+    return row;
+  }
+
+  function openEditModal(catId, groupId, itemIndex) {
+    editTarget = { catId: catId, groupId: groupId, itemIndex: itemIndex };
+    if (editLinksList) editLinksList.innerHTML = '';
+
+    const cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
+    const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === groupId; });
+    const it = (itemIndex > -1 && group && group.items) ? group.items[itemIndex] : null;
+
+    if (it) {
+      editNameEl.value = it.name || '';
+      editUrlEl.value = it.url || '';
+      editDescEl.value = it.desc || '';
+      editLetterEl.value = it.letter || '';
+      editColorEl.value = it.color || '#4E7296';
+      (it.links || []).forEach(function (l) { addEditLinkRow(l.text || '', l.url || ''); });
+      editModalTitle.textContent = '编辑卡片';
+    } else {
+      editNameEl.value = '';
+      editUrlEl.value = '';
+      editDescEl.value = '';
+      editLetterEl.value = '';
+      editColorEl.value = '#4E7296';
+      editModalTitle.textContent = '添加新卡片';
+    }
+    editModalMask.classList.add('show');
+    lockBodyScroll();
+  }
+
   if (editModalClose) {
     editModalClose.addEventListener('click', function () {
       editModalMask.classList.remove('show');
@@ -1591,14 +1771,30 @@
     });
   }
 
+  if (editLinksAdd) {
+    editLinksAdd.addEventListener('click', function () {
+      const row = addEditLinkRow('', '');
+      if (row) row.querySelector('.edit-link-url').focus();
+    });
+  }
+
   if (editSaveBtn) {
     editSaveBtn.addEventListener('click', function () {
       const name = editNameEl.value.trim();
-      const url = editUrlEl.value.trim();
-      if (!name || !url) return showToast('名称和链接不能为空', true);
+      const url  = editUrlEl.value.trim();
+      if (!name || !url) return showToast('名称和主链接不能为空', true);
 
-      const cat = NAV_CATEGORIES.find(c => c.id === editTarget.catId);
-      const group = cat.groups.find(g => g.id === editTarget.groupId);
+      const cat = NAV_CATEGORIES.find(function (c) { return c.id === editTarget.catId; });
+      const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === editTarget.groupId; });
+      if (!group || !group.items) return;
+
+      // 收集附加链接
+      const extras = [];
+      editLinksList.querySelectorAll('.edit-link-row').forEach(function (row) {
+        const t = row.querySelector('.edit-link-text').value.trim();
+        const u = row.querySelector('.edit-link-url').value.trim();
+        if (u) extras.push({ text: t, url: u });
+      });
 
       const newItem = {
         name: name,
@@ -1608,6 +1804,8 @@
         color: editColorEl.value.trim() || '#4E7296',
         icon: ''
       };
+      // 只有填写了附加链接才写入 links，保持单链接数据干净
+      if (extras.length) newItem.links = extras;
 
       if (editTarget.itemIndex > -1) {
         group.items[editTarget.itemIndex] = newItem;
@@ -1622,13 +1820,14 @@
     });
   }
 
+  /* ============ GitHub API 在线编辑 ============ */
   async function saveToGitHub() {
     if (!SETTINGS.ghOwner || !SETTINGS.ghRepo || !SETTINGS.ghToken || !SETTINGS.ghPath) {
       return showToast('请先在设置中填写完整的 GitHub 配置', true);
     }
 
-    const btn = document.querySelector('.floating-save');
-    if (!btn) return;                                       // ★ 防御性判空
+    const btn = floatingSaveBtn;
+    if (!btn) return;
     const oldText = btn.textContent;
     btn.textContent = '保存中...';
     btn.disabled = true;
@@ -1652,15 +1851,20 @@
       const contentStr = JSON.stringify({ categories: NAV_CATEGORIES }, null, 2);
       const contentBase64 = btoa(unescape(encodeURIComponent(contentStr)));
 
-      // ★ 修复：不再写 sha: sha || undefined，而是条件添加
       const putBody = { message: 'Update nav.json via web editor', content: contentBase64 };
       if (sha) putBody.sha = sha;
 
-      const putRes = await fetch(url, { method: 'PUT', headers, body: JSON.stringify(putBody) });
+      const putRes = await fetch(url, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(putBody)
+      });
+
       if (!putRes.ok) {
         const errData = await putRes.json();
         throw new Error(errData.message || '保存失败');
       }
+
       showToast('🎉 保存成功！稍等片刻 GitHub Pages 即可生效');
     } catch (err) {
       console.error(err);
@@ -1672,11 +1876,11 @@
   }
 
   (function initEditMode() {
-    const saveBtn = document.createElement('button');
-    saveBtn.className = 'floating-save';
-    saveBtn.innerHTML = '☁️ 保存到 GitHub';
-    saveBtn.addEventListener('click', saveToGitHub);
-    document.body.appendChild(saveBtn);
+    floatingSaveBtn = document.createElement('button');
+    floatingSaveBtn.className = 'floating-save';
+    floatingSaveBtn.innerHTML = '☁️ 保存到 GitHub';
+    floatingSaveBtn.addEventListener('click', saveToGitHub);
+    document.body.appendChild(floatingSaveBtn);
   })();
 
   /* ============ 搜索 ============ */
@@ -1693,7 +1897,7 @@
 
       if (isSearching) {
         activeGroupId = 'all';
-        catNavEl.querySelectorAll('.sub-tab').forEach(function (st) { st.classList.remove('active'); });
+        catNavEl.querySelectorAll('.sub-tab').forEach(function(st) { st.classList.remove('active'); });
       }
 
       updateGroupNavActive();
@@ -1770,12 +1974,12 @@
 
   function setFollowSystem(on) {
     if (on) {
-      try { localStorage.setItem('site.theme', 'system'); } catch (e) { }
+      try { localStorage.setItem('site.theme', 'system'); } catch (e) {}
       var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
     } else {
       var current = document.documentElement.dataset.theme || 'light';
-      try { localStorage.setItem('site.theme', current); } catch (e) { }
+      try { localStorage.setItem('site.theme', current); } catch (e) {}
     }
   }
 
@@ -1783,7 +1987,7 @@
     var current = document.documentElement.dataset.theme;
     var next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
-    try { localStorage.setItem('site.theme', next); } catch (e) { }
+    try { localStorage.setItem('site.theme', next); } catch (e) {}
     syncSettingsUI();
   });
 
@@ -1819,7 +2023,7 @@
   /* ============ 导出 / 导入配置 ============ */
   function exportSettings() {
     var themeVal = 'system';
-    try { themeVal = localStorage.getItem('site.theme') || 'system'; } catch (e) { }
+    try { themeVal = localStorage.getItem('site.theme') || 'system'; } catch (e) {}
 
     const safeSettings = Object.assign({}, SETTINGS);
     delete safeSettings.ghOwner;
@@ -1900,11 +2104,11 @@
         saveSettings();
 
         if (incomingTheme === 'system') {
-          try { localStorage.setItem('site.theme', 'system'); } catch (err) { }
+          try { localStorage.setItem('site.theme', 'system'); } catch (err) {}
           var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
         } else if (incomingTheme === 'light' || incomingTheme === 'dark') {
-          try { localStorage.setItem('site.theme', incomingTheme); } catch (err) { }
+          try { localStorage.setItem('site.theme', incomingTheme); } catch (err) {}
           document.documentElement.dataset.theme = incomingTheme;
         }
 
@@ -2053,7 +2257,7 @@
     if (ghTokenEl) ghTokenEl.addEventListener('input', e => { SETTINGS.ghToken = e.target.value.trim(); saveSettings(); });
 
     if (setEditModeEl) {
-      setEditModeEl.addEventListener('change', function () {
+      setEditModeEl.addEventListener('change', function() {
         if (setEditModeEl.checked && !ghTokenEl.value.trim()) {
           showToast('请先填写 Personal Access Token 才能开启', true);
           setEditModeEl.checked = false;

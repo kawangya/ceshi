@@ -326,6 +326,7 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="links-popover" id="linksPopover" role="menu" aria-hidden="true" hidden></div>
 
 <!-- 卡片编辑弹窗 -->
 <div class="modal-mask" id="editModalMask" aria-hidden="true">
@@ -340,6 +341,13 @@
       <input type="text" id="editDesc" placeholder="站点描述 (可选)" class="setting-input">
       <input type="text" id="editLetter" placeholder="首字母 (可选，默认取名称首字)" class="setting-input">
       <input type="text" id="editColor" placeholder="图标背景色 (如 #4E7296)" class="setting-input">
+      <div class="edit-links-section">
+        <div class="edit-links-head">
+          <span class="edit-links-label">附加链接（可选）</span>
+        </div>
+        <div class="edit-links-list" id="editLinksList"></div>
+        <button type="button" class="edit-links-add" id="editLinksAdd">+ 添加附加链接</button>
+      </div>
     </div>
     <div class="modal-actions">
       <button class="settings-btn" id="editSaveBtn" style="background:var(--accent); color:#fff; border:none;">保存</button>
