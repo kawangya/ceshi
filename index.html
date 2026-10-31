@@ -234,18 +234,20 @@
     </div>
 
     <div class="settings-body">
+      <!-- 1. 主题配色 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">主题配色</div>
-          <div class="setting-desc">整体配色方案，浅色 / 深色由顶栏按钮切换</div>
+          <div class="setting-desc">切换网站的整体色彩风格</div>
         </div>
         <div class="theme-colors" id="themeColors"></div>
       </div>
 
+      <!-- 2. 跟随系统 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">跟随系统</div>
-          <div class="setting-desc">自动跟随系统的浅色 / 深色设置</div>
+          <div class="setting-desc">自动根据设备设置切换深色 / 浅色模式</div>
         </div>
         <label class="switch">
           <input type="checkbox" id="setFollowSystem">
@@ -253,10 +255,11 @@
         </label>
       </div>
 
+      <!-- 3. 顶部公告 -->
       <div class="setting-item">
         <div class="setting-label">
-          <div class="setting-name">公告条</div>
-          <div class="setting-desc">顶部置顶公告轮播</div>
+          <div class="setting-name">顶部公告</div>
+          <div class="setting-desc">在页面顶部展示置顶公告轮播条</div>
         </div>
         <label class="switch">
           <input type="checkbox" id="setNoticeBar">
@@ -264,10 +267,11 @@
         </label>
       </div>
 
+      <!-- 4. 底部友站 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">底部友站</div>
-          <div class="setting-desc">显示页面底部的友站链接</div>
+          <div class="setting-desc">在页面底部展示友情链接</div>
         </div>
         <label class="switch">
           <input type="checkbox" id="setShowFriends">
@@ -275,11 +279,11 @@
         </label>
       </div>
 
-      <!-- 多链接下拉开关 -->
+      <!-- 5. 多链接下拉 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">多链接下拉</div>
-          <div class="setting-desc">点击卡片在下方展开多个链接（默认关闭）</div>
+          <div class="setting-desc">点击含多个链接的卡片时，在下方展开完整列表</div>
         </div>
         <label class="switch">
           <input type="checkbox" id="setEnableMultiLinks">
@@ -287,20 +291,22 @@
         </label>
       </div>
 
+      <!-- 6. 默认分类 -->
       <div class="setting-item">
         <div class="setting-label">
-          <div class="setting-name">默认大类</div>
-          <div class="setting-desc">打开页面先展示哪个分类（下次访问生效）</div>
+          <div class="setting-name">默认分类</div>
+          <div class="setting-desc">每次打开页面时默认展示的分类</div>
         </div>
         <select class="setting-select" id="setDefaultCategory">
           <option value="">加载中…</option>
         </select>
       </div>
 
+      <!-- 7. 链接打开方式 -->
       <div class="setting-item">
         <div class="setting-label">
-          <div class="setting-name">打开方式</div>
-          <div class="setting-desc">点击站点卡片时</div>
+          <div class="setting-name">链接打开方式</div>
+          <div class="setting-desc">点击导航卡片后的跳转行为</div>
         </div>
         <div class="segmented" id="setOpenMode">
           <button type="button" data-value="new">新标签页</button>
@@ -308,15 +314,16 @@
         </div>
       </div>
 
+      <!-- 8. GitHub 在线编辑 -->
       <div class="setting-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
         <div class="setting-label">
-          <div class="setting-name">GitHub 在线编辑</div>
-          <div class="setting-desc">填入 Token 即可开启（仓库名可自动获取或手动修改）</div>
+          <div class="setting-name">GitHub 云端同步</div>
+          <div class="setting-desc">填入 Token 后可在线编辑并保存导航数据</div>
         </div>
         <input type="text" id="ghRepo" placeholder="仓库名 (自动获取)" class="setting-input">
         <input type="password" id="ghToken" placeholder="Personal Access Token (ghp_...)" class="setting-input">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
-          <span style="font-size: 13px; color: var(--text); font-weight: 500;">开启可视化编辑模式</span>
+          <span style="font-size: 13px; color: var(--text); font-weight: 500;">可视化编辑</span>
           <label class="switch" style="margin-top: 0;">
             <input type="checkbox" id="setEditMode">
             <span class="switch-track"></span>
@@ -338,6 +345,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<!-- 卡片编辑弹窗 -->
 <div class="modal-mask" id="editModalMask" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modal-head">

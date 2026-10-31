@@ -846,17 +846,12 @@ body.edit-mode .cat-tab .cat-actions { display: flex; }
 body.edit-mode .cat-tab .cat-tab-count { display: none; }
 
 /* =========================================================
-   卡片编辑弹窗 & 多链接配置区
+   卡片编辑弹窗 & 多链接配置区 (始终显示)
    ========================================================= */
 .edit-links-section {
   border-top: 1px dashed var(--border);
   padding-top: 12px;
   margin-top: 4px;
-  display: none; /* 默认隐藏 */
-}
-/* 只有开启多链接功能时，在编辑弹窗中才显示 */
-body.multi-links-enabled .edit-links-section {
-  display: block;
 }
 
 .edit-links-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }

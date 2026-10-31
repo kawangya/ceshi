@@ -1,5 +1,5 @@
 /* =========================================================
-   卡王的导航 - 主脚本 (清理版)
+   卡王的导航 - 主脚本 (最终优化版)
    ========================================================= */
 
 (function () {
@@ -14,7 +14,7 @@
     themeColor: 'orange',
     noticeBar: true,
     showFriends: true,
-    enableMultiLinks: false,
+    enableMultiLinks: false, // 默认关闭多链接下拉
     defaultCategory: '',
     openInNewTab: true,
     ghOwner: '',
@@ -1132,7 +1132,6 @@
           cardAttrs = 'target="' + cardTarget + '" ' + (cardRel ? 'rel="' + cardRel + '" ' : '');
         }
 
-        // 清理了无用的 has-multi 类
         return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + '" ' +
                  'href="' + cardHref + '" ' +
                  cardAttrs +
@@ -1706,8 +1705,6 @@
       
       if (extras.length) {
         newItem.links = extras;
-      } else if (editTarget.itemIndex > -1 && group.items[editTarget.itemIndex].links) {
-        newItem.links = group.items[editTarget.itemIndex].links;
       }
 
       if (editTarget.itemIndex > -1) {
@@ -2004,9 +2001,6 @@
   function applySettings() {
     document.documentElement.dataset.themeColor = SETTINGS.themeColor || 'orange';
     document.body.classList.toggle('edit-mode', !!(SETTINGS.editMode && SETTINGS.ghToken));
-    
-    // 增加多链接状态同步
-    document.body.classList.toggle('multi-links-enabled', !!SETTINGS.enableMultiLinks);
 
     if (NOTICES.length) renderNoticeBar();
     else if (!SETTINGS.noticeBar) {
@@ -2105,13 +2099,11 @@
         renderFriends();
       });
     }
-    // 监听多链接开关
     if (setEnableMultiLinksEl) {
       setEnableMultiLinksEl.addEventListener('change', function () {
         SETTINGS.enableMultiLinks = !!setEnableMultiLinksEl.checked;
         saveSettings();
-        applySettings();
-        showToast(SETTINGS.enableMultiLinks ? '已开启多链接下拉' : '已关闭多链接下拉');
+        applySettings(); // 静默重绘，不再弹出 Toast
       });
     }
     if (setDefaultCategoryEl) {
