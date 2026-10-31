@@ -36,7 +36,7 @@
     { id: 'indigo', name: '石墨蓝', dot: '#465E7B' }
   ];
   let SETTINGS = loadSettings();
-  let editTarget = { catId: '', groupId: '', itemIndex: -1 }; 
+  let editTarget = { catId: '', groupId: '', itemIndex: -1 };
 
   function loadSettings() {
     try {
@@ -59,12 +59,12 @@
   (function autoDetectGitHub() {
     const host = window.location.hostname;
     const path = window.location.pathname;
-    
+
     if (host.endsWith('.github.io')) {
       const owner = host.split('.')[0];
       const repoSegments = path.split('/').filter(Boolean);
       const repo = repoSegments.length > 0 ? repoSegments[0] : host;
-      
+
       if (owner && repo) {
         if (SETTINGS.ghOwner !== owner || SETTINGS.ghRepo !== repo) {
           SETTINGS.ghOwner = owner;
@@ -105,64 +105,64 @@
   })();
 
   /* ============ 元素 ============ */
-  const navGroupsEl   = document.getElementById('navGroups');
-  const navEmptyEl    = document.getElementById('navEmpty');
-  const navSearchEl   = document.getElementById('navSearch');
-  const catNavEl      = document.getElementById('catNav');
-  const catFootEl     = document.getElementById('catFoot');
-  const catRandomEl   = document.getElementById('catRandom');
-  const groupNavEl    = document.getElementById('groupNav');
-  const navTipEl      = document.getElementById('navTip');
+  const navGroupsEl = document.getElementById('navGroups');
+  const navEmptyEl = document.getElementById('navEmpty');
+  const navSearchEl = document.getElementById('navSearch');
+  const catNavEl = document.getElementById('catNav');
+  const catFootEl = document.getElementById('catFoot');
+  const catRandomEl = document.getElementById('catRandom');
+  const groupNavEl = document.getElementById('groupNav');
+  const navTipEl = document.getElementById('navTip');
 
   const friendsSectionEl = document.getElementById('friendsSection');
-  const friendsGridEl    = document.getElementById('friendsGrid');
+  const friendsGridEl = document.getElementById('friendsGrid');
 
-  const noticeBar     = document.getElementById('noticeBar');
-  const barTag        = document.getElementById('barTag');
-  const barText       = document.getElementById('barText');
-  const barDots       = document.getElementById('barDots');
+  const noticeBar = document.getElementById('noticeBar');
+  const barTag = document.getElementById('barTag');
+  const barText = document.getElementById('barText');
+  const barDots = document.getElementById('barDots');
 
-  const noticeListEl   = document.getElementById('noticeList');
-  const noticeEmptyEl  = document.getElementById('noticeEmpty');
-  const noticeTabsEl   = document.getElementById('noticeTabs');
+  const noticeListEl = document.getElementById('noticeList');
+  const noticeEmptyEl = document.getElementById('noticeEmpty');
+  const noticeTabsEl = document.getElementById('noticeTabs');
   const noticeSearchEl = document.getElementById('noticeSearch');
 
-  const searchEl      = document.getElementById('search');
-  const themeBtn      = document.getElementById('themeBtn');
-  const settingsBtn   = document.getElementById('settingsBtn');
-  const backTopBtn    = document.getElementById('backTop');
+  const searchEl = document.getElementById('search');
+  const themeBtn = document.getElementById('themeBtn');
+  const settingsBtn = document.getElementById('settingsBtn');
+  const backTopBtn = document.getElementById('backTop');
 
-  const modalMask     = document.getElementById('modalMask');
-  const modalTag      = document.getElementById('modalTag');
-  const modalTitle    = document.getElementById('modalTitle');
-  const modalBody     = document.getElementById('modalBody');
-  const modalActions  = document.getElementById('modalActions');
-  const modalClose    = document.getElementById('modalClose');
+  const modalMask = document.getElementById('modalMask');
+  const modalTag = document.getElementById('modalTag');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
+  const modalActions = document.getElementById('modalActions');
+  const modalClose = document.getElementById('modalClose');
 
-  const lightbox      = document.getElementById('lightbox');
-  const lightboxImg   = document.getElementById('lightboxImg');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
-  const lightboxOpen  = document.getElementById('lightboxOpen');
-  const lightboxZoom  = document.getElementById('lightboxZoom');
+  const lightboxOpen = document.getElementById('lightboxOpen');
+  const lightboxZoom = document.getElementById('lightboxZoom');
 
-  const settingsMask    = document.getElementById('settingsMask');
-  const settingsClose   = document.getElementById('settingsClose');
-  const themeColorsEl   = document.getElementById('themeColors');
+  const settingsMask = document.getElementById('settingsMask');
+  const settingsClose = document.getElementById('settingsClose');
+  const themeColorsEl = document.getElementById('themeColors');
   const setFollowSystemEl = document.getElementById('setFollowSystem');
-  const setNoticeBarEl  = document.getElementById('setNoticeBar');
+  const setNoticeBarEl = document.getElementById('setNoticeBar');
   const setShowFriendsEl = document.getElementById('setShowFriends');
   const setDefaultCategoryEl = document.getElementById('setDefaultCategory');
-  const setOpenModeEl   = document.getElementById('setOpenMode');
+  const setOpenModeEl = document.getElementById('setOpenMode');
   const settingsResetEl = document.getElementById('settingsReset');
   const settingsExportEl = document.getElementById('settingsExport');
   const settingsImportEl = document.getElementById('settingsImport');
-  const settingsFileEl   = document.getElementById('settingsFile');
-  const toastEl          = document.getElementById('toast');
-  
+  const settingsFileEl = document.getElementById('settingsFile');
+  const toastEl = document.getElementById('toast');
+
   const ghRepoEl = document.getElementById('ghRepo');
   const ghTokenEl = document.getElementById('ghToken');
   const setEditModeEl = document.getElementById('setEditMode');
-  
+
   const editModalMask = document.getElementById('editModalMask');
   const editModalTitle = document.getElementById('editModalTitle');
   const editModalClose = document.getElementById('editModalClose');
@@ -271,8 +271,8 @@
     }
 
     return '<svg viewBox="-1 -1 ' + (SIZE + 2) + ' ' + (SIZE + 2) + '" ' +
-           'xmlns="http://www.w3.org/2000/svg" fill="#2B2B2B" shape-rendering="crispEdges">' +
-           '<path d="' + path + '"/>' + finderSvg + '</svg>';
+      'xmlns="http://www.w3.org/2000/svg" fill="#2B2B2B" shape-rendering="crispEdges">' +
+      '<path d="' + path + '"/>' + finderSvg + '</svg>';
   }
 
   /* ============ 图片灯箱 ============ */
@@ -531,7 +531,7 @@
     if (fontsReadyBound) return;
     fontsReadyBound = true;
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(measureCardTruncation).catch(function () {});
+      document.fonts.ready.then(measureCardTruncation).catch(function () { });
     }
   }
 
@@ -656,11 +656,11 @@
         const groupId = card.dataset.group;
         const idx = parseInt(card.dataset.idx, 10);
         const dir = moveItemBtn.dataset.dir;
-        
+
         const cat = NAV_CATEGORIES.find(c => c.id === catId);
         const group = cat.groups.find(g => g.id === groupId);
         if (!group || !group.items) return;
-        
+
         if (dir === 'up' && idx > 0) {
           const temp = group.items[idx];
           group.items[idx] = group.items[idx - 1];
@@ -739,8 +739,8 @@
     for (var i = 0; i < 6; i++) cards += '<div class="skeleton skeleton-card"></div>';
     navGroupsEl.innerHTML =
       '<div class="nav-group">' +
-        '<div class="skeleton skeleton-group-title"></div>' +
-        '<div class="nav-grid">' + cards + '</div>' +
+      '<div class="skeleton skeleton-group-title"></div>' +
+      '<div class="nav-grid">' + cards + '</div>' +
       '</div>';
   }
 
@@ -798,12 +798,12 @@
 
       const noticeBarH = (noticeBar.hidden || !SETTINGS.noticeBar) ? 0 : noticeBar.offsetHeight;
       const offset = 60 + noticeBarH + (navSearchEl ? navSearchEl.offsetHeight : 50) + 16;
-      
+
       const rect = targetEl.getBoundingClientRect();
       const targetY = rect.top + window.scrollY - offset;
 
       if (Math.abs(window.scrollY - targetY) < 4) return;
-      
+
       isAutoScrolling = true;
       clearTimeout(autoScrollTimer);
       autoScrollTimer = setTimeout(function () { isAutoScrolling = false; }, 800);
@@ -822,7 +822,7 @@
 
     const noticeBarH = (noticeBar.hidden || !SETTINGS.noticeBar) ? 0 : noticeBar.offsetHeight;
     const offset = 60 + noticeBarH + (navSearchEl ? navSearchEl.offsetHeight : 50) + 60;
-    
+
     let currentGroupId = '';
     for (let i = groups.length - 1; i >= 0; i--) {
       if (groups[i].getBoundingClientRect().top <= offset) {
@@ -870,19 +870,19 @@
 
       catHtml += '<div class="cat-block">';
       catHtml += '<button class="cat-tab' + (isActive ? ' active' : '') +
-                 '" type="button" data-cat="' + esc(cat.id) + '">' +
-                 '<span class="cat-tab-name">' + esc(cat.title) + '</span>' +
-                 catActions +
-                 '<span class="cat-tab-count">' + total + '</span>' +
-                 '</button>';
+        '" type="button" data-cat="' + esc(cat.id) + '">' +
+        '<span class="cat-tab-name">' + esc(cat.title) + '</span>' +
+        catActions +
+        '<span class="cat-tab-count">' + total + '</span>' +
+        '</button>';
 
       catHtml += '<div class="sub-cats-wrap' + (isActive ? ' show' : '') + '">';
       catHtml += '<div class="sub-cats-inner">';
-      
+
       (cat.groups || []).forEach(function (g) {
         catHtml += '<button class="sub-tab' + (activeGroupId === g.id ? ' active' : '') + '" type="button" data-group="' + esc(g.id) + '">' + esc(g.title) + '</button>';
       });
-      
+
       catHtml += '</div></div></div>';
     });
 
@@ -895,7 +895,7 @@
 
     const addCatBtn = document.getElementById('addCatBtn');
     if (addCatBtn) {
-      addCatBtn.addEventListener('click', function() {
+      addCatBtn.addEventListener('click', function () {
         const name = prompt('请输入新分类的名称（如：影视资源）：');
         if (!name || !name.trim()) return;
         const id = 'cat_' + Date.now();
@@ -909,34 +909,35 @@
 
   function bindCatEvents() {
     catNavEl.onclick = function (e) {
+      // 优先处理子分类点击（合并原 addEventListener，避免每次渲染重复绑定）
+      const sub = e.target.closest('.sub-tab');
+      if (sub) {
+        catNavEl.querySelectorAll('.sub-tab').forEach(st => st.classList.toggle('active', st === sub));
+        scrollToGroup(sub.dataset.group);
+        return;
+      }
+
       const tab = e.target.closest('.cat-tab');
       if (!tab) return;
 
-      // 处理分类编辑/删除
+      // 处理分类编辑 / 移动 / 删除
       if (document.body.classList.contains('edit-mode')) {
         const moveBtn = e.target.closest('.move-cat');
         const editBtn = e.target.closest('.edit-cat');
         const delBtn = e.target.closest('.del-cat');
-        
+
         if (moveBtn) {
           e.preventDefault(); e.stopPropagation();
           const catId = moveBtn.dataset.cat;
           const dir = moveBtn.dataset.dir;
           const idx = NAV_CATEGORIES.findIndex(c => c.id === catId);
           if (idx === -1) return;
-          
           if (dir === 'up' && idx > 0) {
-            const temp = NAV_CATEGORIES[idx];
-            NAV_CATEGORIES[idx] = NAV_CATEGORIES[idx - 1];
-            NAV_CATEGORIES[idx - 1] = temp;
-            renderNav();
-            showToast('分类已上移，请记得保存');
+            const t = NAV_CATEGORIES[idx]; NAV_CATEGORIES[idx] = NAV_CATEGORIES[idx - 1]; NAV_CATEGORIES[idx - 1] = t;
+            renderNav(); showToast('分类已上移，请记得保存');
           } else if (dir === 'down' && idx < NAV_CATEGORIES.length - 1) {
-            const temp = NAV_CATEGORIES[idx];
-            NAV_CATEGORIES[idx] = NAV_CATEGORIES[idx + 1];
-            NAV_CATEGORIES[idx + 1] = temp;
-            renderNav();
-            showToast('分类已下移，请记得保存');
+            const t = NAV_CATEGORIES[idx]; NAV_CATEGORIES[idx] = NAV_CATEGORIES[idx + 1]; NAV_CATEGORIES[idx + 1] = t;
+            renderNav(); showToast('分类已下移，请记得保存');
           }
           return;
         }
@@ -947,27 +948,23 @@
           const catIdx = NAV_CATEGORIES.findIndex(c => c.id === catId);
           if (catIdx === -1) return;
           const cat = NAV_CATEGORIES[catIdx];
-
           if (editBtn) {
             const newName = prompt('请输入新的大类名称：', cat.title);
             if (newName && newName.trim()) {
-              cat.title = newName.trim();
-              renderNav();
-              showToast('分类已重命名，请记得保存');
+              cat.title = newName.trim(); renderNav(); showToast('分类已重命名，请记得保存');
             }
-          } else if (delBtn) {
+          } else {
             if (confirm('确定要删除大类「' + cat.title + '」及其下的所有内容吗？')) {
               NAV_CATEGORIES.splice(catIdx, 1);
               if (activeCategoryId === catId) activeCategoryId = NAV_CATEGORIES[0] ? NAV_CATEGORIES[0].id : '';
-              renderNav();
-              showToast('分类已删除，请记得保存');
+              renderNav(); showToast('分类已删除，请记得保存');
             }
           }
           return;
         }
       }
 
-      // 处理切换分类
+      // 切换分类
       if (activeCategoryId === tab.dataset.cat) return;
       activeCategoryId = tab.dataset.cat;
       activeGroupId = 'all';
@@ -976,34 +973,21 @@
       catNavEl.querySelectorAll('.cat-tab').forEach(t => t.classList.toggle('active', t === tab));
       catNavEl.querySelectorAll('.cat-block').forEach(block => {
         const subWrap = block.querySelector('.sub-cats-wrap');
-        if (subWrap) {
-          const isCurrent = block.contains(tab);
-          subWrap.classList.toggle('show', isCurrent);
-          if (isCurrent) {
-            subWrap.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
-          }
-        }
+        if (!subWrap) return;
+        const isCurrent = block.contains(tab);
+        subWrap.classList.toggle('show', isCurrent);
+        if (isCurrent) subWrap.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
       });
 
-      if (window.matchMedia('(max-width: 1024px)').matches) {
-        if (tab.scrollIntoView) tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      if (window.matchMedia('(max-width: 1024px)').matches && tab.scrollIntoView) {
+        tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
       }
 
       renderGroupNav();
       renderCards();
 
-      if (window.matchMedia('(min-width: 1025px)').matches) {
-        scrollToGroup('all');
-      }
+      if (window.matchMedia('(min-width: 1025px)').matches) scrollToGroup('all');
     };
-    
-    // 保留子分类点击
-    catNavEl.addEventListener('click', function(e) {
-      const sub = e.target.closest('.sub-tab');
-      if (!sub) return;
-      catNavEl.querySelectorAll('.sub-tab').forEach(st => st.classList.toggle('active', st === sub));
-      scrollToGroup(sub.dataset.group);
-    });
   }
 
   function renderGroupNav() {
@@ -1037,9 +1021,9 @@
     const cardTarget = SETTINGS.openInNewTab ? '_blank' : '_self';
     const cardRel = SETTINGS.openInNewTab ? 'noopener' : '';
     const isDesktop = window.matchMedia('(min-width: 1025px)').matches;
-    const isEditMode = document.body.classList.contains('edit-mode');   // ← 新增
+    const isEditMode = document.body.classList.contains('edit-mode');   // ★ 新增
 
-    const currentCat = NAV_CATEGORIES.find(function (c) { return c.id === activeCategoryId; });
+    const currentCat = NAV_CATEGORIES.find(c => c.id === activeCategoryId);
     const groups = currentCat ? (currentCat.groups || []) : [];
 
     let html = '';
@@ -1048,18 +1032,24 @@
     groups.forEach(function (group) {
       if (!isDesktop && activeGroupId !== 'all' && activeGroupId !== group.id) return;
 
-      const items = (group.items || []).filter(function (it) {
-        if (!q) return true;
-        return ((it.name || '') + ' ' + (it.desc || '')).toLowerCase().indexOf(q) !== -1;
-      });
+      // ★ 修复：保留原始索引，避免搜索过滤后编辑/删除错位
+      const filtered = (group.items || [])
+        .map((it, i) => ({ it, i }))
+        .filter(o => {
+          if (!q) return true;
+          return ((o.it.name || '') + ' ' + (o.it.desc || '')).toLowerCase().indexOf(q) !== -1;
+        });
 
-      if (!items.length) {
-        if (!isEditMode || q) return;   // 非编辑模式 / 搜索中 仍然跳过
+      // ★ 修复：编辑模式下即使分组无卡片也要渲染，否则新建空分组会消失
+      if (!filtered.length) {
+        if (!isEditMode || q) return;
       } else {
-        shown += items.length;
+        shown += filtered.length;
       }
 
-      const cards = items.map(function (it, idx) {
+      const cards = filtered.map(function (o) {
+        const it = o.it;
+        const originalIdx = o.i;
         const name = it.name || '';
         const desc = it.desc || '';
         const hasDesc = !!desc;
@@ -1068,60 +1058,60 @@
         const noLink = !it.url || it.url === '#';
 
         return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + '" ' +
-                 'href="' + (noLink ? 'javascript:void(0)' : esc(it.url)) + '" ' +
-                 (noLink
-                   ? 'data-disabled="true" aria-disabled="true" tabindex="0" '
-                   : 'target="' + cardTarget + '" ' + (cardRel ? 'rel="' + cardRel + '" ' : '')) +
-                 'data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-idx="' + idx + '" ' +
-                 '>' +
-                 '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
-                   '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
-                 '</span>' +
-                 '<span class="nav-info">' +
-                   '<span class="nav-name">' + highlight(name, q) + '</span>' +
-                   (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
-                 '</span>' +
-                 (hasDesc ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>' : '') +
-                 '<div class="edit-actions">' +
-                   '<button class="edit-btn move-item" type="button" data-dir="up" title="上移">↑</button>' +
-                   '<button class="edit-btn move-item" type="button" data-dir="down" title="下移">↓</button>' +
-                   '<button class="edit-btn edit" type="button" title="编辑">✎</button>' +
-                   '<button class="edit-btn del" type="button" title="删除">×</button>' +
-                 '</div>' +
-               '</a>';
+          'href="' + (noLink ? 'javascript:void(0)' : esc(it.url)) + '" ' +
+          (noLink
+            ? 'data-disabled="true" aria-disabled="true" tabindex="0" '
+            : 'target="' + cardTarget + '" ' + (cardRel ? 'rel="' + cardRel + '" ' : '')) +
+          'data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-idx="' + originalIdx + '" ' +
+          '>' +
+          '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
+          '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
+          '</span>' +
+          '<span class="nav-info">' +
+          '<span class="nav-name">' + highlight(name, q) + '</span>' +
+          (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
+          '</span>' +
+          (hasDesc ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>' : '') +
+          '<div class="edit-actions">' +
+          '<button class="edit-btn move-item" type="button" data-dir="up"   title="上移">↑</button>' +
+          '<button class="edit-btn move-item" type="button" data-dir="down" title="下移">↓</button>' +
+          '<button class="edit-btn edit"      type="button" title="编辑">✎</button>' +
+          '<button class="edit-btn del"       type="button" title="删除">×</button>' +
+          '</div>' +
+          '</a>';
       }).join('');
 
-      // 分组操作按钮
       let groupActions = '';
-      if (document.body.classList.contains('edit-mode')) {
-        groupActions = `
-          <div class="group-actions">
-            <button class="edit-btn move-group" type="button" title="上移分组" data-cat="${esc(currentCat.id)}" data-group="${esc(group.id)}" data-dir="up" style="width:20px; height:20px;">↑</button>
-            <button class="edit-btn move-group" type="button" title="下移分组" data-cat="${esc(currentCat.id)}" data-group="${esc(group.id)}" data-dir="down" style="width:20px; height:20px;">↓</button>
-            <button class="edit-btn edit-group" type="button" title="修改分组名" data-cat="${esc(currentCat.id)}" data-group="${esc(group.id)}" style="width:20px; height:20px;">✎</button>
-            <button class="edit-btn del del-group" type="button" title="删除分组" data-cat="${esc(currentCat.id)}" data-group="${esc(group.id)}" style="width:20px; height:20px;">×</button>
-          </div>
-        `;
+      if (isEditMode) {
+        groupActions =
+          '<div class="group-actions">' +
+          '<button class="edit-btn move-group" type="button" title="上移分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-dir="up"   style="width:20px;height:20px;">↑</button>' +
+          '<button class="edit-btn move-group" type="button" title="下移分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-dir="down" style="width:20px;height:20px;">↓</button>' +
+          '<button class="edit-btn edit-group" type="button" title="修改分组名" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" style="width:20px;height:20px;">✎</button>' +
+          '<button class="edit-btn del del-group" type="button" title="删除分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" style="width:20px;height:20px;">×</button>' +
+          '</div>';
       }
 
       html += '<div class="nav-group" data-group-id="' + esc(group.id) + '">' +
-                '<h2 class="group-title">' + esc(group.title || '') + '<span class="group-count">' + items.length + '</span>' + groupActions + '</h2>' +
-                '<div class="nav-grid">' + cards;
-      
-      if (document.body.classList.contains('edit-mode')) {
+        '<h2 class="group-title">' + esc(group.title || '') +
+        '<span class="group-count">' + filtered.length + '</span>' + groupActions +
+        '</h2>' +
+        '<div class="nav-grid">' + cards;
+
+      if (isEditMode) {
         html += '<button class="add-btn add-card-btn" type="button" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '">+ 添加卡片</button>';
       }
-      
+
       html += '</div></div>';
     });
 
-    if (document.body.classList.contains('edit-mode')) {
-      html += '<button class="add-btn" id="addGroupBtn" type="button" style="margin-top: 24px;" data-cat="' + esc(currentCat.id) + '">+ 添加新分组</button>';
+    if (isEditMode) {
+      html += '<button class="add-btn" id="addGroupBtn" type="button" style="margin-top:24px;" data-cat="' + esc(currentCat.id) + '">+ 添加新分组</button>';
     }
 
     navGroupsEl.innerHTML = html;
 
-    // 编辑模式下（未搜索时）不显示空态，避免遮住"添加分组/添加卡片"入口
+    // ★ 修复：编辑模式下（未搜索时）不显示外部搜索空态，避免遮住“添加分组/卡片”入口
     const showEmptyState = shown === 0 && !(isEditMode && !q);
     navEmptyEl.hidden = !showEmptyState;
 
@@ -1130,7 +1120,6 @@
       if (/^\d+$/.test(q)) {
         steamIdBtn = `<button class="ext-btn" onclick="window.open('https://steamcommunity.com/sharedfiles/filedetails/?id=' + encodeURIComponent('${esc(q)}'), '_blank')">Steam 搜创意工坊</button>`;
       }
-
       navEmptyEl.innerHTML = `
         <div class="external-search">
           <p>没有找到匹配的站点，去搜索引擎看看？</p>
@@ -1145,16 +1134,14 @@
             <button class="ext-btn" onclick="window.open('https://store.steampowered.com/search/?term=' + encodeURIComponent('${esc(q)}'), '_blank')">Steam 搜游戏</button>
             ${steamIdBtn}
           </div>
-          <p style="margin-top: 16px; font-size: 12px; color: var(--text-mute);">
+          <p style="margin-top:16px; font-size:12px; color:var(--text-mute);">
             或 <button id="emptyClearBtn" type="button" style="background:none; border:none; padding:0; color:var(--accent); text-decoration:underline; cursor:pointer; font-family:inherit; font-size:inherit;">清空关键词</button> 重新查找
           </p>
-        </div>
-      `;
-      const btn = document.getElementById('emptyClearBtn');
-      if (btn) {
-        btn.addEventListener('click', function() {
-          searchEl.value = '';
-          navKeyword = '';
+        </div>`;
+      const clearBtn = document.getElementById('emptyClearBtn');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function () {
+          searchEl.value = ''; navKeyword = '';
           groupNavEl.hidden = false;
           renderCards();
           if (!IS_TOUCH) searchEl.focus();
@@ -1164,36 +1151,25 @@
 
     const addGroupBtn = document.getElementById('addGroupBtn');
     if (addGroupBtn) {
-      addGroupBtn.addEventListener('click', function() {
+      addGroupBtn.addEventListener('click', function () {
         const name = prompt('请输入新分组的名称（如：常用工具）：');
         if (!name || !name.trim()) return;
-        const id = 'group_' + Date.now();
-        const cat = NAV_CATEGORIES.find(c => c.id === currentCat.id);
-        if (cat) {
-          if (!cat.groups) cat.groups = [];
-          cat.groups.push({ id: id, title: name.trim(), items: [] });
-          renderGroupNav(); 
-          renderCards();
-          showToast('分组已添加，请记得保存');
-        }
+        const cat = NAV_CATEGORIES.find(c => c.id === activeCategoryId);
+        if (!cat) return;
+        if (!cat.groups) cat.groups = [];
+        cat.groups.push({ id: 'group_' + Date.now(), title: name.trim(), items: [] });
+        renderGroupNav(); renderCards();
+        showToast('分组已添加，请记得保存');
       });
     }
 
-    const addCardBtns = document.querySelectorAll('.add-card-btn');
-    addCardBtns.forEach(btn => {
-      btn.addEventListener('click', function(e) {
+    document.querySelectorAll('.add-card-btn').forEach(btn => {
+      btn.addEventListener('click', function (e) {
         e.preventDefault();
-        const catId = this.dataset.cat;
-        const groupId = this.dataset.group;
-        editTarget = { catId: catId, groupId: groupId, itemIndex: -1 }; 
-        
-        editNameEl.value = '';
-        editUrlEl.value = '';
-        editDescEl.value = '';
-        editLetterEl.value = '';
-        editColorEl.value = '#4E7296';
+        editTarget = { catId: this.dataset.cat, groupId: this.dataset.group, itemIndex: -1 };
+        editNameEl.value = ''; editUrlEl.value = ''; editDescEl.value = '';
+        editLetterEl.value = ''; editColorEl.value = '#4E7296';
         editModalTitle.textContent = '添加新卡片';
-        
         editModalMask.classList.add('show');
         lockBodyScroll();
       });
@@ -1236,11 +1212,11 @@
       const hasIcon = !!(f.icon && f.icon.trim());
       const iconHtml = hasIcon ? '<img data-fallback src="' + esc(f.icon) + '" alt="">' : '';
       return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener" title="' + esc(f.name || '') + '">' +
-               '<span class="friend-ico" style="background:' + esc(f.color || '#4E7296') + '">' +
-                 '<span>' + esc(f.letter || '友') + '</span>' + iconHtml +
-               '</span>' +
-               '<span class="friend-name">' + esc(f.name || '') + '</span>' +
-             '</a>';
+        '<span class="friend-ico" style="background:' + esc(f.color || '#4E7296') + '">' +
+        '<span>' + esc(f.letter || '友') + '</span>' + iconHtml +
+        '</span>' +
+        '<span class="friend-name">' + esc(f.name || '') + '</span>' +
+        '</a>';
     }).join('');
 
     guardImgs(friendsGridEl);
@@ -1609,21 +1585,21 @@
 
   /* ============ GitHub API 在线编辑 ============ */
   if (editModalClose) {
-    editModalClose.addEventListener('click', function() {
+    editModalClose.addEventListener('click', function () {
       editModalMask.classList.remove('show');
       unlockBodyScroll();
     });
   }
-  
+
   if (editSaveBtn) {
-    editSaveBtn.addEventListener('click', function() {
+    editSaveBtn.addEventListener('click', function () {
       const name = editNameEl.value.trim();
       const url = editUrlEl.value.trim();
       if (!name || !url) return showToast('名称和链接不能为空', true);
-      
+
       const cat = NAV_CATEGORIES.find(c => c.id === editTarget.catId);
       const group = cat.groups.find(g => g.id === editTarget.groupId);
-      
+
       const newItem = {
         name: name,
         url: url,
@@ -1632,13 +1608,13 @@
         color: editColorEl.value.trim() || '#4E7296',
         icon: ''
       };
-      
+
       if (editTarget.itemIndex > -1) {
         group.items[editTarget.itemIndex] = newItem;
       } else {
         group.items.push(newItem);
       }
-      
+
       editModalMask.classList.remove('show');
       unlockBodyScroll();
       renderCards();
@@ -1650,8 +1626,9 @@
     if (!SETTINGS.ghOwner || !SETTINGS.ghRepo || !SETTINGS.ghToken || !SETTINGS.ghPath) {
       return showToast('请先在设置中填写完整的 GitHub 配置', true);
     }
-    
+
     const btn = document.querySelector('.floating-save');
+    if (!btn) return;                                       // ★ 防御性判空
     const oldText = btn.textContent;
     btn.textContent = '保存中...';
     btn.disabled = true;
@@ -1667,8 +1644,7 @@
       const getRes = await fetch(url, { headers, method: 'GET' });
       let sha = '';
       if (getRes.ok) {
-        const fileData = await getRes.json();
-        sha = fileData.sha;
+        sha = (await getRes.json()).sha;
       } else if (getRes.status !== 404) {
         throw new Error('获取文件信息失败，请检查仓库是否存在或 Token 是否有权限');
       }
@@ -1676,23 +1652,15 @@
       const contentStr = JSON.stringify({ categories: NAV_CATEGORIES }, null, 2);
       const contentBase64 = btoa(unescape(encodeURIComponent(contentStr)));
 
-      const putBody = {
-        message: 'Update nav.json via web editor',
-        content: contentBase64,
-        sha: sha || undefined
-      };
+      // ★ 修复：不再写 sha: sha || undefined，而是条件添加
+      const putBody = { message: 'Update nav.json via web editor', content: contentBase64 };
+      if (sha) putBody.sha = sha;
 
-      const putRes = await fetch(url, {
-        method: 'PUT',
-        headers,
-        body: JSON.stringify(putBody)
-      });
-
+      const putRes = await fetch(url, { method: 'PUT', headers, body: JSON.stringify(putBody) });
       if (!putRes.ok) {
         const errData = await putRes.json();
         throw new Error(errData.message || '保存失败');
       }
-
       showToast('🎉 保存成功！稍等片刻 GitHub Pages 即可生效');
     } catch (err) {
       console.error(err);
@@ -1725,12 +1693,12 @@
 
       if (isSearching) {
         activeGroupId = 'all';
-        catNavEl.querySelectorAll('.sub-tab').forEach(function(st) { st.classList.remove('active'); });
+        catNavEl.querySelectorAll('.sub-tab').forEach(function (st) { st.classList.remove('active'); });
       }
-      
+
       updateGroupNavActive();
       renderCards();
-      
+
       if (isSearching) scrollToResultsTop();
     }, 120);
   });
@@ -1760,12 +1728,12 @@
     document.addEventListener('keydown', function (e) {
       const active = document.activeElement;
       const isInput = active && (
-        active.tagName === 'INPUT' || 
-        active.tagName === 'TEXTAREA' || 
+        active.tagName === 'INPUT' ||
+        active.tagName === 'TEXTAREA' ||
         active.isContentEditable
       );
 
-      if ((e.key === '/' && !isInput) || ((e.ctrlKey || e.metaKey) && e.key === 'k' && !isInput)) {
+      if (!isInput && (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'))) {
         if (document.body.classList.contains('modal-open')) return;
         e.preventDefault();
         if (navSearchEl && !navSearchEl.hidden) {
@@ -1802,12 +1770,12 @@
 
   function setFollowSystem(on) {
     if (on) {
-      try { localStorage.setItem('site.theme', 'system'); } catch (e) {}
+      try { localStorage.setItem('site.theme', 'system'); } catch (e) { }
       var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
     } else {
       var current = document.documentElement.dataset.theme || 'light';
-      try { localStorage.setItem('site.theme', current); } catch (e) {}
+      try { localStorage.setItem('site.theme', current); } catch (e) { }
     }
   }
 
@@ -1815,7 +1783,7 @@
     var current = document.documentElement.dataset.theme;
     var next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
-    try { localStorage.setItem('site.theme', next); } catch (e) {}
+    try { localStorage.setItem('site.theme', next); } catch (e) { }
     syncSettingsUI();
   });
 
@@ -1851,7 +1819,7 @@
   /* ============ 导出 / 导入配置 ============ */
   function exportSettings() {
     var themeVal = 'system';
-    try { themeVal = localStorage.getItem('site.theme') || 'system'; } catch (e) {}
+    try { themeVal = localStorage.getItem('site.theme') || 'system'; } catch (e) { }
 
     const safeSettings = Object.assign({}, SETTINGS);
     delete safeSettings.ghOwner;
@@ -1932,11 +1900,11 @@
         saveSettings();
 
         if (incomingTheme === 'system') {
-          try { localStorage.setItem('site.theme', 'system'); } catch (err) {}
+          try { localStorage.setItem('site.theme', 'system'); } catch (err) { }
           var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
         } else if (incomingTheme === 'light' || incomingTheme === 'dark') {
-          try { localStorage.setItem('site.theme', incomingTheme); } catch (err) {}
+          try { localStorage.setItem('site.theme', incomingTheme); } catch (err) { }
           document.documentElement.dataset.theme = incomingTheme;
         }
 
@@ -2083,9 +2051,9 @@
 
     if (ghRepoEl) ghRepoEl.addEventListener('input', e => { SETTINGS.ghRepo = e.target.value.trim(); saveSettings(); });
     if (ghTokenEl) ghTokenEl.addEventListener('input', e => { SETTINGS.ghToken = e.target.value.trim(); saveSettings(); });
-    
+
     if (setEditModeEl) {
-      setEditModeEl.addEventListener('change', function() {
+      setEditModeEl.addEventListener('change', function () {
         if (setEditModeEl.checked && !ghTokenEl.value.trim()) {
           showToast('请先填写 Personal Access Token 才能开启', true);
           setEditModeEl.checked = false;
@@ -2094,7 +2062,7 @@
         SETTINGS.editMode = setEditModeEl.checked;
         saveSettings();
         document.body.classList.toggle('edit-mode', SETTINGS.editMode);
-        renderNav(); 
+        renderNav();
         showToast(SETTINGS.editMode ? '已开启编辑模式' : '已关闭编辑模式');
       });
     }
@@ -2120,10 +2088,10 @@
           ghPath: SETTINGS.ghPath,
           ghToken: SETTINGS.ghToken
         };
-        
+
         SETTINGS = Object.assign({}, DEFAULT_SETTINGS, ghConfig);
         SETTINGS.editMode = false;
-        
+
         saveSettings();
         setFollowSystem(true);
         applySettings();
@@ -2202,7 +2170,7 @@
   function initGreeting() {
     const greetingEl = document.getElementById('greetingText');
     if (!greetingEl) return;
-    
+
     function updateGreeting() {
       const hour = new Date().getHours();
       let text = '';
@@ -2212,10 +2180,10 @@
       else if (hour >= 14 && hour < 18) text = '下午好，喝杯水吧 🍵';
       else if (hour >= 18 && hour < 24) text = '晚上好，辛苦一天了 🌙';
       else text = '夜深了，注意身体早点休息 🌛';
-      
+
       greetingEl.textContent = text;
     }
-    
+
     updateGreeting();
     setInterval(updateGreeting, 600000);
   }
