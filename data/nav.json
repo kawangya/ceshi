@@ -142,6 +142,42 @@
           ]
         },
         {
+          "id": "group_1793455568286",
+          "title": "Java启动器（安卓）",
+          "items": [
+            {
+              "name": "FCL",
+              "url": "https://github.com/FCL-Team/FoldCraftLauncher",
+              "desc": "Android 端 Minecraft Java 版启动器，基于 HMCL 核心与 Amethyst-Android 后端，支持全版本和模组运行。",
+              "letter": "F",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "Zalith Launcher 2",
+              "url": "https://www.zalithlauncher.cn/",
+              "desc": "Android 端 Minecraft Java 版启动器，界面简洁，支持版本管理、模组/资源整合包下载、渲染器调节与联机，开源社区维护。",
+              "letter": "Z",
+              "color": "#4E7296",
+              "icon": "",
+              "links": [
+                {
+                  "text": "Github",
+                  "url": "https://github.com/ZalithLauncher/ZalithLauncher2"
+                }
+              ]
+            },
+            {
+              "name": "牛逼",
+              "url": "#",
+              "desc": "",
+              "letter": "牛",
+              "color": "#4E7296",
+              "icon": ""
+            }
+          ]
+        },
+        {
           "id": "group_1793454191448",
           "title": "基岩版本库",
           "items": [
