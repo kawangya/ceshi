@@ -98,17 +98,31 @@
           ]
         },
         {
-          "id": "launcher",
-          "title": "Java启动器（PC）",
+          "id": "group_1793455900118",
+          "title": "官方启动器",
           "items": [
+            {
+              "name": "Minecraft",
+              "url": "https://www.minecraft.net/",
+              "desc": "Minecraft 官方网站，提供正版下载、版本与衍生内容介绍，以及市场、教育版和中国区入口。",
+              "letter": "M",
+              "color": "#4E7296",
+              "icon": ""
+            },
             {
               "name": "我的世界中国版",
               "url": "https://mc.163.com",
               "desc": "网易《我的世界》中国版官网，提供端游/手游下载，以及模组、皮肤、联机、租赁服等资源和功能。",
-              "letter": "网",
-              "color": "#5F8468",
+              "letter": "我",
+              "color": "#4E7296",
               "icon": ""
-            },
+            }
+          ]
+        },
+        {
+          "id": "launcher",
+          "title": "三方启动器（PC）",
+          "items": [
             {
               "name": "HMCL",
               "url": "https://hmcl.huangyuhui.net",
@@ -143,7 +157,7 @@
         },
         {
           "id": "group_1793455568286",
-          "title": "Java启动器（安卓）",
+          "title": "三方启动器（安卓）",
           "items": [
             {
               "name": "FCL",
