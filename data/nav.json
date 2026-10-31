@@ -6,21 +6,43 @@
       "default": true,
       "groups": [
         {
+          "id": "nav",
+          "title": "导航聚合",
+          "items": [
+            {
+              "name": "MCNav 导航",
+              "letter": "M",
+              "color": "#4E7296",
+              "icon": "",
+              "desc": "综合 MC 资源导航站",
+              "url": "https://www.mcnav.net/"
+            },
+            {
+              "name": "所见皆是 MC",
+              "letter": "所",
+              "color": "#5F8468",
+              "icon": "",
+              "desc": "MC 主题资源聚合",
+              "url": "https://mcisee.top/"
+            }
+          ]
+        },
+        {
           "id": "group_1793452355536",
           "title": "Java下载",
           "items": [
             {
               "name": "Adoptium",
-              "url": "https://adoptium.net/",
-              "desc": "Adoptium 是开源 Java 运行时项目，主打高质量、安全的 Eclipse Temurin OpenJDK 发行版，覆盖开发到生产环境。",
+              "url": "https://adoptium.net/zh-CN/temurin/releases",
+              "desc": "开源 Java 运行时项目，主打高质量、安全的 Eclipse Temurin OpenJDK 发行版，覆盖开发到生产环境。",
               "letter": "A",
               "color": "#4E7296",
               "icon": ""
             },
             {
               "name": "BellSoft",
-              "url": "https://bell-sw.com/",
-              "desc": "BellSoft 官网，主打 Liberica JDK 等开源 Java 运行时与云原生方案，提供 TCK 验证、容器优化和企业级支持。",
+              "url": "https://bell-sw.com/pages/downloads/",
+              "desc": "主打 Liberica JDK 等开源 Java 运行时与云原生方案，提供 TCK 验证、容器优化和企业级支持。",
               "letter": "B",
               "color": "#4E7296",
               "icon": ""
@@ -28,7 +50,7 @@
             {
               "name": "Oracle",
               "url": "https://www.oracle.com/cn/java/technologies/downloads/",
-              "desc": "Oracle 官方 Java 下载页，提供各版本 JDK/JRE 下载，适合开发与运行 Java 应用，生产及商业用途需注意许可条款。",
+              "desc": "官方 Java 下载页，提供各版本 JDK/JRE 下载，适合开发与运行 Java 应用，生产及商业用途需注意许可条款。",
               "letter": "O",
               "color": "#4E7296",
               "icon": ""
@@ -36,7 +58,7 @@
             {
               "name": "清华开源镜像站",
               "url": "https://mirrors.tuna.tsinghua.edu.cn/Adoptium/",
-              "desc": "清华开源镜像站的 Adoptium 仓库，提供 Eclipse Temurin JDK/JRE 国内加速下载，适合替代官方源拉取各版本安装包。",
+              "desc": "提供 Eclipse Temurin JDK/JRE 国内加速下载，适合替代官方源拉取各版本安装包。",
               "letter": "清",
               "color": "#4E7296",
               "icon": ""
@@ -44,7 +66,7 @@
             {
               "name": "Azul",
               "url": "https://www.azul.com/downloads/",
-              "desc": "Azul 下载页，提供 Zulu 等 OpenJDK 构建，覆盖多版本、多平台，含开源发行版、商业优化版及运行时性能分析工具。",
+              "desc": "提供 Zulu 等 OpenJDK 构建，覆盖多版本、多平台，含开源发行版、商业优化版及运行时性能分析工具。",
               "letter": "A",
               "color": "#4E7296",
               "icon": ""
@@ -52,7 +74,7 @@
             {
               "name": "GraalVM",
               "url": "https://www.graalvm.org/downloads/",
-              "desc": "GraalVM 官方下载页，提供高性能 OpenJDK 构建，支持原生镜像与多平台，适合微服务和云原生场景。",
+              "desc": "提供高性能 OpenJDK 构建，支持原生镜像与多平台，适合微服务和云原生场景。",
               "letter": "G",
               "color": "#4E7296",
               "icon": ""
@@ -60,7 +82,7 @@
             {
               "name": "IBM Semeru",
               "url": "https://developer.ibm.com/languages/java/semeru-runtimes/downloads/",
-              "desc": "IBM Semeru Runtime 下载页，提供基于 OpenJDK 的预构建 Java 运行时，支持多版本多平台，含 jextract 与原生接口工具。",
+              "desc": "提供基于 OpenJDK 的预构建 Java 运行时，支持多版本多平台，含 jextract 与原生接口工具。",
               "letter": "I",
               "color": "#4E7296",
               "icon": ""
@@ -68,7 +90,7 @@
             {
               "name": "Amazon Corretto",
               "url": "https://aws.amazon.com/cn/corretto/",
-              "desc": "Amazon Corretto 是 AWS 推出的免费、生产就绪 OpenJDK 发行版，跨平台、长期支持，含性能优化与安全修复，适合开发与生产环境。",
+              "desc": "AWS 推出的免费、生产就绪 OpenJDK 发行版，跨平台、长期支持，含性能优化与安全修复，适合开发与生产环境。",
               "letter": "A",
               "color": "#4E7296",
               "icon": ""
@@ -77,65 +99,75 @@
         },
         {
           "id": "launcher",
-          "title": "启动器与版本库",
+          "title": "Java启动器",
           "items": [
             {
-              "name": "HMCL 启动器",
-              "letter": "H",
-              "color": "#4E7296",
-              "icon": "",
-              "desc": "开源跨平台 Java 版启动器",
-              "url": "https://hmcl.huangyuhui.net"
-            },
-            {
-              "name": "网易版 MC",
+              "name": "我的世界中国版",
+              "url": "https://mc.163.com",
+              "desc": "网易《我的世界》中国版官网，提供端游/手游下载，以及模组、皮肤、联机、租赁服等资源和功能。",
               "letter": "网",
               "color": "#5F8468",
-              "icon": "",
-              "desc": "国服官方入口与资源",
-              "url": "https://mc.163.com"
+              "icon": ""
             },
             {
-              "name": "MC版本库",
-              "letter": "版",
-              "color": "#7A6E96",
-              "icon": "",
-              "desc": "bbk.endyun.ltd 版本汇总",
-              "url": "http://bbk.endyun.ltd"
+              "name": "HMCL",
+              "url": "https://hmcl.huangyuhui.net",
+              "desc": "开源 Minecraft 启动器，支持多系统、自动安装与各加载器，可导入导出整合包，并自定义主题。",
+              "letter": "H",
+              "color": "#4E7296",
+              "icon": ""
             },
             {
-              "name": "星月版本库",
-              "letter": "星",
-              "color": "#9A7250",
+              "name": "PCL",
+              "url": "https://github.com/Meloong-Git/PCL",
+              "desc": "PCL 官方源码仓库，Minecraft 启动器 Plain Craft Launcher 的开源代码，含 UI、动画、下载与游戏启动模块，发布新版时同步更新。",
+              "letter": "P",
+              "color": "#4E7296",
               "icon": "",
-              "desc": "Spectrollay 维护的版本仓库",
-              "url": "https://spectrollay.github.io/minecraft_repository",
               "links": [
                 {
-                  "text": "镜像站",
-                  "url": "https://mirror.minecraft.wiki/"
-                },
-                {
-                  "text": "GitHub",
-                  "url": "https://github.com/minecraft-wiki"
+                  "text": "蓝奏云（提取码：pcl2）",
+                  "url": "https://ltcat.lanzouv.com/b0aj6gsid"
                 }
               ]
             },
             {
-              "name": "MineAPK版本库",
-              "letter": "A",
-              "color": "#6B6F7A",
-              "icon": "",
-              "desc": "安卓版 MC 版本下载",
-              "url": "https://www.mineapk.cn"
+              "name": "PCL CE",
+              "url": "https://github.com/PCL-Community/PCL-CE",
+              "desc": "PCL 启动器的社区维护版，基于开源代码二次开发，包含主线未上线的功能与改进；版本号不与官方严格对应，问题勿反馈官方，优先支持最新版与 Windows 环境。",
+              "letter": "P",
+              "color": "#4E7296",
+              "icon": ""
+            }
+          ]
+        },
+        {
+          "id": "group_1793454191448",
+          "title": "基岩版本库",
+          "items": [
+            {
+              "name": "MC版本库",
+              "url": "http://bbk.endyun.ltd",
+              "desc": "提供我的世界国际版多版本安装包下载，主打手机版各版本安全获取与快速安装。",
+              "letter": "M",
+              "color": "#4E7296",
+              "icon": ""
             },
             {
-              "name": "klplt国际版",
-              "letter": "K",
-              "color": "#4F7A9B",
-              "icon": "",
-              "desc": "国际版客户端下载站",
-              "url": "http://mcapks.net"
+              "name": "MineAPK",
+              "url": "https://www.mineapk.cn",
+              "desc": "专注 Minecraft 的版本与资源库，支持多平台版本下载，提供模组、整合包、光影、资源包和地图，并带联机与社区功能。",
+              "letter": "M",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "MCAPKS",
+              "url": "https://mcapks.net/",
+              "desc": "Minecraft 国际版全版本下载站，提供多版本安装包浏览与下载，并引导正版购买。",
+              "letter": "M",
+              "color": "#4E7296",
+              "icon": ""
             }
           ]
         },
@@ -257,7 +289,7 @@
         },
         {
           "id": "online",
-          "title": "联机与服务器",
+          "title": "联机工具",
           "items": [
             {
               "name": "Radmin LAN",
@@ -274,44 +306,6 @@
               "icon": "",
               "desc": "免费内网穿透与联机",
               "url": "https://www.natfrp.com/"
-            },
-            {
-              "name": "ToDesk",
-              "letter": "T",
-              "color": "#5F8468",
-              "icon": "",
-              "desc": "远程控制与代安装必备",
-              "url": "https://www.todesk.com/"
-            },
-            {
-              "name": "UU远程",
-              "letter": "U",
-              "color": "#7A6E96",
-              "icon": "",
-              "desc": "网易远程协助工具",
-              "url": "https://uuyc.163.com/"
-            }
-          ]
-        },
-        {
-          "id": "nav",
-          "title": "导航聚合",
-          "items": [
-            {
-              "name": "MCNav 导航",
-              "letter": "M",
-              "color": "#4E7296",
-              "icon": "",
-              "desc": "综合 MC 资源导航站",
-              "url": "https://www.mcnav.net/"
-            },
-            {
-              "name": "所见皆是 MC",
-              "letter": "所",
-              "color": "#5F8468",
-              "icon": "",
-              "desc": "MC 主题资源聚合",
-              "url": "https://mcisee.top/"
             }
           ]
         }
