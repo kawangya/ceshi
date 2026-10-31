@@ -6,6 +6,28 @@
       "default": true,
       "groups": [
         {
+          "id": "group_1793452355536",
+          "title": "Java下载",
+          "items": [
+            {
+              "name": "Adoptium",
+              "url": "https://adoptium.net/",
+              "desc": "Adoptium 是开源 Java 运行时项目，主打高质量、安全的 Eclipse Temurin OpenJDK 发行版，覆盖开发到生产环境。",
+              "letter": "A",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "BellSoft",
+              "url": "https://bell-sw.com/",
+              "desc": "BellSoft 官网，主打 Liberica JDK 等开源 Java 运行时与云原生方案，提供 TCK 验证、容器优化和企业级支持。",
+              "letter": "B",
+              "color": "#4E7296",
+              "icon": ""
+            }
+          ]
+        },
+        {
           "id": "launcher",
           "title": "启动器与版本库",
           "items": [
@@ -41,9 +63,15 @@
               "desc": "Spectrollay 维护的版本仓库",
               "url": "https://spectrollay.github.io/minecraft_repository",
               "links": [
-               { "text": "镜像站", "url": "https://mirror.minecraft.wiki/" },
-               { "text": "GitHub", "url": "https://github.com/minecraft-wiki" }
-               ]
+                {
+                  "text": "镜像站",
+                  "url": "https://mirror.minecraft.wiki/"
+                },
+                {
+                  "text": "GitHub",
+                  "url": "https://github.com/minecraft-wiki"
+                }
+              ]
             },
             {
               "name": "MineAPK版本库",
