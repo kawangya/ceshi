@@ -326,9 +326,8 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<div class="links-popover" id="linksPopover" role="menu" aria-hidden="true" hidden></div>
 
-<!-- 卡片编辑弹窗 -->
+<!-- 卡片编辑弹窗（含附加链接维护） -->
 <div class="modal-mask" id="editModalMask" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modal-head">
@@ -341,6 +340,7 @@
       <input type="text" id="editDesc" placeholder="站点描述 (可选)" class="setting-input">
       <input type="text" id="editLetter" placeholder="首字母 (可选，默认取名称首字)" class="setting-input">
       <input type="text" id="editColor" placeholder="图标背景色 (如 #4E7296)" class="setting-input">
+
       <div class="edit-links-section">
         <div class="edit-links-head">
           <span class="edit-links-label">附加链接（可选）</span>
@@ -352,6 +352,18 @@
     <div class="modal-actions">
       <button class="settings-btn" id="editSaveBtn" style="background:var(--accent); color:#fff; border:none;">保存</button>
     </div>
+  </div>
+</div>
+
+<!-- 链接选择弹层（桌面居中弹窗 / 手机底部抽屉） -->
+<div class="sheet-mask" id="linksSheet" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="linksSheetTitle">
+    <div class="sheet-grabber" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <h2 class="sheet-title" id="linksSheetTitle">选择链接</h2>
+      <button class="sheet-close" id="linksSheetClose" type="button" aria-label="关闭">×</button>
+    </div>
+    <div class="sheet-body" id="linksSheetBody"></div>
   </div>
 </div>
 

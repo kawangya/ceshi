@@ -3,8 +3,8 @@
    - 修复：编辑模式空分组不渲染
    - 修复：搜索状态下编辑卡片索引错位
    - 修复：分类事件监听重复绑定
-   - 清理：无冗余判断、sah 字段按需附加、按钮缓存
-   - 新增：多链接支持（角标 + 弹层 + 编辑行）
+   - 清理：冗余判断、sha 按需附加、保存按钮缓存
+   - 新增：多链接（移动端友好）—— 整卡点击弹选择抽屉
    ========================================================= */
 
 (function () {
@@ -179,10 +179,13 @@
   const editColorEl    = document.getElementById('editColor');
   const editSaveBtn    = document.getElementById('editSaveBtn');
 
-  // 多链接相关
-  const editLinksList = document.getElementById('editLinksList');
-  const editLinksAdd  = document.getElementById('editLinksAdd');
-  const linksPopover  = document.getElementById('linksPopover');
+  // 多链接编辑与选择
+  const editLinksList  = document.getElementById('editLinksList');
+  const editLinksAdd   = document.getElementById('editLinksAdd');
+  const linksSheet       = document.getElementById('linksSheet');
+  const linksSheetTitle  = document.getElementById('linksSheetTitle');
+  const linksSheetBody   = document.getElementById('linksSheetBody');
+  const linksSheetClose  = document.getElementById('linksSheetClose');
 
   /* ============ 工具 ============ */
   function esc(str) {
@@ -337,7 +340,7 @@
     lightbox.setAttribute('aria-hidden', 'true');
     lightboxImg.removeAttribute('src');
     resetLightboxTransform();
-    if (!modalMask.classList.contains('show')) {
+    if (!modalMask.classList.contains('show') && !linksSheet.classList.contains('show')) {
       unlockBodyScroll();
     }
   }
@@ -549,7 +552,7 @@
   let measureResizeTimer = null;
   window.addEventListener('resize', function () {
     hideTip();
-    closeLinksPopover();
+    if (linksSheet && linksSheet.classList.contains('show')) closeLinksSheet();
     clearTimeout(measureResizeTimer);
     measureResizeTimer = setTimeout(function () {
       measureCardTruncation();
@@ -597,112 +600,89 @@
     return arr;
   }
 
-  /* ============ 多链接弹层 ============ */
-  let linksPopoverAnchor = null;
+  /* ============ 链接选择弹层（桌面弹窗 / 手机底部抽屉） ============ */
+  let lastSheetFocused = null;
 
-  function openLinksPopover(anchor, links) {
-    if (!linksPopover) return;
+  function openLinksSheet(item) {
+    if (!linksSheet || !item) return;
+    const links = getItemLinks(item);
+    if (links.length < 2) return;
 
-    // 若已打开则先关掉（避免叠加）
-    if (!linksPopover.hidden) {
-      linksPopover.hidden = true;
-      linksPopover.classList.remove('show');
-      linksPopover.innerHTML = '';
-      linksPopoverAnchor = null;
-    }
+    linksSheetTitle.textContent = item.name || '选择链接';
+    linksSheetBody.innerHTML = '';
 
-    linksPopover.innerHTML = '';
-    links.forEach(function (l) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'links-popover-item' + (l.text ? '' : ' no-text');
-      btn.setAttribute('role', 'menuitem');
-      btn.innerHTML =
-        '<span class="links-popover-text">' + esc(l.text || '') + '</span>' +
-        '<span class="links-popover-url">' + esc(l.url) + '</span>';
-      btn.addEventListener('click', function () {
-        if (SETTINGS.openInNewTab) {
-          window.open(l.url, '_blank', 'noopener');
-        } else {
-          window.location.href = l.url;
-        }
-        closeLinksPopover();
+    links.forEach(function (l, i) {
+      const a = document.createElement('a');
+      a.className = 'links-sheet-item' + (i === 0 ? ' primary' : '');
+      a.href = l.url;
+      if (SETTINGS.openInNewTab) {
+        a.target = '_blank';
+        a.rel = 'noopener';
+      }
+
+      const label = l.text || (i === 0 ? (item.name || '主链接') : '链接');
+      const letter = label.trim().charAt(0) || '链';
+
+      a.innerHTML =
+        '<span class="links-sheet-ico">' + esc(letter) + '</span>' +
+        '<span class="links-sheet-info">' +
+          '<span class="links-sheet-name">' +
+            esc(label) +
+            (i === 0 ? '<span class="links-sheet-badge">主</span>' : '') +
+          '</span>' +
+          '<span class="links-sheet-url">' + esc(l.url) + '</span>' +
+        '</span>';
+
+      a.addEventListener('click', function () {
+        setTimeout(closeLinksSheet, 0);
       });
-      linksPopover.appendChild(btn);
+      linksSheetBody.appendChild(a);
     });
 
-    linksPopoverAnchor = anchor;
-
-    // 先显示再测量，然后再定位（避免抖动）
-    linksPopover.hidden = false;
-    linksPopover.style.visibility = 'hidden';
-    linksPopover.style.left = '0px';
-    linksPopover.style.top = '0px';
-    linksPopover.classList.add('show');
-
-    const rect = anchor.getBoundingClientRect();
-    const popRect = linksPopover.getBoundingClientRect();
-    const gap = 6;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-
-    let left = rect.left;
-    if (left + popRect.width > vw - 12) left = vw - popRect.width - 12;
-    if (left < 12) left = 12;
-
-    let top = rect.bottom + gap;
-    if (top + popRect.height > vh - 12) {
-      if (rect.top - gap - popRect.height >= 12) {
-        top = rect.top - gap - popRect.height;
-      } else {
-        top = Math.max(12, vh - popRect.height - 12);
-      }
-    }
-
-    linksPopover.style.left = left + 'px';
-    linksPopover.style.top = top + 'px';
-    linksPopover.style.visibility = '';
-
-    const first = linksPopover.querySelector('.links-popover-item');
-    if (first) first.focus();
+    lastSheetFocused = document.activeElement;
+    linksSheet.classList.add('show');
+    linksSheet.setAttribute('aria-hidden', 'false');
+    lockBodyScroll();
+    if (linksSheetClose) linksSheetClose.focus();
   }
 
-  function closeLinksPopover() {
-    if (!linksPopover || linksPopover.hidden) return;
-    linksPopover.classList.remove('show');
-    linksPopover.hidden = true;
-    linksPopover.innerHTML = '';
-    if (linksPopoverAnchor && document.body.contains(linksPopoverAnchor)) {
-      linksPopoverAnchor.focus();
+  function closeLinksSheet() {
+    if (!linksSheet || !linksSheet.classList.contains('show')) return;
+    linksSheet.classList.remove('show');
+    linksSheet.setAttribute('aria-hidden', 'true');
+    if (!modalMask.classList.contains('show') &&
+        !lightbox.classList.contains('show') &&
+        !(editModalMask && editModalMask.classList.contains('show'))) {
+      unlockBodyScroll();
     }
-    linksPopoverAnchor = null;
+    if (lastSheetFocused && document.body.contains(lastSheetFocused)) {
+      lastSheetFocused.focus();
+    }
+    lastSheetFocused = null;
   }
 
-  document.addEventListener('click', function (e) {
-    if (!linksPopover || linksPopover.hidden) return;
-    if (linksPopover.contains(e.target)) return;
-    if (e.target.closest('.nav-links-badge')) return;
-    closeLinksPopover();
-  }, true);
+  if (linksSheetClose) linksSheetClose.addEventListener('click', closeLinksSheet);
+  if (linksSheet) {
+    linksSheet.addEventListener('click', function (e) {
+      if (e.target === linksSheet) closeLinksSheet();
+    });
+  }
 
   /* ============ 统一事件委托：卡片交互 ============ */
   navGroupsEl.addEventListener('click', function (e) {
-    /* 0. 多链接角标（优先级最高，且编辑模式下不触发） */
-    const linkBadge = e.target.closest('.nav-links-badge');
-    if (linkBadge && !document.body.classList.contains('edit-mode')) {
+    /* 0. 多链接卡片 —— 点击整卡弹出选择抽屉
+          注意：点简介按钮 (i) 时不应弹抽屉，让后面的简介逻辑处理 */
+    const multiCard = e.target.closest('.nav-card[data-multi="true"]');
+    if (multiCard &&
+        !e.target.closest('.nav-info-btn') &&
+        !document.body.classList.contains('edit-mode')) {
       e.preventDefault();
-      e.stopPropagation();
-      if (linksPopoverAnchor === linkBadge) { closeLinksPopover(); return; }
-
-      const card = linkBadge.closest('.nav-card');
-      const catId = card.dataset.cat;
-      const groupId = card.dataset.group;
-      const idx = parseInt(card.dataset.idx, 10);
+      const catId = multiCard.dataset.cat;
+      const groupId = multiCard.dataset.group;
+      const idx = parseInt(multiCard.dataset.idx, 10);
       const cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
       const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === groupId; });
-      if (!group || !group.items || !group.items[idx]) return;
-      const links = getItemLinks(group.items[idx]);
-      if (links.length > 1) openLinksPopover(linkBadge, links);
+      if (group && group.items && group.items[idx]) openLinksSheet(group.items[idx]);
       return;
     }
 
@@ -848,6 +828,21 @@
   navGroupsEl.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     if (document.body.classList.contains('edit-mode')) return;
+
+    // 多链接卡片：Enter / Space 打开选择抽屉
+    const multiCard = e.target.closest('.nav-card[data-multi="true"]');
+    if (multiCard) {
+      e.preventDefault();
+      const catId = multiCard.dataset.cat;
+      const groupId = multiCard.dataset.group;
+      const idx = parseInt(multiCard.dataset.idx, 10);
+      const cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
+      const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === groupId; });
+      if (group && group.items && group.items[idx]) openLinksSheet(group.items[idx]);
+      return;
+    }
+
+    // 无链接卡片
     const card = e.target.closest('.nav-card[data-disabled="true"]');
     if (!card) return;
     e.preventDefault();
@@ -959,7 +954,6 @@
 
   function handleScroll() {
     hideTip();
-    closeLinksPopover();
     updateBackTop();
 
     if (!isAutoScrolling) {
@@ -1029,7 +1023,7 @@
   }
 
   function bindCatEvents() {
-    // 覆盖式绑定，避免累积
+    // 覆盖式绑定，避免每次渲染累积监听
     catNavEl.onclick = function (e) {
       // 子分类点击（优先）
       const sub = e.target.closest('.sub-tab');
@@ -1147,11 +1141,11 @@
   }
 
   function renderCards() {
-    const q           = navKeyword.trim().toLowerCase();
-    const cardTarget  = SETTINGS.openInNewTab ? '_blank' : '_self';
-    const cardRel     = SETTINGS.openInNewTab ? 'noopener' : '';
-    const isDesktop   = window.matchMedia('(min-width: 1025px)').matches;
-    const isEditMode  = document.body.classList.contains('edit-mode');
+    const q          = navKeyword.trim().toLowerCase();
+    const cardTarget = SETTINGS.openInNewTab ? '_blank' : '_self';
+    const cardRel    = SETTINGS.openInNewTab ? 'noopener' : '';
+    const isDesktop  = window.matchMedia('(min-width: 1025px)').matches;
+    const isEditMode = document.body.classList.contains('edit-mode');
 
     const currentCat = NAV_CATEGORIES.find(c => c.id === activeCategoryId);
     const groups = currentCat ? (currentCat.groups || []) : [];
@@ -1191,23 +1185,34 @@
         const noLink     = !primaryUrl;
         const multiLinks = allLinks.length > 1;
 
-        return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + '" ' +
-                 'href="' + (noLink ? 'javascript:void(0)' : esc(primaryUrl)) + '" ' +
-                 (noLink
-                   ? 'data-disabled="true" aria-disabled="true" tabindex="0" '
-                   : 'target="' + cardTarget + '" ' + (cardRel ? 'rel="' + cardRel + '" ' : '')) +
+        // 多链接：整卡点击弹抽屉；单链接：直接跳转；无链接：拦截提示
+        let cardHref, cardAttrs;
+        if (multiLinks) {
+          cardHref  = 'javascript:void(0)';
+          cardAttrs = 'data-multi="true" role="button" tabindex="0" ';
+        } else if (noLink) {
+          cardHref  = 'javascript:void(0)';
+          cardAttrs = 'data-disabled="true" aria-disabled="true" tabindex="0" ';
+        } else {
+          cardHref  = esc(primaryUrl);
+          cardAttrs = 'target="' + cardTarget + '" ' + (cardRel ? 'rel="' + cardRel + '" ' : '');
+        }
+
+        return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + (multiLinks ? ' has-multi' : '') + '" ' +
+                 'href="' + cardHref + '" ' +
+                 cardAttrs +
                  'data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-idx="' + originalIdx + '" ' +
                  '>' +
                  '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
                    '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
                  '</span>' +
                  '<span class="nav-info">' +
-                   '<span class="nav-name">' + highlight(name, q) + '</span>' +
+                   '<span class="nav-name">' +
+                     '<span class="nav-name-text">' + highlight(name, q) + '</span>' +
+                     (multiLinks ? '<span class="nav-multi-hint" aria-hidden="true">' + allLinks.length + '</span>' : '') +
+                   '</span>' +
                    (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
                  '</span>' +
-                 (multiLinks
-                   ? '<span class="nav-links-badge" role="button" tabindex="-1" title="' + allLinks.length + ' 个链接" aria-label="查看全部 ' + allLinks.length + ' 个链接">' + allLinks.length + '</span>'
-                   : '') +
                  (hasDesc ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>' : '') +
                  '<div class="edit-actions">' +
                    '<button class="edit-btn move-item" type="button" data-dir="up"   title="上移">↑</button>' +
@@ -1699,7 +1704,9 @@
     modalMask.classList.remove('show');
     modalMask.setAttribute('aria-hidden', 'true');
     if (!lightbox || !lightbox.classList.contains('show')) {
-      unlockBodyScroll();
+      if (!linksSheet || !linksSheet.classList.contains('show')) {
+        unlockBodyScroll();
+      }
     }
     if (lastFocused && document.body.contains(lastFocused)) lastFocused.focus();
   }
@@ -1709,7 +1716,7 @@
 
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
-    if (linksPopover && !linksPopover.hidden) { closeLinksPopover(); return; }
+    if (linksSheet && linksSheet.classList.contains('show')) { closeLinksSheet(); return; }
     if (lightbox && lightbox.classList.contains('show')) { closeLightbox(); return; }
     if (settingsMask && settingsMask.classList.contains('show')) { closeSettings(); return; }
     if (editModalMask && editModalMask.classList.contains('show')) {
@@ -1790,11 +1797,13 @@
 
       // 收集附加链接
       const extras = [];
-      editLinksList.querySelectorAll('.edit-link-row').forEach(function (row) {
-        const t = row.querySelector('.edit-link-text').value.trim();
-        const u = row.querySelector('.edit-link-url').value.trim();
-        if (u) extras.push({ text: t, url: u });
-      });
+      if (editLinksList) {
+        editLinksList.querySelectorAll('.edit-link-row').forEach(function (row) {
+          const t = row.querySelector('.edit-link-text').value.trim();
+          const u = row.querySelector('.edit-link-url').value.trim();
+          if (u) extras.push({ text: t, url: u });
+        });
+      }
 
       const newItem = {
         name: name,
@@ -2318,7 +2327,9 @@
     if (!settingsMask) return;
     settingsMask.classList.remove('show');
     settingsMask.setAttribute('aria-hidden', 'true');
-    if (!modalMask.classList.contains('show') && !lightbox.classList.contains('show')) {
+    if (!modalMask.classList.contains('show') &&
+        !lightbox.classList.contains('show') &&
+        !(linksSheet && linksSheet.classList.contains('show'))) {
       unlockBodyScroll();
     }
   }
