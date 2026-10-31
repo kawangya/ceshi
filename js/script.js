@@ -1,5 +1,5 @@
 /* =========================================================
-   卡王的导航 - 主脚本
+   卡王的导航 - 主脚本 (清理版)
    ========================================================= */
 
 (function () {
@@ -11,10 +11,10 @@
 
   const SETTINGS_KEY = 'site.settings';
   const DEFAULT_SETTINGS = {
-    themeColor: 'orange', // 改为默认 orange
+    themeColor: 'orange',
     noticeBar: true,
     showFriends: true,
-    enableMultiLinks: false, // 默认关闭多链接
+    enableMultiLinks: false,
     defaultCategory: '',
     openInNewTab: true,
     ghOwner: '',
@@ -24,7 +24,6 @@
     editMode: false
   };
 
-  // 暖阳橘排在第一位
   const THEME_COLORS = [
     { id: 'orange', name: '暖阳橘 (默认)', dot: '#C07B57' },
     { id: 'default', name: '海蓝', dot: '#3F729B' },
@@ -528,7 +527,7 @@
   function getItemLinks(it) {
     const arr = [];
     if (it.url && it.url !== '#' && it.url !== 'javascript:void(0)') {
-      arr.push({ text: '', url: it.url, primary: true });
+      arr.push({ url: it.url });
     }
     (it.links || []).forEach(function (l) {
       if (l && l.url && l.url !== '#') arr.push({ text: l.text || '', url: l.url });
@@ -1119,7 +1118,6 @@
         const allLinks   = getItemLinks(it);
         const primaryUrl = allLinks[0] ? allLinks[0].url : '';
         const noLink     = !primaryUrl;
-        // ★ 根据设置判断是否开启多链接交互
         const multiLinks = SETTINGS.enableMultiLinks && allLinks.length > 1;
 
         let cardHref, cardAttrs;
@@ -1134,7 +1132,8 @@
           cardAttrs = 'target="' + cardTarget + '" ' + (cardRel ? 'rel="' + cardRel + '" ' : '');
         }
 
-        return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + (multiLinks ? ' has-multi' : '') + '" ' +
+        // 清理了无用的 has-multi 类
+        return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + '" ' +
                  'href="' + cardHref + '" ' +
                  cardAttrs +
                  'data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-idx="' + originalIdx + '" ' +
@@ -1639,12 +1638,6 @@
     editTarget = { catId: catId, groupId: groupId, itemIndex: itemIndex };
     if (editLinksList) editLinksList.innerHTML = '';
 
-    // ★ 如果未开启多链接功能，隐藏附加链接设置区
-    const editLinksSection = document.querySelector('.edit-links-section');
-    if (editLinksSection) {
-      editLinksSection.style.display = SETTINGS.enableMultiLinks ? '' : 'none';
-    }
-
     const cat = NAV_CATEGORIES.find(function (c) { return c.id === catId; });
     const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === groupId; });
     const it = (itemIndex > -1 && group && group.items) ? group.items[itemIndex] : null;
@@ -1694,7 +1687,7 @@
       if (!group || !group.items) return;
 
       const extras = [];
-      if (editLinksList && SETTINGS.enableMultiLinks) {
+      if (editLinksList) {
         editLinksList.querySelectorAll('.edit-link-row').forEach(function (row) {
           const t = row.querySelector('.edit-link-text').value.trim();
           const u = row.querySelector('.edit-link-url').value.trim();
@@ -1710,12 +1703,10 @@
         color: editColorEl.value.trim() || '#4E7296',
         icon: ''
       };
-      // 只有在开启多链接且填了附加链接时才保存（或保留原有数据）
+      
       if (extras.length) {
         newItem.links = extras;
       } else if (editTarget.itemIndex > -1 && group.items[editTarget.itemIndex].links) {
-        // 如果关闭了功能而之前有附加链接数据，这里为了避免误删，保留原本存在的 links。
-        // 如果是新建就不管了。
         newItem.links = group.items[editTarget.itemIndex].links;
       }
 
@@ -2011,8 +2002,11 @@
 
   /* ============ 设置面板 ============ */
   function applySettings() {
-    document.documentElement.dataset.themeColor = SETTINGS.themeColor || 'orange'; // 改默认
+    document.documentElement.dataset.themeColor = SETTINGS.themeColor || 'orange';
     document.body.classList.toggle('edit-mode', !!(SETTINGS.editMode && SETTINGS.ghToken));
+    
+    // 增加多链接状态同步
+    document.body.classList.toggle('multi-links-enabled', !!SETTINGS.enableMultiLinks);
 
     if (NOTICES.length) renderNoticeBar();
     else if (!SETTINGS.noticeBar) {
@@ -2116,7 +2110,7 @@
       setEnableMultiLinksEl.addEventListener('change', function () {
         SETTINGS.enableMultiLinks = !!setEnableMultiLinksEl.checked;
         saveSettings();
-        if (NAV_CATEGORIES.length) renderCards();
+        applySettings();
         showToast(SETTINGS.enableMultiLinks ? '已开启多链接下拉' : '已关闭多链接下拉');
       });
     }

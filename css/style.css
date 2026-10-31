@@ -845,7 +845,20 @@ body.edit-mode .group-actions { display: flex; }
 body.edit-mode .cat-tab .cat-actions { display: flex; }
 body.edit-mode .cat-tab .cat-tab-count { display: none; }
 
-.edit-links-section { border-top: 1px dashed var(--border); padding-top: 12px; margin-top: 4px; }
+/* =========================================================
+   卡片编辑弹窗 & 多链接配置区
+   ========================================================= */
+.edit-links-section {
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+  margin-top: 4px;
+  display: none; /* 默认隐藏 */
+}
+/* 只有开启多链接功能时，在编辑弹窗中才显示 */
+body.multi-links-enabled .edit-links-section {
+  display: block;
+}
+
 .edit-links-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .edit-links-label { font-size: 12.5px; font-weight: 600; color: var(--text-dim); }
 .edit-links-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
