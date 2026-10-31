@@ -120,6 +120,36 @@
           ]
         },
         {
+          "id": "group_1793454191448",
+          "title": "基岩版本库",
+          "items": [
+            {
+              "name": "MC版本库",
+              "url": "http://bbk.endyun.ltd",
+              "desc": "提供我的世界国际版多版本安装包下载，主打手机版各版本安全获取与快速安装。",
+              "letter": "M",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "MineAPK",
+              "url": "https://www.mineapk.cn",
+              "desc": "专注 Minecraft 的版本与资源库，支持多平台版本下载，提供模组、整合包、光影、资源包和地图，并带联机与社区功能。",
+              "letter": "M",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "MCAPKS",
+              "url": "https://mcapks.net/",
+              "desc": "Minecraft 国际版全版本下载站，提供多版本安装包浏览与下载，并引导正版购买。",
+              "letter": "M",
+              "color": "#4E7296",
+              "icon": ""
+            }
+          ]
+        },
+        {
           "id": "launcher",
           "title": "三方启动器（PC）",
           "items": [
@@ -184,29 +214,53 @@
           ]
         },
         {
-          "id": "group_1793454191448",
-          "title": "基岩版本库",
+          "id": "community",
+          "title": "资源社区（Java版）",
           "items": [
             {
-              "name": "MC版本库",
-              "url": "http://bbk.endyun.ltd",
-              "desc": "提供我的世界国际版多版本安装包下载，主打手机版各版本安全获取与快速安装。",
-              "letter": "M",
+              "name": "CurseForge",
+              "url": "https://www.curseforge.com/minecraft",
+              "desc": "Minecraft 主流模组与整合包平台，提供模组、整合包等资源下载，覆盖优化、建筑、战斗、探索等玩法。",
+              "letter": "C",
               "color": "#4E7296",
               "icon": ""
             },
             {
-              "name": "MineAPK",
-              "url": "https://www.mineapk.cn",
-              "desc": "专注 Minecraft 的版本与资源库，支持多平台版本下载，提供模组、整合包、光影、资源包和地图，并带联机与社区功能。",
+              "name": "Modrinth",
+              "url": "https://modrinth.com/",
+              "desc": "Minecraft 现代模组平台，提供模组、整合包、资源包等内容，搜索快、支持启动器集成与创作者发布管理。",
               "letter": "M",
+              "color": "#4F7A9B",
+              "icon": ""
+            },
+            {
+              "name": "MC 百科",
+              "url": "https://www.mcmod.cn/",
+              "desc": "国内最大的 Minecraft 中文模组资料库，提供模组介绍、物品资料、教程与下载索引，方便查版本兼容和用法。",
+              "letter": "科",
               "color": "#4E7296",
               "icon": ""
             },
             {
-              "name": "MCAPKS",
-              "url": "https://mcapks.net/",
-              "desc": "Minecraft 国际版全版本下载站，提供多版本安装包浏览与下载，并引导正版购买。",
+              "name": "BBSMC",
+              "url": "https://bbsmc.net/",
+              "desc": "中文 Minecraft 资源社区，提供模组、整合包、光影、资源包下载与分享，含大量汉化整合包和多样玩法内容。",
+              "letter": "B",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "Planet",
+              "url": "https://www.planetminecraft.com/",
+              "desc": "Minecraft 创意社区站，提供皮肤、材质、地图、数据包等玩家作品分享与下载，含社区活动和创作交流。",
+              "letter": "P",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "MinecraftMaps",
+              "url": "https://www.minecraftmaps.com/",
+              "desc": "老牌 MC 自定义地图库，提供冒险、跑酷、生存、解谜、恐怖等地图免费下载，支持 Java 版和基岩版。",
               "letter": "M",
               "color": "#4E7296",
               "icon": ""
@@ -214,8 +268,60 @@
           ]
         },
         {
+          "id": "group_1793456156087",
+          "title": "资源社区（基岩版）",
+          "items": [
+            {
+              "name": "MCPEDL",
+              "url": "https://mcpedl.com/",
+              "desc": "Minecraft 基岩版资源站，提供模组、附加包、地图、皮肤、种子和材质包免费下载。",
+              "letter": "M",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "MineBBS",
+              "url": "https://www.minebbs.com/",
+              "desc": "MC 综合中文论坛，提供 Java/基岩双端资源、服务端插件、开服教程与社区交流。",
+              "letter": "M",
+              "color": "#4E7296",
+              "icon": ""
+            },
+            {
+              "name": "苦力怕论坛",
+              "url": "https://klpbbs.com/",
+              "desc": "Minecraft 中文社区，以基岩版资源为特色，提供模组、附加包、地图、材质、皮肤下载与教程、联机、问答交流。",
+              "letter": "苦",
+              "color": "#4E7296",
+              "icon": ""
+            }
+          ]
+        },
+        {
+          "id": "online",
+          "title": "联机工具",
+          "items": [
+            {
+              "name": "Radmin LAN",
+              "letter": "R",
+              "color": "#4E7296",
+              "icon": "",
+              "desc": "虚拟局域网联机工具",
+              "url": "https://www.radmin-lan.cn/"
+            },
+            {
+              "name": "樱花内网穿透",
+              "letter": "樱",
+              "color": "#9A7250",
+              "icon": "",
+              "desc": "免费内网穿透与联机",
+              "url": "https://www.natfrp.com/"
+            }
+          ]
+        },
+        {
           "id": "skin",
-          "title": "皮肤与创作",
+          "title": "皮肤披风相关",
           "items": [
             {
               "name": "NameMC",
@@ -264,90 +370,6 @@
               "icon": "",
               "desc": "命令生成、药水计算等",
               "url": "https://minecraft.tools/"
-            }
-          ]
-        },
-        {
-          "id": "community",
-          "title": "资源社区",
-          "items": [
-            {
-              "name": "MC 百科",
-              "letter": "科",
-              "color": "#4E7296",
-              "icon": "",
-              "desc": "模组、教程、工具中文百科",
-              "url": "https://www.mcmod.cn/"
-            },
-            {
-              "name": "MineBBS",
-              "letter": "M",
-              "color": "#5F8468",
-              "icon": "",
-              "desc": "中文 MC 论坛与资源社区",
-              "url": "https://www.minebbs.com/"
-            },
-            {
-              "name": "苦力怕论坛",
-              "letter": "苦",
-              "color": "#9A7250",
-              "icon": "",
-              "desc": "基岩版资源与讨论社区",
-              "url": "https://klpbbs.com/"
-            },
-            {
-              "name": "Planet Minecraft",
-              "letter": "P",
-              "color": "#7A6E96",
-              "icon": "",
-              "desc": "皮肤、地图、建筑作品社区",
-              "url": "https://www.planetminecraft.com/"
-            },
-            {
-              "name": "CurseForge",
-              "letter": "C",
-              "color": "#96697C",
-              "icon": "",
-              "desc": "全球最大 MC 模组平台",
-              "url": "https://www.curseforge.com/minecraft"
-            },
-            {
-              "name": "Modrinth",
-              "letter": "M",
-              "color": "#4F7A9B",
-              "icon": "",
-              "desc": "现代开源模组托管",
-              "url": "https://modrinth.com/"
-            },
-            {
-              "name": "DL论坛",
-              "letter": "D",
-              "color": "#6B6F7A",
-              "icon": "",
-              "desc": "mcpedl.com 基岩版资源",
-              "url": "https://mcpedl.com"
-            }
-          ]
-        },
-        {
-          "id": "online",
-          "title": "联机工具",
-          "items": [
-            {
-              "name": "Radmin LAN",
-              "letter": "R",
-              "color": "#4E7296",
-              "icon": "",
-              "desc": "虚拟局域网联机工具",
-              "url": "https://www.radmin-lan.cn/"
-            },
-            {
-              "name": "樱花内网穿透",
-              "letter": "樱",
-              "color": "#9A7250",
-              "icon": "",
-              "desc": "免费内网穿透与联机",
-              "url": "https://www.natfrp.com/"
             }
           ]
         }
