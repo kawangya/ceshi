@@ -39,7 +39,11 @@
               "color": "#9A7250",
               "icon": "",
               "desc": "Spectrollay 维护的版本仓库",
-              "url": "https://spectrollay.github.io/minecraft_repository"
+              "url": "https://spectrollay.github.io/minecraft_repository",
+              "links": [
+               { "text": "镜像站", "url": "https://mirror.minecraft.wiki/" },
+               { "text": "GitHub", "url": "https://github.com/minecraft-wiki" }
+               ]
             },
             {
               "name": "MineAPK版本库",

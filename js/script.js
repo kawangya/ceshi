@@ -578,25 +578,22 @@
     dropdown.setAttribute('role', 'menu');
     dropdown.setAttribute('aria-label', item.name || '选择链接');
 
-    links.forEach(function (l, i) {
-      const a = document.createElement('a');
-      a.className = 'inline-link' + (i === 0 ? ' primary' : '');
-      a.href = l.url;
-      if (SETTINGS.openInNewTab) {
-        a.target = '_blank';
-        a.rel = 'noopener';
-      }
-      const label = l.text || (i === 0 ? (item.name || '主链接') : '链接');
-      a.innerHTML =
-        '<span class="inline-link-name">' + esc(label) +
-          (i === 0 ? '<span class="inline-link-badge">主</span>' : '') +
-        '</span>' +
-        '<span class="inline-link-url">' + esc(l.url) + '</span>';
-      a.addEventListener('click', function () {
-        closeInlineDropdown();
-      });
-      dropdown.appendChild(a);
-    });
+links.forEach(function (l, i) {
+  const a = document.createElement('a');
+  a.className = 'inline-link' + (i === 0 ? ' primary' : '');
+  a.href = l.url;
+  if (SETTINGS.openInNewTab) {
+    a.target = '_blank';
+    a.rel = 'noopener';
+  }
+  // 主链接 → 卡片名；附加链接 → 用户设定的标题
+  const label = i === 0 ? (item.name || '主链接') : (l.text || '链接');
+  a.textContent = label;
+  a.addEventListener('click', function () {
+    closeInlineDropdown();
+  });
+  dropdown.appendChild(a);
+});
 
     document.body.appendChild(dropdown);
     inlineDropdown = dropdown;
@@ -1141,13 +1138,10 @@
                  '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
                    '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
                  '</span>' +
-                 '<span class="nav-info">' +
-                   '<span class="nav-name">' +
-                     '<span class="nav-name-text">' + highlight(name, q) + '</span>' +
-                     (multiLinks ? '<span class="nav-multi-hint" aria-hidden="true">' + allLinks.length + '</span>' : '') +
-                   '</span>' +
-                   (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
-                 '</span>' +
+'<span class="nav-info">' +
+  '<span class="nav-name">' + highlight(name, q) + '</span>' +
+  (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
+'</span>' +
                  (hasDesc ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>' : '') +
                  '<div class="edit-actions">' +
                    '<button class="edit-btn move-item" type="button" data-dir="up"   title="上移">↑</button>' +
