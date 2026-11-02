@@ -295,7 +295,11 @@
         signal = controller.signal;
         timer = setTimeout(() => controller.abort(), 5000);
       }
-      const res = await fetch('https://favicon.im/' + domain + '?larger=true', { signal });
+      // 使用 favicon.run：明确支持 CORS，Access-Control-Allow-Origin: *
+      const res = await fetch(
+        'https://favicon.run/favicon?domain=' + encodeURIComponent(domain) + '&sz=128',
+        { signal }
+      );
       if (timer) clearTimeout(timer);
       if (!res.ok) throw new Error('network error');
       
