@@ -501,26 +501,64 @@
 
   function positionInlineDropdown(card, dropdown) {
     const rect = card.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    // 1. 先重置字号（防止多次打开时受到上一次缩小的干扰）
+    dropdown.querySelectorAll('.inline-link-text').forEach(el => el.style.fontSize = '');
+    
+    // 2. 测量文字内容的自然绝对宽度
+    dropdown.style.width = 'max-content';
+    dropdown.style.left = '0px';
+    dropdown.style.top = '0px';
+    const naturalWidth = dropdown.offsetWidth;
+    
+    // 3. 计算最终宽度限制
+    const maxWidth = vw - 24; // 屏幕最大可用宽度（留出左右边距）
+    let finalWidth = Math.max(rect.width, naturalWidth); // 默认取卡片和文字中较宽的那个
+    
+    // 4. ★ 核心逻辑：如果自然宽度超出了屏幕，开始缩小字号
+    if (finalWidth > maxWidth) {
+      finalWidth = maxWidth; // 宽度被屏幕钉死
+      
+      // 估算缩放比例（减去大概 60px 用于边距和“主”字标签的占位）
+      const availableTextSpace = maxWidth - 60;
+      const actualTextSpace = naturalWidth - 60;
+      const scale = availableTextSpace / actualTextSpace;
+      
+      // 限制最小缩放比例，比如最小不低于 0.75 倍
+      const finalScale = Math.max(0.75, scale);
+      
+      // 给内部文字应用缩小后的字号
+      dropdown.querySelectorAll('.inline-link-text').forEach(el => {
+        el.style.fontSize = (13.5 * finalScale) + 'px';
+      });
+    }
+
+    // 5. 获取缩放后的实际高度
     const dRect = dropdown.getBoundingClientRect();
     const gap = 6;
-    const vw = window.innerWidth, vh = window.innerHeight;
 
-    let width = rect.width;
-    if (width > vw - 24) width = vw - 24;
+    // 6. 计算水平位置（居中向两边衍生，越界则推回屏幕内）
+    let left = rect.left + (rect.width - finalWidth) / 2;
+    if (left + finalWidth > vw - 12) {
+      left = vw - finalWidth - 12;
+    }
+    if (left < 12) {
+      left = 12;
+    }
 
-    let left = rect.left;
-    if (left + width > vw - 12) left = vw - width - 12;
-    if (left < 12) left = 12;
-
+    // 7. 计算垂直位置
     let top = rect.bottom + gap;
     if (top + dRect.height > vh - 12) {
       const upTop = rect.top - gap - dRect.height;
       top = upTop >= 12 ? upTop : Math.max(12, vh - dRect.height - 12);
     }
 
+    // 8. 应用最终样式
+    dropdown.style.width = finalWidth + 'px';
     dropdown.style.left = left + 'px';
     dropdown.style.top = top + 'px';
-    dropdown.style.width = width + 'px';
   }
 
   function openInlineDropdown(card, item) {

@@ -1,13 +1,13 @@
 /* =========================================================
-   卡王的导航 - 主脚本 (全自动精简版)
+   卡王的导航 - 主脚本 (最终完美版)
    ========================================================= */
 
 (function () {
   'use strict';
 
-  const NAV_URL = 'data/nav.json';
-  const NOTICE_URL = 'data/notices.json';
-  const FRIENDS_URL = 'data/friends.json';
+  const NAV_URL = './data/nav.json';
+  const NOTICE_URL = './data/notices.json';
+  const FRIENDS_URL = './data/friends.json';
 
   const SETTINGS_KEY = 'site.settings';
   const DEFAULT_SETTINGS = {
@@ -242,6 +242,122 @@
     document.body.style.paddingRight = '';
   }
 
+  /* ============ 图标视口懒加载 + 本地缓存 (含 SVG 拦截) ============ */
+  let imgObserver = null;
+
+  function initImgObserver() {
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('img[data-domain]').forEach(loadImageFromDomain);
+      return;
+    }
+    imgObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          if (img.dataset.domain) {
+            loadImageFromDomain(img);
+            observer.unobserve(img);
+          }
+        }
+      });
+    }, { rootMargin: '200px 0px', threshold: 0.01 });
+  }
+
+  async function loadImageFromDomain(img) {
+    const domain = img.dataset.domain;
+    if (!domain) return;
+    img.removeAttribute('data-domain');
+
+    const cacheKey = 'icon_cache_' + domain;
+    const rawCache = localStorage.getItem(cacheKey);
+    const now = Date.now();
+    const SUCCESS_TTL = 7 * 24 * 60 * 60 * 1000; 
+    const FAILED_TTL = 1 * 24 * 60 * 60 * 1000;
+
+    if (rawCache) {
+      try {
+        const cache = JSON.parse(rawCache);
+        if (cache && cache.time) {
+          const age = now - cache.time;
+          if (cache.data === 'FAILED' && age < FAILED_TTL) { fallbackToLetter(img); return; }
+          if (cache.data !== 'FAILED' && age < SUCCESS_TTL) { img.src = cache.data; return; }
+        }
+      } catch (e) {
+        localStorage.removeItem(cacheKey);
+      }
+    }
+
+    let timer;
+    try {
+      let signal;
+      if (typeof AbortController !== 'undefined') {
+        const controller = new AbortController();
+        signal = controller.signal;
+        timer = setTimeout(() => controller.abort(), 5000);
+      }
+      const res = await fetch('https://favicon.im/' + domain + '?larger=true', { signal });
+      if (timer) clearTimeout(timer);
+      if (!res.ok) throw new Error('network error');
+      
+      const blob = await res.blob();
+      
+      const base64data = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          if (result.startsWith('data:image/svg+xml')) {
+            try {
+              const base64Str = result.split(',')[1];
+              const svgText = atob(base64Str).toLowerCase();
+              if (svgText.includes('>f</text>') || svgText.includes('>f</')) {
+                reject(new Error('default svg icon'));
+                return;
+              }
+            } catch (e) {}
+          }
+          if (result.length < 200) {
+            reject(new Error('invalid icon'));
+            return;
+          }
+          resolve(result);
+        };
+        reader.readAsDataURL(blob);
+      });
+      
+      try { localStorage.setItem(cacheKey, JSON.stringify({ data: base64data, time: Date.now() })); } catch (e) {}
+      img.src = base64data;
+      
+    } catch (e) {
+      if (timer) clearTimeout(timer);
+      try { localStorage.setItem(cacheKey, JSON.stringify({ data: 'FAILED', time: Date.now() })); } catch (err) {}
+      fallbackToLetter(img);
+    }
+  }
+
+  function fallbackToLetter(img) {
+    if (img.dataset.hasFallback === 'true') return;
+    img.dataset.hasFallback = 'true';
+
+    img.style.display = 'none';
+    const parent = img.parentNode;
+    if (parent) {
+      parent.classList.remove('nav-ico-img'); 
+      parent.style.background = img.dataset.color || '#4E7296';
+      const span = document.createElement('span');
+      span.textContent = img.dataset.letter || '链';
+      parent.appendChild(span);
+    }
+  }
+
+  function observeImages(root) {
+    const imgs = (root || document).querySelectorAll('img[data-domain]');
+    if (!imgObserver) {
+      imgs.forEach(loadImageFromDomain);
+    } else {
+      imgs.forEach(img => imgObserver.observe(img));
+    }
+  }
+
   /* ============ 通用交互弹窗 ============ */
   function showUniversalModal(title, message, defaultValue = null) {
     return new Promise(function (resolve) {
@@ -292,7 +408,7 @@
     });
   }
 
-  /* ---------- 二维码占位 ---------- */
+  /* ============ 二维码占位 ============ */
   function makeQRCode(seed) {
     const SIZE = 25;
     const finders = [[0, 0], [SIZE - 7, 0], [0, SIZE - 7]];
@@ -601,36 +717,40 @@
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
-    // 1. 测量文字内容的自然宽度
+    dropdown.querySelectorAll('.inline-link-text').forEach(el => el.style.fontSize = '');
     dropdown.style.width = 'max-content';
     dropdown.style.left = '0px';
     dropdown.style.top = '0px';
     
-    // 2. 计算最终宽度：最小不低于卡片宽度，最大不超过屏幕边界
-    let finalWidth = Math.max(rect.width, dropdown.offsetWidth);
-    if (finalWidth > vw - 24) finalWidth = vw - 24;
+    const naturalWidth = dropdown.offsetWidth;
+    const maxWidth = vw - 24;
+    let finalWidth = Math.max(rect.width, naturalWidth);
+    
+    if (finalWidth > maxWidth) {
+      finalWidth = maxWidth;
+      const availableTextSpace = maxWidth - 60;
+      const actualTextSpace = naturalWidth - 60;
+      const scale = availableTextSpace / actualTextSpace;
+      const finalScale = Math.max(0.75, scale);
+      
+      dropdown.querySelectorAll('.inline-link-text').forEach(el => {
+        el.style.fontSize = (13.5 * finalScale) + 'px';
+      });
+    }
 
-    // 3. 获取实际高度
     const dRect = dropdown.getBoundingClientRect();
     const gap = 6;
 
-    // 4. 计算水平位置（居中向两边衍生，越界则推回屏幕内）
     let left = rect.left + (rect.width - finalWidth) / 2;
-    if (left + finalWidth > vw - 12) {
-      left = vw - finalWidth - 12;
-    }
-    if (left < 12) {
-      left = 12;
-    }
+    if (left + finalWidth > vw - 12) left = vw - finalWidth - 12;
+    if (left < 12) left = 12;
 
-    // 5. 计算垂直位置
     let top = rect.bottom + gap;
     if (top + dRect.height > vh - 12) {
       const upTop = rect.top - gap - dRect.height;
       top = upTop >= 12 ? upTop : Math.max(12, vh - dRect.height - 12);
     }
 
-    // 6. 应用最终样式
     dropdown.style.width = finalWidth + 'px';
     dropdown.style.left = left + 'px';
     dropdown.style.top = top + 'px';
@@ -658,11 +778,15 @@
       }
       const label = i === 0 ? (item.name || '主链接') : (l.text || '链接');
       
+      let htmlStr = '<span class="inline-link-text">';
+      htmlStr += '<span class="inline-link-inner">' + esc(label) + '</span>';
+      htmlStr += '</span>';
+
       if (i === 0) {
-        a.innerHTML = '<span class="inline-link-text">' + esc(label) + '</span><span class="inline-link-badge">主</span>';
-      } else {
-        a.innerHTML = '<span class="inline-link-text">' + esc(label) + '</span>';
+        htmlStr += '<span class="inline-link-badge">主</span>';
       }
+      
+      a.innerHTML = htmlStr;
 
       a.addEventListener('click', function () { closeInlineDropdown(); });
       dropdown.appendChild(a);
@@ -700,7 +824,6 @@
 
   /* ============ 统一事件委托：卡片交互 ============ */
   navGroupsEl.addEventListener('click', async function (e) {
-    /* 0. 多链接卡片 */
     const multiCard = e.target.closest('.nav-card[data-multi="true"]');
     if (multiCard && !e.target.closest('.nav-info-btn') && !document.body.classList.contains('edit-mode')) {
       e.preventDefault();
@@ -720,7 +843,6 @@
       return;
     }
 
-    /* 1. 无链接卡片拦截 */
     if (!document.body.classList.contains('edit-mode')) {
       const disabledCard = e.target.closest('.nav-card[data-disabled="true"]');
       if (disabledCard) {
@@ -730,7 +852,6 @@
       }
     }
 
-    /* 2. 编辑模式下的操作拦截 */
     if (document.body.classList.contains('edit-mode')) {
       const moveGroupBtn = e.target.closest('.move-group');
       if (moveGroupBtn) {
@@ -830,7 +951,6 @@
       }
     }
 
-    /* 3. 简介提示 */
     const infoBtn = e.target.closest('.nav-info-btn');
     if (infoBtn) {
       e.preventDefault(); e.stopPropagation();
@@ -1172,18 +1292,26 @@
         const bgColor = it.color || AUTO_COLORS[colorHash % AUTO_COLORS.length];
 
         let iconUrl = it.icon;
+        let iconDomain = '';
         if (!iconUrl && it.url && it.url !== '#' && it.url !== 'javascript:void(0)') {
           try {
             const u = new URL(it.url);
-            iconUrl = 'https://favicon.im/' + u.hostname + '?larger=true';
+            iconDomain = u.hostname;
           } catch(e) {}
         }
-        const hasIcon = !!iconUrl;
+        const hasIcon = !!iconUrl || !!iconDomain;
         const icoClass = hasIcon ? 'nav-ico nav-ico-img' : 'nav-ico';
         const icoStyle = hasIcon ? '' : 'background:' + esc(bgColor);
-        const icoContent = hasIcon 
-          ? '<img data-fallback src="' + esc(iconUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' 
-          : '<span>' + esc(letter) + '</span>';
+        
+        let icoContent = '';
+        if (hasIcon) {
+          const imgAttrs = iconUrl 
+            ? 'src="' + esc(iconUrl) + '"' 
+            : 'data-domain="' + esc(iconDomain) + '" data-letter="' + esc(letter) + '" data-color="' + esc(bgColor) + '"';
+          icoContent = '<img data-fallback ' + imgAttrs + ' alt="" referrerpolicy="no-referrer">';
+        } else {
+          icoContent = '<span>' + esc(letter) + '</span>';
+        }
 
         const allLinks   = getItemLinks(it);
         const primaryUrl = allLinks[0] ? allLinks[0].url : '';
@@ -1316,6 +1444,7 @@
     navGroupsEl.classList.add('fade-in-content');
 
     guardImgs(navGroupsEl);
+    observeImages(navGroupsEl);
     bindNavTips();
     bindFontsReadyMeasure();
   }
@@ -1341,29 +1470,32 @@
     friendsSectionEl.hidden = false;
     friendsGridEl.innerHTML = visible.map(function (f) {
       const name = f.name || '';
-      
-      // 自动推导首字母
       const letter = f.letter || (name ? name.charAt(0).toUpperCase() : '友');
       
-      // 自动推导背景色
       let colorHash = 0;
       for (let i = 0; i < name.length; i++) colorHash += name.charCodeAt(i);
       const bgColor = f.color || AUTO_COLORS[colorHash % AUTO_COLORS.length];
 
-      // 图标获取
       let iconUrl = f.icon;
+      let iconDomain = '';
       if (!iconUrl && f.url && f.url !== '#' && f.url !== 'javascript:void(0)') {
         try {
           const u = new URL(f.url);
-          iconUrl = 'https://favicon.im/' + u.hostname + '?larger=true';
+          iconDomain = u.hostname;
         } catch(e) {}
       }
-      const hasIcon = !!iconUrl;
+      const hasIcon = !!iconUrl || !!iconDomain;
       
       const icoStyle = hasIcon ? '' : 'background:' + esc(bgColor);
-      const icoContent = hasIcon 
-        ? '<img data-fallback src="' + esc(iconUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' 
-        : '<span>' + esc(letter) + '</span>';
+      let icoContent = '';
+      if (hasIcon) {
+        const imgAttrs = iconUrl 
+          ? 'src="' + esc(iconUrl) + '"' 
+          : 'data-domain="' + esc(iconDomain) + '" data-letter="' + esc(letter) + '" data-color="' + esc(bgColor) + '"';
+        icoContent = '<img data-fallback ' + imgAttrs + ' alt="" referrerpolicy="no-referrer">';
+      } else {
+        icoContent = '<span>' + esc(letter) + '</span>';
+      }
 
       return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener" title="' + esc(name) + '">' +
                '<span class="friend-ico" style="' + icoStyle + '">' +
@@ -1374,6 +1506,7 @@
     }).join('');
     
     guardImgs(friendsGridEl);
+    observeImages(friendsGridEl);
   }
 
   /* ============ 公告条 ============ */
@@ -1757,6 +1890,16 @@
     });
   }
 
+  // 监听回车键快速保存
+  if (editModalMask) {
+    editModalMask.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (editSaveBtn) editSaveBtn.click();
+      }
+    });
+  }
+
   if (editLinksAdd) {
     editLinksAdd.addEventListener('click', function () {
       const row = addEditLinkRow('', '');
@@ -1794,7 +1937,7 @@
       if (extras.length) newItem.links = extras;
 
       if (editTarget.itemIndex > -1) {
-        group.items[editTarget.itemIndex] = newItem; // 直接覆盖，顺便清理旧冗余字段
+        group.items[editTarget.itemIndex] = newItem;
       } else {
         group.items.push(newItem);
       }
@@ -2209,35 +2352,17 @@
 
     if (settingsResetEl) {
       settingsResetEl.addEventListener('click', function () {
-        // 1. 提前记录需要保留的当前状态
-        const currentThemeColor = SETTINGS.themeColor;
-        const ghConfig = { 
-          ghOwner: SETTINGS.ghOwner, 
-          ghRepo: SETTINGS.ghRepo, 
-          ghPath: SETTINGS.ghPath, 
-          ghToken: SETTINGS.ghToken 
-        };
+        const { themeColor } = SETTINGS;
         
-        // 2. 合并状态：默认配置 + GitHub配置 + 保留的配色 + 强制关闭编辑模式
-        SETTINGS = Object.assign({}, DEFAULT_SETTINGS, ghConfig, {
-          themeColor: currentThemeColor,
-          editMode: false
-        });
-        
+        SETTINGS = Object.assign({}, DEFAULT_SETTINGS, { themeColor });
         saveSettings();
 
-        // 3. 强制恢复“跟随系统”（会同步深浅色模式）
         setFollowSystem(true);
-        
-        // 4. 重新应用、刷新设置面板 UI、重新渲染导航分类和分组
-        applySettings(); 
+        applySettings();
         syncSettingsUI();
-        
-        // 5. 只渲染分类与分组（因为卡片已经在 applySettings 里刷新过了）
         renderCatNav();
         renderGroupNav();
-        setTimeout(updateActiveSubTab, 100);
-
+        
         showToast('已恢复默认设置');
       });
     }
@@ -2400,6 +2525,7 @@
   }
 
   /* ============ 启动 ============ */
+  initImgObserver();
   guardImgs(document);
   bindQRCodeFallback();
   updateBackTop();
