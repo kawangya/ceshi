@@ -5,9 +5,9 @@
 (function () {
   'use strict';
 
-  const NAV_URL = './data/nav.json';
-  const NOTICE_URL = './data/notices.json';
-  const FRIENDS_URL = './data/friends.json';
+  const NAV_URL = 'data/nav.json';
+  const NOTICE_URL = 'data/notices.json';
+  const FRIENDS_URL = 'data/friends.json';
 
   const SETTINGS_KEY = 'site.settings';
   const DEFAULT_SETTINGS = {
