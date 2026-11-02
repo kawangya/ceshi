@@ -18,12 +18,9 @@
   (function () {
     try {
       var s = localStorage.getItem('site.theme');
-      var theme;
-      if (!s || s === 'system') {
-        theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      } else {
-        theme = s;
-      }
+      var theme = (!s || s === 'system')
+        ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : s;
       document.documentElement.dataset.theme = theme;
 
       var raw = localStorage.getItem('site.settings');
@@ -32,9 +29,6 @@
           var st = JSON.parse(raw);
           if (st && st.themeColor) document.documentElement.dataset.themeColor = st.themeColor;
         } catch (e) {}
-      }
-      if (!document.documentElement.dataset.themeColor) {
-        document.documentElement.dataset.themeColor = 'orange';
       }
     } catch (e) {}
   })();
@@ -272,7 +266,7 @@
           <button type="button" data-value="self">当前页</button>
         </div>
       </div>
-      
+
       <div class="setting-item setting-item-github">
         <div class="setting-label">
           <div class="setting-name">GitHub 云端同步</div>
@@ -285,7 +279,6 @@
           <label class="switch"><input type="checkbox" id="setEditMode"><span class="switch-track"></span></label>
         </div>
       </div>
-      
     </div>
     <div class="settings-foot">
       <div class="settings-actions">
