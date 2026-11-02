@@ -951,16 +951,10 @@
       }
     }
 
-        const infoBtn = e.target.closest('.nav-info-btn');
+    const infoBtn = e.target.closest('.nav-info-btn');
     if (infoBtn) {
       e.preventDefault(); e.stopPropagation();
       const card = infoBtn.closest('.nav-card');
-      
-      // ★ 核心修改：如果下拉框开着，先把它关掉！这样就不会挡住简介了
-      if (card.classList.contains('dropdown-open')) {
-        closeInlineDropdown();
-      }
-
       const descEl = card.querySelector('.nav-desc');
       if (!descEl) return;
       if (tipCard === card) hideTip();
