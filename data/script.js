@@ -598,26 +598,42 @@
 
   function positionInlineDropdown(card, dropdown) {
     const rect = card.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    // 1. 测量文字内容的自然宽度
+    dropdown.style.width = 'max-content';
+    dropdown.style.left = '0px';
+    dropdown.style.top = '0px';
+    
+    // 2. 计算最终宽度：最小不低于卡片宽度，最大不超过屏幕边界
+    let finalWidth = Math.max(rect.width, dropdown.offsetWidth);
+    if (finalWidth > vw - 24) finalWidth = vw - 24;
+
+    // 3. 获取实际高度
     const dRect = dropdown.getBoundingClientRect();
     const gap = 6;
-    const vw = window.innerWidth, vh = window.innerHeight;
 
-    let width = rect.width;
-    if (width > vw - 24) width = vw - 24;
+    // 4. 计算水平位置（居中向两边衍生，越界则推回屏幕内）
+    let left = rect.left + (rect.width - finalWidth) / 2;
+    if (left + finalWidth > vw - 12) {
+      left = vw - finalWidth - 12;
+    }
+    if (left < 12) {
+      left = 12;
+    }
 
-    let left = rect.left;
-    if (left + width > vw - 12) left = vw - width - 12;
-    if (left < 12) left = 12;
-
+    // 5. 计算垂直位置
     let top = rect.bottom + gap;
     if (top + dRect.height > vh - 12) {
       const upTop = rect.top - gap - dRect.height;
       top = upTop >= 12 ? upTop : Math.max(12, vh - dRect.height - 12);
     }
 
+    // 6. 应用最终样式
+    dropdown.style.width = finalWidth + 'px';
     dropdown.style.left = left + 'px';
     dropdown.style.top = top + 'px';
-    dropdown.style.width = width + 'px';
   }
 
   function openInlineDropdown(card, item) {
