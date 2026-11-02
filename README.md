@@ -1,6 +1,6 @@
 # 卡王的导航
 
-一个无需构建工具的静态导航网站，用于整理 Minecraft、实用工具和游戏相关资源。项目使用 HTML、CSS、原生 JavaScript 和 JSON 文件，不依赖后端服务。
+一个无需构建工具的静态导航网站。项目使用 HTML、CSS、原生 JavaScript 和 JSON 文件，不依赖后端服务。
 
 ## 功能
 
