@@ -242,7 +242,7 @@
     document.body.style.paddingRight = '';
   }
 
-  /* ============ 图标视口懒加载 + 本地缓存 (含 SVG 拦截) ============ */
+  /* ============ 图标视口懒加载 + 本地缓存 ============ */
   let imgObserver = null;
 
   function initImgObserver() {
@@ -295,31 +295,20 @@
         signal = controller.signal;
         timer = setTimeout(() => controller.abort(), 5000);
       }
-      // 使用 favicon.run：明确支持 CORS，Access-Control-Allow-Origin: *
+      // favicon.run：支持 CORS，失败时返回 500，成功时必定是真实图片
       const res = await fetch(
         'https://favicon.run/favicon?domain=' + encodeURIComponent(domain) + '&sz=128',
         { signal }
       );
       if (timer) clearTimeout(timer);
       if (!res.ok) throw new Error('network error');
-      
+
       const blob = await res.blob();
-      
       const base64data = await new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onloadend = () => {
           const result = reader.result;
-          if (result.startsWith('data:image/svg+xml')) {
-            try {
-              const base64Str = result.split(',')[1];
-              const svgText = atob(base64Str).toLowerCase();
-              if (svgText.includes('>f</text>') || svgText.includes('>f</')) {
-                reject(new Error('default svg icon'));
-                return;
-              }
-            } catch (e) {}
-          }
-          if (result.length < 200) {
+          if (!result || result.length < 200) {
             reject(new Error('invalid icon'));
             return;
           }
@@ -327,10 +316,10 @@
         };
         reader.readAsDataURL(blob);
       });
-      
+
       try { localStorage.setItem(cacheKey, JSON.stringify({ data: base64data, time: Date.now() })); } catch (e) {}
       img.src = base64data;
-      
+
     } catch (e) {
       if (timer) clearTimeout(timer);
       try { localStorage.setItem(cacheKey, JSON.stringify({ data: 'FAILED', time: Date.now() })); } catch (err) {}
