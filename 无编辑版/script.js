@@ -1,5 +1,5 @@
 /* =========================================================
-   卡王的导航 - 无云端同步纯净版
+   卡王的导航 - 纯展示精简版 (无云端同步/编辑功能)
    ========================================================= */
 
 (function () {
@@ -14,7 +14,7 @@
     themeColor: 'orange',
     noticeBar: true,
     showFriends: true,
-    enableMultiLinks: false, // 默认关闭多链接下拉
+    enableMultiLinks: false,
     defaultCategory: '',
     openInNewTab: true
   };
@@ -29,6 +29,9 @@
     { id: 'gray', name: '晨雾灰', dot: '#595959' },
     { id: 'indigo', name: '石墨蓝', dot: '#465E7B' }
   ];
+  
+  const AUTO_COLORS = ['#4E7296', '#5F8468', '#9A7250', '#7A6E96', '#96697C', '#4F7A9B', '#6B6F7A'];
+
   let SETTINGS = loadSettings();
 
   function loadSettings() {
@@ -192,7 +195,7 @@
     document.body.style.paddingRight = '';
   }
 
-  /* ---------- 二维码占位 ---------- */
+  /* ============ 二维码占位 ============ */
   function makeQRCode(seed) {
     const SIZE = 25;
     const finders = [[0, 0], [SIZE - 7, 0], [0, SIZE - 7]];
@@ -236,8 +239,7 @@
 
   function applyLightboxTransform() {
     if (!lightboxImg) return;
-    lightboxImg.style.transform =
-      'translate(' + lbTx + 'px,' + lbTy + 'px) scale(' + lbScale + ')';
+    lightboxImg.style.transform = 'translate(' + lbTx + 'px,' + lbTy + 'px) scale(' + lbScale + ')';
     if (lightboxZoom) lightboxZoom.textContent = Math.round(lbScale * 100) + '%';
     lightboxImg.style.cursor = lbScale > 1.01 ? (lbDragging ? 'grabbing' : 'grab') : 'zoom-in';
   }
@@ -429,8 +431,7 @@
     navGroupsEl.querySelectorAll('.nav-card').forEach(function (card) {
       const descEl = card.querySelector('.nav-desc');
       if (!descEl) return;
-      card.dataset.truncated =
-        descEl.scrollWidth > descEl.clientWidth + 1 ? 'true' : 'false';
+      card.dataset.truncated = descEl.scrollWidth > descEl.clientWidth + 1 ? 'true' : 'false';
     });
   }
 
@@ -494,7 +495,7 @@
     return arr;
   }
 
-  /* ============ 内联下拉（卡片正下方） ============ */
+  /* ============ 内联下拉 ============ */
   let inlineDropdown = null;
   let inlineDropdownAnchor = null;
 
@@ -502,8 +503,7 @@
     const rect = card.getBoundingClientRect();
     const dRect = dropdown.getBoundingClientRect();
     const gap = 6;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
+    const vw = window.innerWidth, vh = window.innerHeight;
 
     let width = rect.width;
     if (width > vw - 24) width = vw - 24;
@@ -543,19 +543,15 @@
         a.target = '_blank';
         a.rel = 'noopener';
       }
-
       const label = i === 0 ? (item.name || '主链接') : (l.text || '链接');
       
       if (i === 0) {
-        a.innerHTML = '<span class="inline-link-text">' + esc(label) + '</span>' +
-                      '<span class="inline-link-badge">主</span>';
+        a.innerHTML = '<span class="inline-link-text">' + esc(label) + '</span><span class="inline-link-badge">主</span>';
       } else {
         a.innerHTML = '<span class="inline-link-text">' + esc(label) + '</span>';
       }
 
-      a.addEventListener('click', function () {
-        closeInlineDropdown();
-      });
+      a.addEventListener('click', function () { closeInlineDropdown(); });
       dropdown.appendChild(a);
     });
 
@@ -639,8 +635,7 @@
     if (multiCard) {
       e.preventDefault();
       if (inlineDropdownAnchor === multiCard) {
-        closeInlineDropdown();
-        return;
+        closeInlineDropdown(); return;
       }
       const catId = multiCard.dataset.cat;
       const groupId = multiCard.dataset.group;
@@ -661,11 +656,7 @@
   function renderNavSkeleton() {
     var cards = '';
     for (var i = 0; i < 6; i++) cards += '<div class="skeleton skeleton-card"></div>';
-    navGroupsEl.innerHTML =
-      '<div class="nav-group">' +
-        '<div class="skeleton skeleton-group-title"></div>' +
-        '<div class="nav-grid">' + cards + '</div>' +
-      '</div>';
+    navGroupsEl.innerHTML = '<div class="nav-group"><div class="skeleton skeleton-group-title"></div><div class="nav-grid">' + cards + '</div></div>';
   }
 
   function renderNoticeSkeleton() {
@@ -766,14 +757,11 @@
       const isActive = cat.id === activeCategoryId;
 
       catHtml += '<div class="cat-block">';
-      catHtml += '<button class="cat-tab' + (isActive ? ' active' : '') +
-                 '" type="button" data-cat="' + esc(cat.id) + '">' +
+      catHtml += '<button class="cat-tab' + (isActive ? ' active' : '') + '" type="button" data-cat="' + esc(cat.id) + '">' +
                  '<span class="cat-tab-name">' + esc(cat.title) + '</span>' +
-                 '<span class="cat-tab-count">' + total + '</span>' +
-                 '</button>';
+                 '<span class="cat-tab-count">' + total + '</span></button>';
 
-      catHtml += '<div class="sub-cats-wrap' + (isActive ? ' show' : '') + '">';
-      catHtml += '<div class="sub-cats-inner">';
+      catHtml += '<div class="sub-cats-wrap' + (isActive ? ' show' : '') + '"><div class="sub-cats-inner">';
       (cat.groups || []).forEach(function (g) {
         catHtml += '<button class="sub-tab' + (activeGroupId === g.id ? ' active' : '') + '" type="button" data-group="' + esc(g.id) + '">' + esc(g.title) + '</button>';
       });
@@ -879,9 +867,26 @@
         const name = it.name || '';
         const desc = it.desc || '';
         const hasDesc = !!desc;
-        const hasIcon = !!(it.icon && it.icon.trim());
-        // const iconHtml = hasIcon ? '<img data-fallback src="' + esc(it.icon) + '" alt="">' : '';
-        const iconHtml = hasIcon ? '<img data-fallback src="' + esc(it.icon) + '" alt="" loading="lazy">' : '';
+        
+        const letter = it.letter || (name ? name.charAt(0).toUpperCase() : '链');
+        
+        let colorHash = 0;
+        for (let i = 0; i < name.length; i++) colorHash += name.charCodeAt(i);
+        const bgColor = it.color || AUTO_COLORS[colorHash % AUTO_COLORS.length];
+
+        let iconUrl = it.icon;
+        if (!iconUrl && it.url && it.url !== '#' && it.url !== 'javascript:void(0)') {
+          try {
+            const u = new URL(it.url);
+            iconUrl = 'https://favicon.im/' + u.hostname + '?larger=true';
+          } catch(e) {}
+        }
+        const hasIcon = !!iconUrl;
+        const icoClass = hasIcon ? 'nav-ico nav-ico-img' : 'nav-ico';
+        const icoStyle = hasIcon ? '' : 'background:' + esc(bgColor);
+        const icoContent = hasIcon 
+          ? '<img data-fallback src="' + esc(iconUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' 
+          : '<span>' + esc(letter) + '</span>';
 
         const allLinks   = getItemLinks(it);
         const primaryUrl = allLinks[0] ? allLinks[0].url : '';
@@ -905,9 +910,7 @@
                  cardAttrs +
                  'data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-idx="' + originalIdx + '" ' +
                  '>' +
-                 '<span class="nav-ico" style="background:' + esc(it.color || '#4E7296') + '">' +
-                   '<span>' + esc(it.letter || '') + '</span>' + iconHtml +
-                 '</span>' +
+                 '<span class="' + icoClass + '" style="' + icoStyle + '">' + icoContent + '</span>' +
                  '<span class="nav-info">' +
                    '<span class="nav-name">' + highlight(name, q) + '</span>' +
                    (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
@@ -956,9 +959,7 @@
       const btn = document.getElementById('emptyClearBtn');
       if (btn) {
         btn.addEventListener('click', function() {
-          searchEl.value = '';
-          navKeyword = '';
-          groupNavEl.hidden = false;
+          searchEl.value = ''; navKeyword = ''; groupNavEl.hidden = false;
           renderCards();
           if (!IS_TOUCH) searchEl.focus();
         });
@@ -991,17 +992,38 @@
       friendsGridEl.innerHTML = '';
       return;
     }
+    
     friendsSectionEl.hidden = false;
     friendsGridEl.innerHTML = visible.map(function (f) {
-      const hasIcon = !!(f.icon && f.icon.trim());
-      const iconHtml = hasIcon ? '<img data-fallback src="' + esc(f.icon) + '" alt="">' : '';
-      return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener" title="' + esc(f.name || '') + '">' +
-               '<span class="friend-ico" style="background:' + esc(f.color || '#4E7296') + '">' +
-                 '<span>' + esc(f.letter || '友') + '</span>' + iconHtml +
+      const name = f.name || '';
+      const letter = f.letter || (name ? name.charAt(0).toUpperCase() : '友');
+      
+      let colorHash = 0;
+      for (let i = 0; i < name.length; i++) colorHash += name.charCodeAt(i);
+      const bgColor = f.color || AUTO_COLORS[colorHash % AUTO_COLORS.length];
+
+      let iconUrl = f.icon;
+      if (!iconUrl && f.url && f.url !== '#' && f.url !== 'javascript:void(0)') {
+        try {
+          const u = new URL(f.url);
+          iconUrl = 'https://favicon.im/' + u.hostname + '?larger=true';
+        } catch(e) {}
+      }
+      const hasIcon = !!iconUrl;
+      
+      const icoStyle = hasIcon ? '' : 'background:' + esc(bgColor);
+      const icoContent = hasIcon 
+        ? '<img data-fallback src="' + esc(iconUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' 
+        : '<span>' + esc(letter) + '</span>';
+
+      return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener" title="' + esc(name) + '">' +
+               '<span class="friend-ico" style="' + icoStyle + '">' +
+                 icoContent +
                '</span>' +
-               '<span class="friend-name">' + esc(f.name || '') + '</span>' +
+               '<span class="friend-name">' + esc(name) + '</span>' +
              '</a>';
     }).join('');
+    
     guardImgs(friendsGridEl);
   }
 
@@ -1373,19 +1395,12 @@
   (function initShortcuts() {
     document.addEventListener('keydown', function (e) {
       const active = document.activeElement;
-      const isInput = active && (
-        active.tagName === 'INPUT' ||
-        active.tagName === 'TEXTAREA' ||
-        active.isContentEditable
-      );
+      const isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
 
       if (!isInput && (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'))) {
         if (document.body.classList.contains('modal-open')) return;
         e.preventDefault();
-        if (navSearchEl && !navSearchEl.hidden) {
-          searchEl.focus();
-          searchEl.select();
-        }
+        if (navSearchEl && !navSearchEl.hidden) { searchEl.focus(); searchEl.select(); }
         return;
       }
 
@@ -1395,11 +1410,8 @@
         e.preventDefault();
         const currentIdx = cards.indexOf(document.activeElement);
         let nextIdx = 0;
-        if (e.key === 'ArrowDown') {
-          nextIdx = currentIdx === -1 || currentIdx === cards.length - 1 ? 0 : currentIdx + 1;
-        } else {
-          nextIdx = currentIdx === -1 || currentIdx === 0 ? cards.length - 1 : currentIdx - 1;
-        }
+        if (e.key === 'ArrowDown') nextIdx = currentIdx === -1 || currentIdx === cards.length - 1 ? 0 : currentIdx + 1;
+        else nextIdx = currentIdx === -1 || currentIdx === 0 ? cards.length - 1 : currentIdx - 1;
         cards[nextIdx].focus();
         cards[nextIdx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
@@ -1408,10 +1420,7 @@
 
   /* ============ 主题控制 ============ */
   function isFollowSystem() {
-    try {
-      var v = localStorage.getItem('site.theme');
-      return !v || v === 'system';
-    } catch (e) { return true; }
+    try { var v = localStorage.getItem('site.theme'); return !v || v === 'system'; } catch (e) { return true; }
   }
 
   function setFollowSystem(on) {
@@ -1507,9 +1516,7 @@
         var merged = Object.assign({}, DEFAULT_SETTINGS);
 
         if (typeof incoming.themeColor === 'string') {
-          if (THEME_COLORS.some(function (c) { return c.id === incoming.themeColor; })) {
-            merged.themeColor = incoming.themeColor;
-          }
+          if (THEME_COLORS.some(function (c) { return c.id === incoming.themeColor; })) merged.themeColor = incoming.themeColor;
         }
         if (typeof incoming.noticeBar === 'boolean') merged.noticeBar = incoming.noticeBar;
         if (typeof incoming.showFriends === 'boolean') merged.showFriends = incoming.showFriends;
@@ -1590,9 +1597,7 @@
         if (!found) found = NAV_CATEGORIES.find(function (c) { return c.default; }) || NAV_CATEGORIES[0];
         effective = found ? found.id : '';
         let html = '';
-        NAV_CATEGORIES.forEach(function (c) {
-          html += '<option value="' + esc(c.id) + '">' + esc(c.title) + '</option>';
-        });
+        NAV_CATEGORIES.forEach(function (c) { html += '<option value="' + esc(c.id) + '">' + esc(c.title) + '</option>'; });
         setDefaultCategoryEl.innerHTML = html;
       } else {
         setDefaultCategoryEl.innerHTML = '<option value="">加载中…</option>';
@@ -1602,9 +1607,7 @@
 
     if (setOpenModeEl) {
       const mode = SETTINGS.openInNewTab ? 'new' : 'self';
-      setOpenModeEl.querySelectorAll('button').forEach(function (btn) {
-        btn.classList.toggle('active', btn.dataset.value === mode);
-      });
+      setOpenModeEl.querySelectorAll('button').forEach(function (btn) { btn.classList.toggle('active', btn.dataset.value === mode); });
     }
   }
 
@@ -1627,22 +1630,19 @@
     if (setNoticeBarEl) {
       setNoticeBarEl.addEventListener('change', function () {
         SETTINGS.noticeBar = !!setNoticeBarEl.checked;
-        saveSettings();
-        applySettings();
+        saveSettings(); applySettings();
       });
     }
     if (setShowFriendsEl) {
       setShowFriendsEl.addEventListener('change', function () {
         SETTINGS.showFriends = !!setShowFriendsEl.checked;
-        saveSettings();
-        renderFriends();
+        saveSettings(); renderFriends();
       });
     }
     if (setEnableMultiLinksEl) {
       setEnableMultiLinksEl.addEventListener('change', function () {
         SETTINGS.enableMultiLinks = !!setEnableMultiLinksEl.checked;
-        saveSettings();
-        applySettings();
+        saveSettings(); applySettings();
       });
     }
     if (setDefaultCategoryEl) {
@@ -1656,9 +1656,7 @@
         btn.addEventListener('click', function () {
           const v = btn.dataset.value;
           SETTINGS.openInNewTab = (v === 'new');
-          saveSettings();
-          applySettings();
-          syncSettingsUI();
+          saveSettings(); applySettings(); syncSettingsUI();
         });
       });
     }
@@ -1678,12 +1676,19 @@
 
     if (settingsResetEl) {
       settingsResetEl.addEventListener('click', function () {
-        SETTINGS = Object.assign({}, DEFAULT_SETTINGS);
+        // 提取需要保留的字段
+        const { themeColor } = SETTINGS;
+        
+        // 重置
+        SETTINGS = Object.assign({}, DEFAULT_SETTINGS, { themeColor });
         saveSettings();
-        setFollowSystem(true);
-        applySettings();
+
+        setFollowSystem(true); // 强制跟随系统
+        applySettings();       // 内部已包含 renderCards()
         syncSettingsUI();
-        renderNav();
+        renderCatNav();        // 刷新侧边分类
+        renderGroupNav();      // 刷新横排分组
+        
         showToast('已恢复默认设置');
       });
     }
@@ -1701,9 +1706,7 @@
     if (!settingsMask) return;
     settingsMask.classList.remove('show');
     settingsMask.setAttribute('aria-hidden', 'true');
-    if (!modalMask.classList.contains('show') && !lightbox.classList.contains('show')) {
-      unlockBodyScroll();
-    }
+    if (!modalMask.classList.contains('show') && !lightbox.classList.contains('show')) unlockBodyScroll();
   }
 
   /* ============ 回到顶部 & 品牌主页 ============ */
@@ -1813,9 +1816,7 @@
       NOTICES = Array.isArray(noticeData) ? noticeData : [];
 
       NOTICES.forEach(function (n) {
-        n._searchText = (
-          (n.title || '') + ' ' + (n.excerpt || '') + ' ' + (n.tag || '') + ' ' + (n.content || '') + ' ' + JSON.stringify(n.sections || '')
-        ).toLowerCase();
+        n._searchText = ((n.title || '') + ' ' + (n.excerpt || '') + ' ' + (n.tag || '') + ' ' + (n.content || '') + ' ' + JSON.stringify(n.sections || '')).toLowerCase();
       });
 
       TAGS = ['全部', ...new Set(NOTICES.map(function (n) { return n.tag; }).filter(Boolean))];
