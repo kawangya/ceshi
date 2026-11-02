@@ -34,7 +34,7 @@
     { id: 'gray', name: '晨雾灰', dot: '#595959' },
     { id: 'indigo', name: '石墨蓝', dot: '#465E7B' }
   ];
-
+  
   // 自动分配颜色的色卡
   const AUTO_COLORS = ['#4E7296', '#5F8468', '#9A7250', '#7A6E96', '#96697C', '#4F7A9B', '#6B6F7A'];
 
@@ -104,84 +104,82 @@
   })();
 
   /* ============ 元素 ============ */
-  const navGroupsEl = document.getElementById('navGroups');
-  const navEmptyEl = document.getElementById('navEmpty');
-  const navSearchEl = document.getElementById('navSearch');
-  const catNavEl = document.getElementById('catNav');
-  const catFootEl = document.getElementById('catFoot');
-  const catRandomEl = document.getElementById('catRandom');
-  const groupNavEl = document.getElementById('groupNav');
-  const navTipEl = document.getElementById('navTip');
+  const navGroupsEl   = document.getElementById('navGroups');
+  const navEmptyEl    = document.getElementById('navEmpty');
+  const navSearchEl   = document.getElementById('navSearch');
+  const catNavEl      = document.getElementById('catNav');
+  const catFootEl     = document.getElementById('catFoot');
+  const catRandomEl   = document.getElementById('catRandom');
+  const groupNavEl    = document.getElementById('groupNav');
+  const navTipEl      = document.getElementById('navTip');
 
   const friendsSectionEl = document.getElementById('friendsSection');
-  const friendsGridEl = document.getElementById('friendsGrid');
+  const friendsGridEl    = document.getElementById('friendsGrid');
 
-  const noticeBar = document.getElementById('noticeBar');
-  const barTag = document.getElementById('barTag');
-  const barText = document.getElementById('barText');
-  const barDots = document.getElementById('barDots');
+  const noticeBar     = document.getElementById('noticeBar');
+  const barTag        = document.getElementById('barTag');
+  const barText       = document.getElementById('barText');
+  const barDots       = document.getElementById('barDots');
 
-  const noticeListEl = document.getElementById('noticeList');
-  const noticeEmptyEl = document.getElementById('noticeEmpty');
-  const noticeTabsEl = document.getElementById('noticeTabs');
+  const noticeListEl   = document.getElementById('noticeList');
+  const noticeEmptyEl  = document.getElementById('noticeEmpty');
+  const noticeTabsEl   = document.getElementById('noticeTabs');
   const noticeSearchEl = document.getElementById('noticeSearch');
 
-  const searchEl = document.getElementById('search');
-  const themeBtn = document.getElementById('themeBtn');
-  const settingsBtn = document.getElementById('settingsBtn');
-  const backTopBtn = document.getElementById('backTop');
+  const searchEl      = document.getElementById('search');
+  const themeBtn      = document.getElementById('themeBtn');
+  const settingsBtn   = document.getElementById('settingsBtn');
+  const backTopBtn    = document.getElementById('backTop');
 
-  const modalMask = document.getElementById('modalMask');
-  const modalTag = document.getElementById('modalTag');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = document.getElementById('modalBody');
-  const modalActions = document.getElementById('modalActions');
-  const modalClose = document.getElementById('modalClose');
+  const modalMask     = document.getElementById('modalMask');
+  const modalTag      = document.getElementById('modalTag');
+  const modalTitle    = document.getElementById('modalTitle');
+  const modalBody     = document.getElementById('modalBody');
+  const modalActions  = document.getElementById('modalActions');
+  const modalClose    = document.getElementById('modalClose');
 
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
+  const lightbox      = document.getElementById('lightbox');
+  const lightboxImg   = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
-  const lightboxOpen = document.getElementById('lightboxOpen');
-  const lightboxZoom = document.getElementById('lightboxZoom');
+  const lightboxOpen  = document.getElementById('lightboxOpen');
+  const lightboxZoom  = document.getElementById('lightboxZoom');
 
-  const settingsMask = document.getElementById('settingsMask');
-  const settingsClose = document.getElementById('settingsClose');
-  const themeColorsEl = document.getElementById('themeColors');
+  const settingsMask    = document.getElementById('settingsMask');
+  const settingsClose   = document.getElementById('settingsClose');
+  const themeColorsEl   = document.getElementById('themeColors');
   const setFollowSystemEl = document.getElementById('setFollowSystem');
-  const setNoticeBarEl = document.getElementById('setNoticeBar');
+  const setNoticeBarEl  = document.getElementById('setNoticeBar');
   const setShowFriendsEl = document.getElementById('setShowFriends');
   const setEnableMultiLinksEl = document.getElementById('setEnableMultiLinks');
   const setDefaultCategoryEl = document.getElementById('setDefaultCategory');
-  const setOpenModeEl = document.getElementById('setOpenMode');
+  const setOpenModeEl   = document.getElementById('setOpenMode');
   const settingsResetEl = document.getElementById('settingsReset');
   const settingsExportEl = document.getElementById('settingsExport');
   const settingsImportEl = document.getElementById('settingsImport');
-  const settingsFileEl = document.getElementById('settingsFile');
-  const toastEl = document.getElementById('toast');
+  const settingsFileEl   = document.getElementById('settingsFile');
+  const toastEl          = document.getElementById('toast');
 
   const ghRepoEl = document.getElementById('ghRepo');
   const ghTokenEl = document.getElementById('ghToken');
   const setEditModeEl = document.getElementById('setEditMode');
 
-  // 编辑卡片弹窗
-  const editModalMask = document.getElementById('editModalMask');
+  const editModalMask  = document.getElementById('editModalMask');
   const editModalTitle = document.getElementById('editModalTitle');
   const editModalClose = document.getElementById('editModalClose');
-  const editNameEl = document.getElementById('editName');
-  const editUrlEl = document.getElementById('editUrl');
-  const editDescEl = document.getElementById('editDesc');
-  const editSaveBtn = document.getElementById('editSaveBtn');
-  const editLinksList = document.getElementById('editLinksList');
-  const editLinksAdd = document.getElementById('editLinksAdd');
+  const editNameEl     = document.getElementById('editName');
+  const editUrlEl      = document.getElementById('editUrl');
+  const editDescEl     = document.getElementById('editDesc');
+  const editSaveBtn    = document.getElementById('editSaveBtn');
+  const editLinksList  = document.getElementById('editLinksList');
+  const editLinksAdd   = document.getElementById('editLinksAdd');
 
-  // 通用交互弹窗
-  const uniModalMask = document.getElementById('universalModalMask');
-  const uniTitle = document.getElementById('universalTitle');
-  const uniMessage = document.getElementById('universalMessage');
-  const uniInput = document.getElementById('universalInput');
-  const uniCancelBtn = document.getElementById('universalCancelBtn');
-  const uniConfirmBtn = document.getElementById('universalConfirmBtn');
-  const uniModalClose = document.getElementById('universalModalClose');
+  const uniModalMask    = document.getElementById('universalModalMask');
+  const uniTitle        = document.getElementById('universalTitle');
+  const uniMessage      = document.getElementById('universalMessage');
+  const uniInput        = document.getElementById('universalInput');
+  const uniCancelBtn    = document.getElementById('universalCancelBtn');
+  const uniConfirmBtn   = document.getElementById('universalConfirmBtn');
+  const uniModalClose   = document.getElementById('universalModalClose');
 
   /* ============ 工具 ============ */
   function esc(str) {
@@ -249,14 +247,14 @@
     return new Promise(function (resolve) {
       uniTitle.textContent = title;
       uniMessage.textContent = message;
-
+      
       if (defaultValue !== null) {
         uniInput.style.display = 'block';
         uniInput.value = defaultValue;
       } else {
         uniInput.style.display = 'none';
       }
-
+      
       uniModalMask.classList.add('show');
       lockBodyScroll();
 
@@ -270,7 +268,10 @@
 
       function onConfirm() {
         const val = defaultValue !== null ? uniInput.value.trim() : true;
-        if (defaultValue !== null && !val) return; // 阻止空输入
+        if (defaultValue !== null && !val) {
+          showToast('内容不能为空', true);
+          return;
+        }
         cleanup();
         resolve(val);
       }
@@ -322,8 +323,8 @@
       finderSvg += '<rect x="' + (fx + 2) + '" y="' + (fy + 2) + '" width="3" height="3"/>';
     }
     return '<svg viewBox="-1 -1 ' + (SIZE + 2) + ' ' + (SIZE + 2) + '" ' +
-      'xmlns="http://www.w3.org/2000/svg" fill="#2B2B2B" shape-rendering="crispEdges">' +
-      '<path d="' + path + '"/>' + finderSvg + '</svg>';
+           'xmlns="http://www.w3.org/2000/svg" fill="#2B2B2B" shape-rendering="crispEdges">' +
+           '<path d="' + path + '"/>' + finderSvg + '</svg>';
   }
 
   /* ============ 图片灯箱 ============ */
@@ -536,7 +537,7 @@
     if (fontsReadyBound) return;
     fontsReadyBound = true;
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(measureCardTruncation).catch(function () { });
+      document.fonts.ready.then(measureCardTruncation).catch(function () {});
     }
   }
 
@@ -640,7 +641,7 @@
         a.rel = 'noopener';
       }
       const label = i === 0 ? (item.name || '主链接') : (l.text || '链接');
-
+      
       if (i === 0) {
         a.innerHTML = '<span class="inline-link-text">' + esc(label) + '</span><span class="inline-link-badge">主</span>';
       } else {
@@ -746,7 +747,7 @@
         const groupIdx = cat.groups.findIndex(g => g.id === groupId);
         if (groupIdx === -1) return;
         const group = cat.groups[groupIdx];
-
+        
         if (editGroupBtn) {
           const newName = await showUniversalModal('修改分组名', '请输入新的分组名称：', group.title);
           if (newName) {
@@ -776,7 +777,7 @@
         const cat = NAV_CATEGORIES.find(c => c.id === catId);
         const group = cat && cat.groups && cat.groups.find(g => g.id === groupId);
         if (!group || !group.items) return;
-
+        
         if (dir === 'up' && idx > 0) {
           const temp = group.items[idx]; group.items[idx] = group.items[idx - 1]; group.items[idx - 1] = temp;
           renderCards(); showToast('卡片已上移，请记得保存');
@@ -798,7 +799,7 @@
         const cat = NAV_CATEGORIES.find(c => c.id === catId);
         const group = cat && cat.groups && cat.groups.find(g => g.id === groupId);
         if (!group || !group.items) return;
-
+        
         if (editBtn) {
           openEditModal(catId, groupId, idx);
         } else if (delBtn) {
@@ -969,8 +970,8 @@
 
       catHtml += '<div class="cat-block">';
       catHtml += '<button class="cat-tab' + (isActive ? ' active' : '') + '" type="button" data-cat="' + esc(cat.id) + '">' +
-        '<span class="cat-tab-name">' + esc(cat.title) + '</span>' + catActions +
-        '<span class="cat-tab-count">' + total + '</span></button>';
+                 '<span class="cat-tab-name">' + esc(cat.title) + '</span>' + catActions +
+                 '<span class="cat-tab-count">' + total + '</span></button>';
 
       catHtml += '<div class="sub-cats-wrap' + (isActive ? ' show' : '') + '"><div class="sub-cats-inner">';
       (cat.groups || []).forEach(function (g) {
@@ -988,7 +989,7 @@
 
     const addCatBtn = document.getElementById('addCatBtn');
     if (addCatBtn) {
-      addCatBtn.addEventListener('click', async function () {
+      addCatBtn.addEventListener('click', async function() {
         const name = await showUniversalModal('添加分类', '请输入新分类的名称（如：影视资源）：', '');
         if (!name) return;
         const id = 'cat_' + Date.now();
@@ -1015,13 +1016,13 @@
       if (document.body.classList.contains('edit-mode')) {
         const moveBtn = e.target.closest('.move-cat');
         const editBtn = e.target.closest('.edit-cat');
-        const delBtn = e.target.closest('.del-cat');
+        const delBtn  = e.target.closest('.del-cat');
 
         if (moveBtn) {
           e.preventDefault(); e.stopPropagation();
           const catId = moveBtn.dataset.cat;
-          const dir = moveBtn.dataset.dir;
-          const idx = NAV_CATEGORIES.findIndex(c => c.id === catId);
+          const dir   = moveBtn.dataset.dir;
+          const idx   = NAV_CATEGORIES.findIndex(c => c.id === catId);
           if (idx === -1) return;
           if (dir === 'up' && idx > 0) {
             const t = NAV_CATEGORIES[idx]; NAV_CATEGORIES[idx] = NAV_CATEGORIES[idx - 1]; NAV_CATEGORIES[idx - 1] = t;
@@ -1035,11 +1036,11 @@
 
         if (editBtn || delBtn) {
           e.preventDefault(); e.stopPropagation();
-          const catId = (editBtn || delBtn).dataset.cat;
+          const catId  = (editBtn || delBtn).dataset.cat;
           const catIdx = NAV_CATEGORIES.findIndex(c => c.id === catId);
           if (catIdx === -1) return;
           const cat = NAV_CATEGORIES[catIdx];
-
+          
           if (editBtn) {
             const newName = await showUniversalModal('修改分类名', '请输入新的大类名称：', cat.title);
             if (newName) {
@@ -1113,10 +1114,10 @@
   function renderCards() {
     closeInlineDropdown();
 
-    const q = navKeyword.trim().toLowerCase();
+    const q          = navKeyword.trim().toLowerCase();
     const cardTarget = SETTINGS.openInNewTab ? '_blank' : '_self';
-    const cardRel = SETTINGS.openInNewTab ? 'noopener' : '';
-    const isDesktop = window.matchMedia('(min-width: 1025px)').matches;
+    const cardRel    = SETTINGS.openInNewTab ? 'noopener' : '';
+    const isDesktop  = window.matchMedia('(min-width: 1025px)').matches;
     const isEditMode = document.body.classList.contains('edit-mode');
 
     const currentCat = NAV_CATEGORIES.find(c => c.id === activeCategoryId);
@@ -1147,83 +1148,80 @@
         const name = it.name || '';
         const desc = it.desc || '';
         const hasDesc = !!desc;
-
-        // 自动推导首字母
+        
         const letter = it.letter || (name ? name.charAt(0).toUpperCase() : '链');
-
-        // 自动推导背景色
+        
         let colorHash = 0;
         for (let i = 0; i < name.length; i++) colorHash += name.charCodeAt(i);
         const bgColor = it.color || AUTO_COLORS[colorHash % AUTO_COLORS.length];
 
-        // 图标获取
         let iconUrl = it.icon;
         if (!iconUrl && it.url && it.url !== '#' && it.url !== 'javascript:void(0)') {
           try {
             const u = new URL(it.url);
             iconUrl = 'https://favicon.im/' + u.hostname + '?larger=true';
-          } catch (e) { }
+          } catch(e) {}
         }
         const hasIcon = !!iconUrl;
         const icoClass = hasIcon ? 'nav-ico nav-ico-img' : 'nav-ico';
         const icoStyle = hasIcon ? '' : 'background:' + esc(bgColor);
-        const icoContent = hasIcon
-          ? '<img data-fallback src="' + esc(iconUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
+        const icoContent = hasIcon 
+          ? '<img data-fallback src="' + esc(iconUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' 
           : '<span>' + esc(letter) + '</span>';
 
-        const allLinks = getItemLinks(it);
+        const allLinks   = getItemLinks(it);
         const primaryUrl = allLinks[0] ? allLinks[0].url : '';
-        const noLink = !primaryUrl;
+        const noLink     = !primaryUrl;
         const multiLinks = SETTINGS.enableMultiLinks && allLinks.length > 1;
 
         let cardHref, cardAttrs;
         if (multiLinks) {
-          cardHref = 'javascript:void(0)';
+          cardHref  = 'javascript:void(0)';
           cardAttrs = 'data-multi="true" role="button" tabindex="0" aria-haspopup="menu" ';
         } else if (noLink) {
-          cardHref = 'javascript:void(0)';
+          cardHref  = 'javascript:void(0)';
           cardAttrs = 'data-disabled="true" aria-disabled="true" tabindex="0" ';
         } else {
-          cardHref = esc(primaryUrl);
+          cardHref  = esc(primaryUrl);
           cardAttrs = 'target="' + cardTarget + '" ' + (cardRel ? 'rel="' + cardRel + '" ' : '');
         }
 
         return '<a class="nav-card' + (hasDesc ? ' has-desc' : '') + '" ' +
-          'href="' + cardHref + '" ' +
-          cardAttrs +
-          'data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-idx="' + originalIdx + '" ' +
-          '>' +
-          '<span class="' + icoClass + '" style="' + icoStyle + '">' + icoContent + '</span>' +
-          '<span class="nav-info">' +
-          '<span class="nav-name">' + highlight(name, q) + '</span>' +
-          (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
-          '</span>' +
-          (hasDesc ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>' : '') +
-          '<div class="edit-actions">' +
-          '<button class="edit-btn move-item" type="button" data-dir="up"   title="上移">↑</button>' +
-          '<button class="edit-btn move-item" type="button" data-dir="down" title="下移">↓</button>' +
-          '<button class="edit-btn edit"      type="button" title="编辑">✎</button>' +
-          '<button class="edit-btn del"       type="button" title="删除">×</button>' +
-          '</div>' +
-          '</a>';
+                 'href="' + cardHref + '" ' +
+                 cardAttrs +
+                 'data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-idx="' + originalIdx + '" ' +
+                 '>' +
+                 '<span class="' + icoClass + '" style="' + icoStyle + '">' + icoContent + '</span>' +
+                 '<span class="nav-info">' +
+                   '<span class="nav-name">' + highlight(name, q) + '</span>' +
+                   (hasDesc ? '<span class="nav-desc">' + highlight(desc, q) + '</span>' : '') +
+                 '</span>' +
+                 (hasDesc ? '<span class="nav-info-btn" role="button" tabindex="-1" aria-label="查看完整简介">i</span>' : '') +
+                 '<div class="edit-actions">' +
+                   '<button class="edit-btn move-item" type="button" data-dir="up"   title="上移">↑</button>' +
+                   '<button class="edit-btn move-item" type="button" data-dir="down" title="下移">↓</button>' +
+                   '<button class="edit-btn edit"      type="button" title="编辑">✎</button>' +
+                   '<button class="edit-btn del"       type="button" title="删除">×</button>' +
+                 '</div>' +
+               '</a>';
       }).join('');
 
       let groupActions = '';
       if (isEditMode) {
         groupActions =
           '<div class="group-actions">' +
-          '<button class="edit-btn move-group" type="button" title="上移分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-dir="up"   style="width:20px;height:20px;">↑</button>' +
-          '<button class="edit-btn move-group" type="button" title="下移分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-dir="down" style="width:20px;height:20px;">↓</button>' +
-          '<button class="edit-btn edit-group" type="button" title="修改分组名" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" style="width:20px;height:20px;">✎</button>' +
-          '<button class="edit-btn del del-group" type="button" title="删除分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" style="width:20px;height:20px;">×</button>' +
+            '<button class="edit-btn move-group" type="button" title="上移分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-dir="up"   style="width:20px;height:20px;">↑</button>' +
+            '<button class="edit-btn move-group" type="button" title="下移分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" data-dir="down" style="width:20px;height:20px;">↓</button>' +
+            '<button class="edit-btn edit-group" type="button" title="修改分组名" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" style="width:20px;height:20px;">✎</button>' +
+            '<button class="edit-btn del del-group" type="button" title="删除分组" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '" style="width:20px;height:20px;">×</button>' +
           '</div>';
       }
 
       html += '<div class="nav-group" data-group-id="' + esc(group.id) + '">' +
-        '<h2 class="group-title">' + esc(group.title || '') +
-        '<span class="group-count">' + filtered.length + '</span>' + groupActions +
-        '</h2>' +
-        '<div class="nav-grid">' + cards;
+                '<h2 class="group-title">' + esc(group.title || '') +
+                  '<span class="group-count">' + filtered.length + '</span>' + groupActions +
+                '</h2>' +
+                '<div class="nav-grid">' + cards;
 
       if (isEditMode) {
         html += '<button class="add-btn add-card-btn" type="button" data-cat="' + esc(currentCat.id) + '" data-group="' + esc(group.id) + '">+ 添加卡片</button>';
@@ -1267,7 +1265,7 @@
       `;
       const btn = document.getElementById('emptyClearBtn');
       if (btn) {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function() {
           searchEl.value = ''; navKeyword = ''; groupNavEl.hidden = false;
           renderCards();
           if (!IS_TOUCH) searchEl.focus();
@@ -1277,7 +1275,7 @@
 
     const addGroupBtn = document.getElementById('addGroupBtn');
     if (addGroupBtn) {
-      addGroupBtn.addEventListener('click', async function () {
+      addGroupBtn.addEventListener('click', async function() {
         const name = await showUniversalModal('添加新分组', '请输入新分组的名称（如：常用工具）：', '');
         if (!name) return;
         const cat = NAV_CATEGORIES.find(c => c.id === activeCategoryId);
@@ -1323,17 +1321,42 @@
       friendsGridEl.innerHTML = '';
       return;
     }
+    
     friendsSectionEl.hidden = false;
     friendsGridEl.innerHTML = visible.map(function (f) {
-      const hasIcon = !!(f.icon && f.icon.trim());
-      const iconHtml = hasIcon ? '<img data-fallback src="' + esc(f.icon) + '" alt="" loading="lazy">' : '';
-      return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener" title="' + esc(f.name || '') + '">' +
-        '<span class="friend-ico" style="background:' + esc(f.color || '#4E7296') + '">' +
-        '<span>' + esc(f.letter || '友') + '</span>' + iconHtml +
-        '</span>' +
-        '<span class="friend-name">' + esc(f.name || '') + '</span>' +
-        '</a>';
+      const name = f.name || '';
+      
+      // 自动推导首字母
+      const letter = f.letter || (name ? name.charAt(0).toUpperCase() : '友');
+      
+      // 自动推导背景色
+      let colorHash = 0;
+      for (let i = 0; i < name.length; i++) colorHash += name.charCodeAt(i);
+      const bgColor = f.color || AUTO_COLORS[colorHash % AUTO_COLORS.length];
+
+      // 图标获取
+      let iconUrl = f.icon;
+      if (!iconUrl && f.url && f.url !== '#' && f.url !== 'javascript:void(0)') {
+        try {
+          const u = new URL(f.url);
+          iconUrl = 'https://favicon.im/' + u.hostname + '?larger=true';
+        } catch(e) {}
+      }
+      const hasIcon = !!iconUrl;
+      
+      const icoStyle = hasIcon ? '' : 'background:' + esc(bgColor);
+      const icoContent = hasIcon 
+        ? '<img data-fallback src="' + esc(iconUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' 
+        : '<span>' + esc(letter) + '</span>';
+
+      return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener" title="' + esc(name) + '">' +
+               '<span class="friend-ico" style="' + icoStyle + '">' +
+                 icoContent +
+               '</span>' +
+               '<span class="friend-name">' + esc(name) + '</span>' +
+             '</a>';
     }).join('');
+    
     guardImgs(friendsGridEl);
   }
 
@@ -1608,7 +1631,7 @@
     return frag;
   }
 
-  /* ============ 弹窗 ============ */
+  /* ============ 公告详情弹窗 ============ */
   function openModal(n) {
     modalTag.textContent = n.tag || '';
     modalTag.className = ('tag ' + (n.tagClass || '')).trim();
@@ -1665,7 +1688,6 @@
       editModalMask.classList.remove('show'); unlockBodyScroll(); return;
     }
     if (uniModalMask && uniModalMask.classList.contains('show')) {
-      // 通用弹窗被主动关闭（模拟取消）
       if (uniCancelBtn) uniCancelBtn.click();
       return;
     }
@@ -1736,7 +1758,6 @@
       const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === editTarget.groupId; });
       if (!group || !group.items) return;
 
-      // 收集附加链接
       const extras = [];
       if (editLinksList) {
         editLinksList.querySelectorAll('.edit-link-row').forEach(function (row) {
@@ -1746,20 +1767,18 @@
         });
       }
 
-      // 组装最简洁的数据
       const newItem = {
         name: name,
         url: url
       };
       
       const desc = editDescEl.value.trim();
-      if (desc) newItem.desc = desc; // 只有填了描述才写
+      if (desc) newItem.desc = desc;
       
-      if (extras.length) newItem.links = extras; // 只有填了附加链接才写
+      if (extras.length) newItem.links = extras;
 
       if (editTarget.itemIndex > -1) {
-        // 直接整体替换，顺便清理掉老数据里可能存在的冗余字段（如旧的 color, letter, icon）
-        group.items[editTarget.itemIndex] = newItem;
+        group.items[editTarget.itemIndex] = newItem; // 直接覆盖，顺便清理旧冗余字段
       } else {
         group.items.push(newItem);
       }
@@ -1836,7 +1855,7 @@
       groupNavEl.hidden = isSearching;
       if (isSearching) {
         activeGroupId = 'all';
-        catNavEl.querySelectorAll('.sub-tab').forEach(function (st) { st.classList.remove('active'); });
+        catNavEl.querySelectorAll('.sub-tab').forEach(function(st) { st.classList.remove('active'); });
       }
       updateGroupNavActive();
       renderCards();
@@ -1895,12 +1914,12 @@
 
   function setFollowSystem(on) {
     if (on) {
-      try { localStorage.setItem('site.theme', 'system'); } catch (e) { }
+      try { localStorage.setItem('site.theme', 'system'); } catch (e) {}
       var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
     } else {
       var current = document.documentElement.dataset.theme || 'light';
-      try { localStorage.setItem('site.theme', current); } catch (e) { }
+      try { localStorage.setItem('site.theme', current); } catch (e) {}
     }
   }
 
@@ -1908,7 +1927,7 @@
     var current = document.documentElement.dataset.theme;
     var next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
-    try { localStorage.setItem('site.theme', next); } catch (e) { }
+    try { localStorage.setItem('site.theme', next); } catch (e) {}
     syncSettingsUI();
   });
 
@@ -1944,7 +1963,7 @@
   /* ============ 导出 / 导入配置 ============ */
   function exportSettings() {
     var themeVal = 'system';
-    try { themeVal = localStorage.getItem('site.theme') || 'system'; } catch (e) { }
+    try { themeVal = localStorage.getItem('site.theme') || 'system'; } catch (e) {}
 
     const safeSettings = Object.assign({}, SETTINGS);
     delete safeSettings.ghOwner; delete safeSettings.ghRepo; delete safeSettings.ghPath; delete safeSettings.ghToken; delete safeSettings.editMode;
@@ -2003,11 +2022,11 @@
         saveSettings();
 
         if (incomingTheme === 'system') {
-          try { localStorage.setItem('site.theme', 'system'); } catch (err) { }
+          try { localStorage.setItem('site.theme', 'system'); } catch (err) {}
           var isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
         } else if (incomingTheme === 'light' || incomingTheme === 'dark') {
-          try { localStorage.setItem('site.theme', incomingTheme); } catch (err) { }
+          try { localStorage.setItem('site.theme', incomingTheme); } catch (err) {}
           document.documentElement.dataset.theme = incomingTheme;
         }
 
@@ -2145,7 +2164,7 @@
     if (ghTokenEl) ghTokenEl.addEventListener('input', e => { SETTINGS.ghToken = e.target.value.trim(); saveSettings(); });
 
     if (setEditModeEl) {
-      setEditModeEl.addEventListener('change', function () {
+      setEditModeEl.addEventListener('change', function() {
         if (setEditModeEl.checked && !ghTokenEl.value.trim()) {
           showToast('请先填写 Personal Access Token 才能开启', true);
           setEditModeEl.checked = false;
@@ -2174,15 +2193,10 @@
 
     if (settingsResetEl) {
       settingsResetEl.addEventListener('click', function () {
-        const ghConfig = {
-          ghOwner: SETTINGS.ghOwner,
-          ghRepo: SETTINGS.ghRepo,
-          ghPath: SETTINGS.ghPath,
-          ghToken: SETTINGS.ghToken
-        };
+        const ghConfig = { ghOwner: SETTINGS.ghOwner, ghRepo: SETTINGS.ghRepo, ghPath: SETTINGS.ghPath, ghToken: SETTINGS.ghToken };
         SETTINGS = Object.assign({}, DEFAULT_SETTINGS, ghConfig);
         SETTINGS.editMode = false;
-
+        
         saveSettings();
         setFollowSystem(true);
         applySettings();

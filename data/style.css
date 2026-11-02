@@ -348,9 +348,9 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 .setting-input:focus { border-color: var(--accent); background: var(--surface); }
 
 /* 编辑器 */
-body.edit-mode .nav-card { border-color: var(--accent); border-style: dashed; padding-right: 80px; padding-bottom: 36px; }
+body.edit-mode .nav-card { border-color: var(--accent); border-style: dashed; padding-right: 66px; padding-bottom: 36px; }
 body.edit-mode .nav-card:hover { transform: none; box-shadow: none; }
-.edit-actions { position: absolute; right: 8px; top: 8px; display: none; flex-wrap: wrap; justify-content: flex-end; gap: 4px; z-index: 10; max-width: 80px; }
+.edit-actions { position: absolute; right: 8px; top: 8px; display: none; flex-wrap: wrap; justify-content: flex-end; gap: 4px; z-index: 10; width: 48px; }
 body.edit-mode .edit-actions { display: flex; }
 .edit-btn { width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-dim); font-size: 12px; display: grid; place-items: center; cursor: pointer; }
 .edit-btn:hover { background: var(--accent-soft); color: var(--accent); }
@@ -385,6 +385,9 @@ body.edit-mode .cat-tab .cat-tab-count { display: none; }
 .edit-links-add:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 @media (max-width: 640px) { .edit-link-row { grid-template-columns: 1fr 1.4fr auto; } }
 
-/* 通用弹窗特定 */
+/* 通用弹窗及 GitHub 设置 */
 .universal-modal { max-width: 360px; }
 .universal-message { margin: 0 0 12px; line-height: 1.6; color: var(--text); font-size: 14px; }
+.setting-item-github { flex-direction: column; align-items: stretch; gap: 8px; }
+.setting-switch-wrap { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; width: 100%; }
+.setting-switch-label { font-size: 13px; color: var(--text); font-weight: 500; }

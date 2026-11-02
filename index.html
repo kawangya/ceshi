@@ -266,17 +266,17 @@
         </div>
       </div>
       
-      <!-- 修复错位：使用内联 flex 强制纵向排版，且适配宽度 -->
-      <div class="setting-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
-        <div class="setting-label" style="width: 100%;">
+      <!-- 使用了统一的 setting-item-github 类名 -->
+      <div class="setting-item setting-item-github">
+        <div class="setting-label">
           <div class="setting-name">GitHub 云端同步</div>
           <div class="setting-desc">填入 Token 后可在线编辑并保存导航数据</div>
         </div>
-        <input type="text" id="ghRepo" placeholder="仓库名 (自动获取)" class="setting-input" style="width: 100%; box-sizing: border-box;">
-        <input type="password" id="ghToken" placeholder="Personal Access Token (ghp_...)" class="setting-input" style="width: 100%; box-sizing: border-box;">
-        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 8px;">
-          <span style="font-size: 13px; color: var(--text); font-weight: 500;">可视化编辑</span>
-          <label class="switch" style="margin-top:0"><input type="checkbox" id="setEditMode"><span class="switch-track"></span></label>
+        <input type="text" id="ghRepo" placeholder="仓库名 (自动获取)" class="setting-input">
+        <input type="password" id="ghToken" placeholder="Personal Access Token (ghp_...)" class="setting-input">
+        <div class="setting-switch-wrap">
+          <span class="setting-switch-label">可视化编辑</span>
+          <label class="switch"><input type="checkbox" id="setEditMode"><span class="switch-track"></span></label>
         </div>
       </div>
       
