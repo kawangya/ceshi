@@ -261,18 +261,6 @@
               "desc": "命令生成、药水计算等"
             }
           ]
-        },
-        {
-          "id": "group_1793613088302",
-          "title": "测试",
-          "items": [
-            {
-              "name": "测试",
-              "url": "https://kawangya.github.io/ceshi/",
-              "desc": "测试",
-              "icon": ""
-            }
-          ]
         }
       ]
     },

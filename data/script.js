@@ -1729,13 +1729,14 @@
   if (editSaveBtn) {
     editSaveBtn.addEventListener('click', function () {
       const name = editNameEl.value.trim();
-      const url = editUrlEl.value.trim();
+      const url  = editUrlEl.value.trim();
       if (!name || !url) return showToast('名称和主链接不能为空', true);
 
       const cat = NAV_CATEGORIES.find(function (c) { return c.id === editTarget.catId; });
       const group = cat && cat.groups && cat.groups.find(function (g) { return g.id === editTarget.groupId; });
       if (!group || !group.items) return;
 
+      // 收集附加链接
       const extras = [];
       if (editLinksList) {
         editLinksList.querySelectorAll('.edit-link-row').forEach(function (row) {
@@ -1745,19 +1746,19 @@
         });
       }
 
-      // 仅保存核心字段，颜色和首字母交给前端自动推导
+      // 组装最简洁的数据
       const newItem = {
         name: name,
-        url: url,
-        desc: editDescEl.value.trim(),
-        icon: ''
+        url: url
       };
-
-      if (extras.length) {
-        newItem.links = extras;
-      }
+      
+      const desc = editDescEl.value.trim();
+      if (desc) newItem.desc = desc; // 只有填了描述才写
+      
+      if (extras.length) newItem.links = extras; // 只有填了附加链接才写
 
       if (editTarget.itemIndex > -1) {
+        // 直接整体替换，顺便清理掉老数据里可能存在的冗余字段（如旧的 color, letter, icon）
         group.items[editTarget.itemIndex] = newItem;
       } else {
         group.items.push(newItem);
