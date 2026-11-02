@@ -1275,8 +1275,7 @@
     friendsSectionEl.hidden = false;
     friendsGridEl.innerHTML = visible.map(function (f) {
       const hasIcon = !!(f.icon && f.icon.trim());
-      // const iconHtml = hasIcon ? '<img data-fallback src="' + esc(f.icon) + '" alt="">' : '';
-      const iconHtml = hasIcon ? '<img data-fallback src="' + esc(f.icon) + '" alt="" loading="lazy">' : '';
+      const iconHtml = hasIcon ? '<img data-fallback src="' + esc(f.icon) + '" alt="">' : '';
       return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener" title="' + esc(f.name || '') + '">' +
                '<span class="friend-ico" style="background:' + esc(f.color || '#4E7296') + '">' +
                  '<span>' + esc(f.letter || '友') + '</span>' + iconHtml +

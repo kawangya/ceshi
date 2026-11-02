@@ -880,7 +880,8 @@
         const desc = it.desc || '';
         const hasDesc = !!desc;
         const hasIcon = !!(it.icon && it.icon.trim());
-        const iconHtml = hasIcon ? '<img data-fallback src="' + esc(it.icon) + '" alt="">' : '';
+        // const iconHtml = hasIcon ? '<img data-fallback src="' + esc(it.icon) + '" alt="">' : '';
+        const iconHtml = hasIcon ? '<img data-fallback src="' + esc(it.icon) + '" alt="" loading="lazy">' : '';
 
         const allLinks   = getItemLinks(it);
         const primaryUrl = allLinks[0] ? allLinks[0].url : '';
