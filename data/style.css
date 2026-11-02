@@ -383,7 +383,6 @@ body.edit-mode .cat-tab .cat-tab-count { display: none; }
 .edit-link-del:hover { border-color: #C0553D; background: #C0553D; color: #fff; }
 .edit-links-add { width: 100%; padding: 7px; border: 1px dashed var(--border-strong); border-radius: 8px; background: var(--surface-2); color: var(--text-dim); font-family: inherit; font-size: 12.5px; cursor: pointer; transition: all .15s ease; }
 .edit-links-add:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-
 @media (max-width: 640px) { .edit-link-row { grid-template-columns: 1fr 1.4fr auto; } }
 
 /* 通用弹窗特定 */

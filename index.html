@@ -184,7 +184,6 @@
 
 <div class="nav-tip" id="navTip" role="tooltip"></div>
 
-<!-- 公告详情弹窗 -->
 <div class="modal-mask" id="modalMask" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-head">
@@ -197,7 +196,6 @@
   </div>
 </div>
 
-<!-- 图片灯箱 -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="图片预览">
   <button class="lightbox-close" id="lightboxClose" type="button" aria-label="关闭">×</button>
   <img class="lightbox-img" id="lightboxImg" alt="">
@@ -208,7 +206,6 @@
   </div>
 </div>
 
-<!-- 设置面板 -->
 <div class="settings-mask" id="settingsMask" aria-hidden="true">
   <aside class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="settings-head">
@@ -268,18 +265,21 @@
           <button type="button" data-value="self">当前页</button>
         </div>
       </div>
-      <div class="setting-item setting-item-column">
-        <div class="setting-label">
+      
+      <!-- 修复错位：使用内联 flex 强制纵向排版，且适配宽度 -->
+      <div class="setting-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
+        <div class="setting-label" style="width: 100%;">
           <div class="setting-name">GitHub 云端同步</div>
           <div class="setting-desc">填入 Token 后可在线编辑并保存导航数据</div>
         </div>
-        <input type="text" id="ghRepo" placeholder="仓库名 (自动获取)" class="setting-input">
-        <input type="password" id="ghToken" placeholder="Personal Access Token (ghp_...)" class="setting-input">
-        <div class="setting-switch-wrap">
-          <span class="setting-switch-label">可视化编辑</span>
+        <input type="text" id="ghRepo" placeholder="仓库名 (自动获取)" class="setting-input" style="width: 100%; box-sizing: border-box;">
+        <input type="password" id="ghToken" placeholder="Personal Access Token (ghp_...)" class="setting-input" style="width: 100%; box-sizing: border-box;">
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 8px;">
+          <span style="font-size: 13px; color: var(--text); font-weight: 500;">可视化编辑</span>
           <label class="switch" style="margin-top:0"><input type="checkbox" id="setEditMode"><span class="switch-track"></span></label>
         </div>
       </div>
+      
     </div>
     <div class="settings-foot">
       <div class="settings-actions">
@@ -294,7 +294,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<!-- 卡片编辑弹窗（精简版，移除首字母与颜色） -->
 <div class="modal-mask" id="editModalMask" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modal-head">
@@ -319,7 +318,6 @@
   </div>
 </div>
 
-<!-- 通用交互弹窗（替代原生 prompt 和 confirm） -->
 <div class="modal-mask" id="universalModalMask" aria-hidden="true">
   <div class="modal universal-modal" role="dialog" aria-modal="true" aria-labelledby="universalTitle">
     <div class="modal-head">

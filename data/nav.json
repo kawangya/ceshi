@@ -12,18 +12,12 @@
             {
               "name": "MCNav",
               "url": "https://www.mcnav.net/",
-              "desc": "Minecraft 综合导航站，汇总官方入口、资源下载、开服工具、启动器、皮肤、地图与各类实用 MC 工具，方便玩家一站式查找。",
-              "letter": "M",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "Minecraft 综合导航站，汇总官方入口、资源下载、开服工具、启动器、皮肤、地图与各类实用 MC 工具，方便玩家一站式查找。"
             },
             {
               "name": "MCiSEE",
               "url": "https://mcisee.top/",
-              "desc": "Minecraft 综合导航站，汇总启动器、模组、资源包、皮肤、开服工具与查询工具，覆盖 Java 版和基岩版，方便玩家一站式查找 MC 资源。",
-              "letter": "所",
-              "color": "#5F8468",
-              "icon": ""
+              "desc": "Minecraft 综合导航站，汇总启动器、模组、资源包、皮肤、开服工具与查询工具，覆盖 Java 版和基岩版，方便玩家一站式查找 MC 资源。"
             }
           ]
         },
@@ -34,66 +28,42 @@
             {
               "name": "Adoptium",
               "url": "https://adoptium.net/zh-CN/temurin/releases",
-              "desc": "开源 Java 运行时项目，主打高质量、安全的 Eclipse Temurin OpenJDK 发行版，覆盖开发到生产环境。",
-              "letter": "A",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "开源 Java 运行时项目，主打高质量、安全的 Eclipse Temurin OpenJDK 发行版，覆盖开发到生产环境。"
             },
             {
               "name": "BellSoft",
               "url": "https://bell-sw.com/pages/downloads/",
-              "desc": "主打 Liberica JDK 等开源 Java 运行时与云原生方案，提供 TCK 验证、容器优化和企业级支持。",
-              "letter": "B",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "主打 Liberica JDK 等开源 Java 运行时与云原生方案，提供 TCK 验证、容器优化和企业级支持。"
             },
             {
               "name": "Oracle",
               "url": "https://www.oracle.com/cn/java/technologies/downloads/",
-              "desc": "官方 Java 下载页，提供各版本 JDK/JRE 下载，适合开发与运行 Java 应用，生产及商业用途需注意许可条款。",
-              "letter": "O",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "官方 Java 下载页，提供各版本 JDK/JRE 下载，适合开发与运行 Java 应用，生产及商业用途需注意许可条款。"
             },
             {
               "name": "清华开源镜像站",
               "url": "https://mirrors.tuna.tsinghua.edu.cn/Adoptium/",
-              "desc": "提供 Eclipse Temurin JDK/JRE 国内加速下载，适合替代官方源拉取各版本安装包。",
-              "letter": "清",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "提供 Eclipse Temurin JDK/JRE 国内加速下载，适合替代官方源拉取各版本安装包。"
             },
             {
               "name": "Azul",
               "url": "https://www.azul.com/downloads/",
-              "desc": "提供 Zulu 等 OpenJDK 构建，覆盖多版本、多平台，含开源发行版、商业优化版及运行时性能分析工具。",
-              "letter": "A",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "提供 Zulu 等 OpenJDK 构建，覆盖多版本、多平台，含开源发行版、商业优化版及运行时性能分析工具。"
             },
             {
               "name": "GraalVM",
               "url": "https://www.graalvm.org/downloads/",
-              "desc": "提供高性能 OpenJDK 构建，支持原生镜像与多平台，适合微服务和云原生场景。",
-              "letter": "G",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "提供高性能 OpenJDK 构建，支持原生镜像与多平台，适合微服务和云原生场景。"
             },
             {
               "name": "IBM Semeru",
               "url": "https://developer.ibm.com/languages/java/semeru-runtimes/downloads/",
-              "desc": "提供基于 OpenJDK 的预构建 Java 运行时，支持多版本多平台，含 jextract 与原生接口工具。",
-              "letter": "I",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "提供基于 OpenJDK 的预构建 Java 运行时，支持多版本多平台，含 jextract 与原生接口工具。"
             },
             {
               "name": "Amazon Corretto",
               "url": "https://aws.amazon.com/cn/corretto/",
-              "desc": "AWS 推出的免费、生产就绪 OpenJDK 发行版，跨平台、长期支持，含性能优化与安全修复，适合开发与生产环境。",
-              "letter": "A",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "AWS 推出的免费、生产就绪 OpenJDK 发行版，跨平台、长期支持，含性能优化与安全修复，适合开发与生产环境。"
             }
           ]
         },
@@ -104,18 +74,12 @@
             {
               "name": "Minecraft",
               "url": "https://www.minecraft.net/",
-              "desc": "Minecraft 官方网站，提供正版下载、版本与衍生内容介绍，以及市场、教育版和中国区入口。",
-              "letter": "M",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "Minecraft 官方网站，提供正版下载、版本与衍生内容介绍，以及市场、教育版和中国区入口。"
             },
             {
               "name": "我的世界中国版",
               "url": "https://mc.163.com",
-              "desc": "网易《我的世界》中国版官网，提供端游/手游下载，以及模组、皮肤、联机、租赁服等资源和功能。",
-              "letter": "我",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "网易《我的世界》中国版官网，提供端游/手游下载，以及模组、皮肤、联机、租赁服等资源和功能。"
             }
           ]
         },
@@ -126,26 +90,17 @@
             {
               "name": "MC版本库",
               "url": "http://bbk.endyun.ltd",
-              "desc": "提供我的世界国际版多版本安装包下载，主打手机版各版本安全获取与快速安装。",
-              "letter": "M",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "提供我的世界国际版多版本安装包下载，主打手机版各版本安全获取与快速安装。"
             },
             {
               "name": "MineAPK",
               "url": "https://www.mineapk.cn",
-              "desc": "专注 Minecraft 的版本与资源库，支持多平台版本下载，提供模组、整合包、光影、资源包和地图，并带联机与社区功能。",
-              "letter": "M",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "专注 Minecraft 的版本与资源库，支持多平台版本下载，提供模组、整合包、光影、资源包和地图，并带联机与社区功能。"
             },
             {
               "name": "MCAPKS",
               "url": "https://mcapks.net/",
-              "desc": "Minecraft 国际版全版本下载站，提供多版本安装包浏览与下载，并引导正版购买。",
-              "letter": "M",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "Minecraft 国际版全版本下载站，提供多版本安装包浏览与下载，并引导正版购买。"
             }
           ]
         },
@@ -156,18 +111,12 @@
             {
               "name": "HMCL",
               "url": "https://hmcl.huangyuhui.net",
-              "desc": "开源 Minecraft 启动器，支持多系统、自动安装与各加载器，可导入导出整合包，并自定义主题。",
-              "letter": "H",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "开源 Minecraft 启动器，支持多系统、自动安装与各加载器，可导入导出整合包，并自定义主题。"
             },
             {
               "name": "PCL",
               "url": "https://github.com/Meloong-Git/PCL",
               "desc": "PCL 官方源码仓库，Minecraft 启动器 Plain Craft Launcher 的开源代码，含 UI、动画、下载与游戏启动模块，发布新版时同步更新。",
-              "letter": "P",
-              "color": "#4E7296",
-              "icon": "",
               "links": [
                 {
                   "text": "蓝奏云（提取码：pcl2）",
@@ -178,10 +127,7 @@
             {
               "name": "PCL CE",
               "url": "https://github.com/PCL-Community/PCL-CE",
-              "desc": "PCL 启动器的社区维护版，基于开源代码二次开发，包含主线未上线的功能与改进；版本号不与官方严格对应，问题勿反馈官方，优先支持最新版与 Windows 环境。",
-              "letter": "P",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "PCL 启动器的社区维护版，基于开源代码二次开发，包含主线未上线的功能与改进；版本号不与官方严格对应，问题勿反馈官方，优先支持最新版与 Windows 环境。"
             }
           ]
         },
@@ -192,18 +138,12 @@
             {
               "name": "FCL",
               "url": "https://github.com/FCL-Team/FoldCraftLauncher",
-              "desc": "Android 端 Minecraft Java 版启动器，基于 HMCL 核心与 Amethyst-Android 后端，支持全版本和模组运行。",
-              "letter": "F",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "Android 端 Minecraft Java 版启动器，基于 HMCL 核心与 Amethyst-Android 后端，支持全版本和模组运行。"
             },
             {
               "name": "Zalith Launcher",
               "url": "https://www.zalithlauncher.cn/",
               "desc": "Android 端 Minecraft Java 版启动器，界面简洁，支持版本管理、模组/资源整合包下载、渲染器调节与联机，开源社区维护。",
-              "letter": "Z",
-              "color": "#4E7296",
-              "icon": "",
               "links": [
                 {
                   "text": "Github",
@@ -220,50 +160,32 @@
             {
               "name": "CurseForge",
               "url": "https://www.curseforge.com/minecraft",
-              "desc": "Minecraft 主流模组与整合包平台，提供模组、整合包等资源下载，覆盖优化、建筑、战斗、探索等玩法。",
-              "letter": "C",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "Minecraft 主流模组与整合包平台，提供模组、整合包等资源下载，覆盖优化、建筑、战斗、探索等玩法。"
             },
             {
               "name": "Modrinth",
               "url": "https://modrinth.com/",
-              "desc": "Minecraft 现代模组平台，提供模组、整合包、资源包等内容，搜索快、支持启动器集成与创作者发布管理。",
-              "letter": "M",
-              "color": "#4F7A9B",
-              "icon": ""
+              "desc": "Minecraft 现代模组平台，提供模组、整合包、资源包等内容，搜索快、支持启动器集成与创作者发布管理。"
             },
             {
               "name": "MC 百科",
               "url": "https://www.mcmod.cn/",
-              "desc": "国内最大的 Minecraft 中文模组资料库，提供模组介绍、物品资料、教程与下载索引，方便查版本兼容和用法。",
-              "letter": "科",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "国内最大的 Minecraft 中文模组资料库，提供模组介绍、物品资料、教程与下载索引，方便查版本兼容和用法。"
             },
             {
               "name": "BBSMC",
               "url": "https://bbsmc.net/",
-              "desc": "中文 Minecraft 资源社区，提供模组、整合包、光影、资源包下载与分享，含大量汉化整合包和多样玩法内容。",
-              "letter": "B",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "中文 Minecraft 资源社区，提供模组、整合包、光影、资源包下载与分享，含大量汉化整合包和多样玩法内容。"
             },
             {
               "name": "Planet",
               "url": "https://www.planetminecraft.com/",
-              "desc": "Minecraft 创意社区站，提供皮肤、材质、地图、数据包等玩家作品分享与下载，含社区活动和创作交流。",
-              "letter": "P",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "Minecraft 创意社区站，提供皮肤、材质、地图、数据包等玩家作品分享与下载，含社区活动和创作交流。"
             },
             {
               "name": "MinecraftMaps",
               "url": "https://www.minecraftmaps.com/",
-              "desc": "老牌 MC 自定义地图库，提供冒险、跑酷、生存、解谜、恐怖等地图免费下载，支持 Java 版和基岩版。",
-              "letter": "M",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "老牌 MC 自定义地图库，提供冒险、跑酷、生存、解谜、恐怖等地图免费下载，支持 Java 版和基岩版。"
             }
           ]
         },
@@ -274,26 +196,17 @@
             {
               "name": "MCPEDL",
               "url": "https://mcpedl.com/",
-              "desc": "Minecraft 基岩版资源站，提供模组、附加包、地图、皮肤、种子和材质包免费下载。",
-              "letter": "M",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "Minecraft 基岩版资源站，提供模组、附加包、地图、皮肤、种子和材质包免费下载。"
             },
             {
               "name": "MineBBS",
               "url": "https://www.minebbs.com/",
-              "desc": "MC 综合中文论坛，提供 Java/基岩双端资源、服务端插件、开服教程与社区交流。",
-              "letter": "M",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "MC 综合中文论坛，提供 Java/基岩双端资源、服务端插件、开服教程与社区交流。"
             },
             {
               "name": "苦力怕论坛",
               "url": "https://klpbbs.com/",
-              "desc": "Minecraft 中文社区，以基岩版资源为特色，提供模组、附加包、地图、材质、皮肤下载与教程、联机、问答交流。",
-              "letter": "苦",
-              "color": "#4E7296",
-              "icon": ""
+              "desc": "Minecraft 中文社区，以基岩版资源为特色，提供模组、附加包、地图、材质、皮肤下载与教程、联机、问答交流。"
             }
           ]
         },
@@ -303,19 +216,13 @@
           "items": [
             {
               "name": "Radmin LAN",
-              "letter": "R",
-              "color": "#4E7296",
-              "icon": "",
-              "desc": "虚拟局域网联机工具",
-              "url": "https://www.radmin-lan.cn/"
+              "url": "https://www.radmin-lan.cn/",
+              "desc": "虚拟局域网联机工具"
             },
             {
               "name": "樱花内网穿透",
-              "letter": "樱",
-              "color": "#9A7250",
-              "icon": "",
-              "desc": "免费内网穿透与联机",
-              "url": "https://www.natfrp.com/"
+              "url": "https://www.natfrp.com/",
+              "desc": "免费内网穿透与联机"
             }
           ]
         },
@@ -325,51 +232,33 @@
           "items": [
             {
               "name": "NameMC",
-              "letter": "N",
-              "color": "#4E7296",
-              "icon": "",
-              "desc": "正版皮肤查询与历史记录",
-              "url": "https://namemc.com/"
+              "url": "https://namemc.com/",
+              "desc": "正版皮肤查询与历史记录"
             },
             {
               "name": "MC 皮肤编辑器",
-              "letter": "皮",
-              "color": "#5F8468",
-              "icon": "",
-              "desc": "网页端皮肤绘制与编辑",
-              "url": "https://minecraftskineditor.org/"
+              "url": "https://minecraftskineditor.org/",
+              "desc": "网页端皮肤绘制与编辑"
             },
             {
               "name": "Blockbench",
-              "letter": "B",
-              "color": "#9A7250",
-              "icon": "",
-              "desc": "免费 3D 模型与皮肤建模工具，支持 MC 皮肤和实体模型",
-              "url": "https://www.blockbench.net/"
+              "url": "https://www.blockbench.net/",
+              "desc": "免费 3D 模型与皮肤建模工具，支持 MC 皮肤和实体模型"
             },
             {
               "name": "壁纸生成器",
-              "letter": "壁",
-              "color": "#7A6E96",
-              "icon": "",
-              "desc": "MC 风格壁纸与头像生成",
-              "url": "https://wallpapers.novaskin.me/"
+              "url": "https://wallpapers.novaskin.me/",
+              "desc": "MC 风格壁纸与头像生成"
             },
             {
               "name": "LittleSkin",
-              "letter": "L",
-              "color": "#96697C",
-              "icon": "",
-              "desc": "国际皮肤站，支持上传与使用",
-              "url": "https://littleskin.cn/"
+              "url": "https://littleskin.cn/",
+              "desc": "国际皮肤站，支持上传与使用"
             },
             {
               "name": "MC 工具集",
-              "letter": "工",
-              "color": "#4F7A9B",
-              "icon": "",
-              "desc": "命令生成、药水计算等",
-              "url": "https://minecraft.tools/"
+              "url": "https://minecraft.tools/",
+              "desc": "命令生成、药水计算等"
             }
           ]
         }
@@ -385,51 +274,33 @@
           "items": [
             {
               "name": "Bandizip",
-              "letter": "B",
-              "color": "#4E7296",
-              "icon": "",
-              "desc": "PC 高效解压，界面清爽",
-              "url": "https://www.bandisoft.com/bandizip/"
+              "url": "https://www.bandisoft.com/bandizip/",
+              "desc": "PC 高效解压，界面清爽"
             },
             {
               "name": "7-Zip",
-              "letter": "7",
-              "color": "#5F8468",
-              "icon": "",
-              "desc": "开源免费压缩解压",
-              "url": "https://www.7-zip.org/"
+              "url": "https://www.7-zip.org/",
+              "desc": "开源免费压缩解压"
             },
             {
               "name": "MT 管理器",
-              "letter": "M",
-              "color": "#9A7250",
-              "icon": "",
-              "desc": "安卓文件管理与 APK 编辑",
-              "url": "https://mt2.cn/"
+              "url": "https://mt2.cn/",
+              "desc": "安卓文件管理与 APK 编辑"
             },
             {
               "name": "ZArchiver",
-              "letter": "Z",
-              "color": "#7A6E96",
-              "icon": "",
-              "desc": "安卓专业解压缩",
-              "url": "https://kawang.lanzoul.com/izM822xcu82d"
+              "url": "https://kawang.lanzoul.com/izM822xcu82d",
+              "desc": "安卓专业解压缩"
             },
             {
               "name": "NP 管理器",
-              "letter": "N",
-              "color": "#96697C",
-              "icon": "",
-              "desc": "安卓无广告文件管理",
-              "url": "http://normalplayer.top"
+              "url": "http://normalplayer.top",
+              "desc": "安卓无广告文件管理"
             },
             {
               "name": "Chunkbase",
-              "letter": "C",
-              "color": "#4F7A9B",
-              "icon": "",
-              "desc": "种子地图与结构查询",
-              "url": "https://www.chunkbase.com/"
+              "url": "https://www.chunkbase.com/",
+              "desc": "种子地图与结构查询"
             }
           ]
         }
@@ -445,75 +316,48 @@
           "items": [
             {
               "name": "Steam",
-              "letter": "S",
-              "color": "#4E7296",
-              "icon": "",
-              "desc": "全球最大 PC 游戏平台",
-              "url": "https://store.steampowered.com/"
+              "url": "https://store.steampowered.com/",
+              "desc": "全球最大 PC 游戏平台"
             },
             {
               "name": "Epic Games",
-              "letter": "E",
-              "color": "#6B6F7A",
-              "icon": "",
-              "desc": "每周免费游戏与虚幻引擎",
-              "url": "https://www.epicgames.com/"
+              "url": "https://www.epicgames.com/",
+              "desc": "每周免费游戏与虚幻引擎"
             },
             {
               "name": "WeGame",
-              "letter": "W",
-              "color": "#5F8468",
-              "icon": "",
-              "desc": "腾讯游戏平台",
-              "url": "https://www.wegame.com.cn"
+              "url": "https://www.wegame.com.cn",
+              "desc": "腾讯游戏平台"
             },
             {
               "name": "itch.io",
-              "letter": "i",
-              "color": "#96697C",
-              "icon": "",
-              "desc": "独立游戏与开发者社区",
-              "url": "https://itch.io/"
+              "url": "https://itch.io/",
+              "desc": "独立游戏与开发者社区"
             },
             {
               "name": "Nexus Mods",
-              "letter": "N",
-              "color": "#9A7250",
-              "icon": "",
-              "desc": "全球最大游戏模组网站",
-              "url": "https://www.nexusmods.com/"
+              "url": "https://www.nexusmods.com/",
+              "desc": "全球最大游戏模组网站"
             },
             {
               "name": "GameBanana",
-              "letter": "G",
-              "color": "#7A6E96",
-              "icon": "",
-              "desc": "多游戏模组资源站",
-              "url": "https://gamebanana.com/"
+              "url": "https://gamebanana.com/",
+              "desc": "多游戏模组资源站"
             },
             {
               "name": "风灵月影",
-              "letter": "风",
-              "color": "#4F7A9B",
-              "icon": "",
-              "desc": "免费单机游戏修改器",
-              "url": "https://flingtrainer.com/"
+              "url": "https://flingtrainer.com/",
+              "desc": "免费单机游戏修改器"
             },
             {
               "name": "WeMod",
-              "letter": "W",
-              "color": "#5F8468",
-              "icon": "",
-              "desc": "一站式游戏修改器平台",
-              "url": "https://www.wemod.com/zh"
+              "url": "https://www.wemod.com/zh",
+              "desc": "一站式游戏修改器平台"
             },
             {
               "name": "Cheat Engine",
-              "letter": "C",
-              "color": "#6B6F7A",
-              "icon": "",
-              "desc": "开源内存修改与调试",
-              "url": "https://www.cheatengine.org/"
+              "url": "https://www.cheatengine.org/",
+              "desc": "开源内存修改与调试"
             }
           ]
         }
