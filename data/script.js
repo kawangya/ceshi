@@ -2193,15 +2193,35 @@
 
     if (settingsResetEl) {
       settingsResetEl.addEventListener('click', function () {
-        const ghConfig = { ghOwner: SETTINGS.ghOwner, ghRepo: SETTINGS.ghRepo, ghPath: SETTINGS.ghPath, ghToken: SETTINGS.ghToken };
-        SETTINGS = Object.assign({}, DEFAULT_SETTINGS, ghConfig);
-        SETTINGS.editMode = false;
+        // 1. 提前记录需要保留的当前状态
+        const currentThemeColor = SETTINGS.themeColor;
+        const ghConfig = { 
+          ghOwner: SETTINGS.ghOwner, 
+          ghRepo: SETTINGS.ghRepo, 
+          ghPath: SETTINGS.ghPath, 
+          ghToken: SETTINGS.ghToken 
+        };
+        
+        // 2. 合并状态：默认配置 + GitHub配置 + 保留的配色 + 强制关闭编辑模式
+        SETTINGS = Object.assign({}, DEFAULT_SETTINGS, ghConfig, {
+          themeColor: currentThemeColor,
+          editMode: false
+        });
         
         saveSettings();
+
+        // 3. 强制恢复“跟随系统”（会同步深浅色模式）
         setFollowSystem(true);
-        applySettings();
+        
+        // 4. 重新应用、刷新设置面板 UI、重新渲染导航分类和分组
+        applySettings(); 
         syncSettingsUI();
-        renderNav();
+        
+        // 5. 只渲染分类与分组（因为卡片已经在 applySettings 里刷新过了）
+        renderCatNav();
+        renderGroupNav();
+        setTimeout(updateActiveSubTab, 100);
+
         showToast('已恢复默认设置');
       });
     }
