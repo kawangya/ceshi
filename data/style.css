@@ -42,13 +42,11 @@ body.modal-open { overflow: hidden; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; border: 2px solid var(--bg); }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-mute); }
 
-/* 图标 */
+/* 图标通用 */
 .brand-mark, .avatar, .acc-ico, .nav-ico, .friend-ico { position: relative; overflow: hidden; flex-shrink: 0; }
-.brand-mark img, .avatar img, .acc-ico img, .nav-ico img, .friend-ico img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; }
+.brand-mark img, .avatar img, .friend-ico img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; }
 .brand-mark { width: 28px; height: 28px; }
 .avatar { width: 46px; height: 46px; }
-.acc-ico { width: 21px; height: 21px; }
-.nav-ico { width: 34px; height: 34px; }
 .friend-ico { width: 18px; height: 18px; }
 .qr-code { width: 76px; height: 76px; }
 
@@ -124,9 +122,9 @@ body.modal-open { overflow: hidden; }
 @media (hover: none) { .nav-card { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; } }
 .nav-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-hover); transform: translateY(-1px); }
 .nav-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.nav-ico { display: grid; place-items: center; border-radius: 9px; color: #fff; font-size: 13px; font-weight: 600; line-height: 1; box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .08); background: var(--surface-2); }
-.nav-ico.nav-ico-img { background: #ffffff !important; border: 1px solid var(--border); box-shadow: none; overflow: hidden; }
-.nav-ico.nav-ico-img img { position: static !important; width: 100% !important; height: 100% !important; object-fit: contain !important; padding: 4px; border-radius: 0; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.08)); }
+.nav-ico { display: grid; place-items: center; border-radius: 9px; color: #fff; font-size: 13px; font-weight: 600; line-height: 1; box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .08); background: var(--surface-2); width: 34px; height: 34px; }
+.nav-ico.nav-ico-img { background: var(--surface-2) !important; border: none; box-shadow: none; overflow: hidden; }
+.nav-ico.nav-ico-img img { position: static !important; width: 100% !important; height: 100% !important; object-fit: contain !important; padding: 0; border-radius: 0; }
 .nav-info { min-width: 0; flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 1px; }
 .nav-name { font-size: 13.5px; font-weight: 600; color: var(--text); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .nav-desc { font-size: 12px; line-height: 1.45; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -169,7 +167,11 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 .account-list { display: flex; flex-direction: column; gap: 2px; }
 .account-item { display: flex; align-items: center; gap: 9px; padding: 6px 8px; border-radius: 9px; text-decoration: none; color: inherit; transition: background-color .16s ease; }
 .account-item:hover { background: var(--surface-2); }
-.acc-ico { display: grid; place-items: center; border-radius: 6px; color: #fff; font-size: 11px; font-weight: 600; line-height: 1; }
+
+/* 账号图标优化 */
+.acc-ico { display: grid; place-items: center; border-radius: 6px; background: var(--surface-2); border: none; box-shadow: none; width: 24px; height: 24px; flex-shrink: 0; overflow: hidden; }
+.acc-ico img { position: static !important; width: 100% !important; height: 100% !important; object-fit: contain !important; padding: 0; border-radius: 0; }
+
 .acc-label { font-size: 12.5px; color: var(--text-dim); flex-shrink: 0; }
 .acc-value { margin-left: auto; font-size: 12.5px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .qr-block { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
@@ -391,3 +393,6 @@ body.edit-mode .cat-tab .cat-tab-count { display: none; }
 .setting-item-github { flex-direction: column; align-items: stretch; gap: 8px; }
 .setting-switch-wrap { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; width: 100%; }
 .setting-switch-label { font-size: 13px; color: var(--text); font-weight: 500; }
+
+[data-theme="dark"] .nav-ico.nav-ico-img,
+[data-theme="dark"] .acc-ico { background: rgba(255, 255, 255, 0.85) !important; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05); }
