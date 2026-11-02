@@ -6,7 +6,7 @@
 <meta name="author" content="卡王">
 <meta name="description" content="卡王的导航">
 <title>卡王的导航</title>
-<link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta property="og:title" content="卡王的导航">
 <meta property="og:description" content="资源、工具与实用链接一站式入口">
@@ -18,12 +18,9 @@
   (function () {
     try {
       var s = localStorage.getItem('site.theme');
-      var theme;
-      if (!s || s === 'system') {
-        theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      } else {
-        theme = s;
-      }
+      var theme = (!s || s === 'system')
+        ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : s;
       document.documentElement.dataset.theme = theme;
 
       var raw = localStorage.getItem('site.settings');
@@ -32,9 +29,6 @@
           var st = JSON.parse(raw);
           if (st && st.themeColor) document.documentElement.dataset.themeColor = st.themeColor;
         } catch (e) {}
-      }
-      if (!document.documentElement.dataset.themeColor) {
-        document.documentElement.dataset.themeColor = 'orange';
       }
     } catch (e) {}
   })();
@@ -48,7 +42,7 @@
   <div class="topbar-inner">
     <a class="brand" href="./" title="回到顶部 / 刷新页面">
       <span class="brand-mark">
-        <img data-fallback src="../images/apple-touch-icon.png" alt="卡王的导航">
+        <img data-fallback src="images/apple-touch-icon.png" alt="卡王的导航">
       </span>
       <span class="brand-name">卡王的导航</span>
     </a>
@@ -108,7 +102,7 @@
     <section class="panel" aria-label="个人账号">
       <div class="profile-top">
         <div class="avatar">
-          <img data-fallback src="../images/apple-touch-icon.png" alt="卡王">
+          <img data-fallback src="images/apple-touch-icon.png" alt="卡王">
         </div>
         <div class="profile-meta">
           <div class="profile-name">卡王</div>
@@ -119,28 +113,28 @@
       <div class="account-list">
         <a class="account-item" href="https://qm.qq.com/q/rqS3pr5QkM" target="_blank" rel="noopener" title="QQ：3596374598">
           <span class="acc-ico">
-            <img data-fallback src="../images/qq.png" alt="QQ">
+            <img data-fallback src="images/qq.png" alt="QQ">
           </span>
           <span class="acc-label">QQ</span>
           <span class="acc-value">3596374598</span>
         </a>
         <a class="account-item" href="mailto:panniyueya@qq.com" title="邮箱：panniyueya@qq.com">
           <span class="acc-ico">
-            <img data-fallback src="../images/email.png" alt="邮箱">
+            <img data-fallback src="images/email.png" alt="邮箱">
           </span>
           <span class="acc-label">邮箱</span>
           <span class="acc-value">panniyueya@qq.com</span>
         </a>
         <a class="account-item" href="https://space.bilibili.com/526424144" target="_blank" rel="noopener" title="哔哩哔哩：526424144">
           <span class="acc-ico">
-            <img data-fallback src="../images/bilibili.png" alt="B站">
+            <img data-fallback src="images/bilibili.png" alt="B站">
           </span>
           <span class="acc-label">B站</span>
           <span class="acc-value">526424144</span>
         </a>
         <a class="account-item" href="https://v.douyin.com/iLSLj2mq/" target="_blank" rel="noopener" title="抖音：kawangya">
           <span class="acc-ico">
-            <img data-fallback src="../images/douyin.png" alt="抖音">
+            <img data-fallback src="images/douyin.png" alt="抖音">
           </span>
           <span class="acc-label">抖音</span>
           <span class="acc-value">kawangya</span>
@@ -148,8 +142,8 @@
       </div>
 
       <div class="qr-block">
-        <a class="qr-code" id="qrCode" href="../images/qr.png" target="_blank" rel="noopener" title="点击查看大图">
-          <img src="../images/qr.png" alt="卡王的小窝 公众号二维码">
+        <a class="qr-code" id="qrCode" href="images/qr.png" target="_blank" rel="noopener" title="点击查看大图">
+          <img src="images/qr.png" alt="卡王的小窝 公众号二维码">
         </a>
         <div class="qr-text">
           <div class="qr-title">公众号</div>
