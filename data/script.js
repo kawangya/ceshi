@@ -1,5 +1,5 @@
 /* =========================================================
-   卡王的导航 - 主脚本 (最终优化版)
+   卡王的导航 - 主脚本 (最终清理版)
    ========================================================= */
 
 (function () {
@@ -14,7 +14,7 @@
     themeColor: 'orange',
     noticeBar: true,
     showFriends: true,
-    enableMultiLinks: false, // 默认关闭多链接下拉
+    enableMultiLinks: false,
     defaultCategory: '',
     openInNewTab: true,
     ghOwner: '',
@@ -1112,9 +1112,17 @@
         const name = it.name || '';
         const desc = it.desc || '';
         const hasDesc = !!desc;
-        const hasIcon = !!(it.icon && it.icon.trim());
-        // const iconHtml = hasIcon ? '<img data-fallback src="' + esc(it.icon) + '" alt="">' : '';
-        const iconHtml = hasIcon ? '<img data-fallback src="' + esc(it.icon) + '" alt="" loading="lazy">' : '';
+        
+        let iconUrl = it.icon;
+        if (!iconUrl && it.url && it.url !== '#' && it.url !== 'javascript:void(0)') {
+          try {
+            const u = new URL(it.url);
+            iconUrl = 'https://favicon.im/' + u.hostname + '?larger=true';
+          } catch(e) {}
+        }
+        const hasIcon = !!iconUrl;
+        // 增加 loading="lazy" 性能优化
+        const iconHtml = hasIcon ? '<img data-fallback src="' + esc(iconUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' : '';
 
         const allLinks   = getItemLinks(it);
         const primaryUrl = allLinks[0] ? allLinks[0].url : '';
@@ -1275,7 +1283,7 @@
     friendsSectionEl.hidden = false;
     friendsGridEl.innerHTML = visible.map(function (f) {
       const hasIcon = !!(f.icon && f.icon.trim());
-      const iconHtml = hasIcon ? '<img data-fallback src="' + esc(f.icon) + '" alt="">' : '';
+      const iconHtml = hasIcon ? '<img data-fallback src="' + esc(f.icon) + '" alt="" loading="lazy">' : '';
       return '<a class="friend-card" href="' + esc(f.url || '#') + '" target="_blank" rel="noopener" title="' + esc(f.name || '') + '">' +
                '<span class="friend-ico" style="background:' + esc(f.color || '#4E7296') + '">' +
                  '<span>' + esc(f.letter || '友') + '</span>' + iconHtml +
@@ -2104,7 +2112,7 @@
       setEnableMultiLinksEl.addEventListener('change', function () {
         SETTINGS.enableMultiLinks = !!setEnableMultiLinksEl.checked;
         saveSettings();
-        applySettings(); // 静默重绘，不再弹出 Toast
+        applySettings();
       });
     }
     if (setDefaultCategoryEl) {

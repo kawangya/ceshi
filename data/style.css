@@ -54,7 +54,6 @@
   --text-mute: #94A3B8;
   --accent: #3F729B;
   --accent-soft: #E8F1F7;
-  --dot: #D97757;
   --shadow: 0 1px 2px rgba(30, 41, 59, .03), 0 6px 20px rgba(30, 41, 59, .03);
   --shadow-hover: 0 2px 4px rgba(30, 41, 59, .04), 0 10px 26px rgba(30, 41, 59, .05);
 }
@@ -70,36 +69,28 @@
   --text-mute: #5C6E82;
   --accent: #7BA4C4;
   --accent-soft: #1E3348;
-  --dot: #D97757;
   --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 6px 20px rgba(0, 0, 0, .3);
   --shadow-hover: 0 2px 4px rgba(0, 0, 0, .45), 0 10px 26px rgba(0, 0, 0, .35);
 }
 
 /* =========================================================
-   其他主题扩展
+   其他主题
    ========================================================= */
-
-/* 护眼绿 */
 [data-theme-color="green"] { --bg:#F3F5F1; --bg-blur:rgba(243,245,241,.82); --surface:#FFFFFF; --surface-2:#F0F3EE; --border:#E2E7DF; --border-strong:#CDD5C8; --text:#2E362F; --text-dim:#6B766D; --text-mute:#98A69B; --accent:#5C8D76; --accent-soft:#E6F0EA; --dot:#5C8D76; }
 [data-theme="dark"][data-theme-color="green"] { --bg:#181B19; --bg-blur:rgba(24,27,25,.82); --surface:#202421; --surface-2:#262B27; --border:#303732; --border-strong:#424B44; --text:#E2E5E3; --text-dim:#909A93; --text-mute:#68716B; --accent:#7BB391; --accent-soft:#26342B; }
 
-/* 极客紫 */
 [data-theme-color="purple"] { --bg:#F6F4F9; --bg-blur:rgba(246,244,249,.82); --surface:#FFFFFF; --surface-2:#F1EEF6; --border:#E3DEF0; --border-strong:#D0C9E0; --text:#2E2B36; --text-dim:#716B80; --text-mute:#A39DB3; --accent:#7E6B8F; --accent-soft:#EBE6F0; --dot:#7E6B8F; }
 [data-theme="dark"][data-theme-color="purple"] { --bg:#1A181D; --bg-blur:rgba(26,24,29,.82); --surface:#211E24; --surface-2:#28242C; --border:#35303A; --border-strong:#484150; --text:#E3E0E8; --text-dim:#9A95A3; --text-mute:#706A7A; --accent:#A997BC; --accent-soft:#2F2838; }
 
-/* 樱花粉 */
 [data-theme-color="pink"] { --bg:#F9F5F6; --bg-blur:rgba(249,245,246,.82); --surface:#FFFFFF; --surface-2:#F6EFEF; --border:#EEDFE1; --border-strong:#DEC8CA; --text:#3B3234; --text-dim:#857377; --text-mute:#B5A3A6; --accent:#B26A76; --accent-soft:#F5E6E8; --dot:#B26A76; }
 [data-theme="dark"][data-theme-color="pink"] { --bg:#1C1819; --bg-blur:rgba(28,24,25,.82); --surface:#241F20; --surface-2:#2B2526; --border:#3A3133; --border-strong:#4F4245; --text:#EAE1E3; --text-dim:#A39496; --text-mute:#756568; --accent:#CF8E9A; --accent-soft:#3A272A; }
 
-/* 抹茶青 */
 [data-theme-color="cyan"] { --bg:#F2F7F6; --bg-blur:rgba(242,247,246,.82); --surface:#FFFFFF; --surface-2:#EAF2F1; --border:#DDE8E6; --border-strong:#C4D6D3; --text:#263331; --text-dim:#687C78; --text-mute:#94AAA6; --accent:#3E8A7B; --accent-soft:#E2F0ED; --dot:#3E8A7B; }
 [data-theme="dark"][data-theme-color="cyan"] { --bg:#141918; --bg-blur:rgba(20,25,24,.82); --surface:#1C2220; --surface-2:#222A28; --border:#2D3835; --border-strong:#404F4B; --text:#E1E8E6; --text-dim:#8B9D99; --text-mute:#62736F; --accent:#68B8A6; --accent-soft:#1C362F; }
 
-/* 晨雾灰 */
 [data-theme-color="gray"] { --bg:#F5F5F5; --bg-blur:rgba(245,245,245,.82); --surface:#FFFFFF; --surface-2:#F0F0F0; --border:#E5E5E5; --border-strong:#D4D4D4; --text:#262626; --text-dim:#737373; --text-mute:#A3A3A3; --accent:#595959; --accent-soft:#F0F0F0; --dot:#595959; }
 [data-theme="dark"][data-theme-color="gray"] { --bg:#181818; --bg-blur:rgba(24,24,24,.82); --surface:#202020; --surface-2:#262626; --border:#333333; --border-strong:#474747; --text:#E5E5E5; --text-dim:#9E9E9E; --text-mute:#707070; --accent:#A3A3A3; --accent-soft:#2E2E2E; }
 
-/* 石墨蓝 */
 [data-theme-color="indigo"] { --bg:#F2F4F8; --bg-blur:rgba(242,244,248,.82); --surface:#FFFFFF; --surface-2:#EAEDF3; --border:#DCE1E9; --border-strong:#C5CDD9; --text:#242B36; --text-dim:#626F82; --text-mute:#8E9AA9; --accent:#465E7B; --accent-soft:#E5EAF0; --dot:#465E7B; }
 [data-theme="dark"][data-theme-color="indigo"] { --bg:#12161C; --bg-blur:rgba(18,22,28,.82); --surface:#1A2028; --surface-2:#202731; --border:#2B3542; --border-strong:#3E4C5E; --text:#E0E5EB; --text-dim:#8B9AAC; --text-mute:#647386; --accent:#7A96B8; --accent-soft:#212F40; }
 
@@ -127,7 +118,7 @@ body.modal-open { overflow: hidden; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; border: 2px solid var(--bg); }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-mute); }
 
-/* 图片图标通用规则 */
+/* 图标容器 */
 .brand-mark, .avatar, .acc-ico, .nav-ico, .friend-ico {
   position: relative; overflow: hidden; flex-shrink: 0;
 }
@@ -273,7 +264,6 @@ body.modal-open { overflow: hidden; }
 .cat-random:hover { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
 .cat-random:active { transform: scale(.98); }
 
-/* 中间内容 */
 .nav-search {
   position: sticky; top: 60px; z-index: 20;
   padding: 8px 0 16px; background: var(--bg);
@@ -318,7 +308,6 @@ body.modal-open { overflow: hidden; }
   align-items: stretch;
 }
 
-/* 解决所有 Grid 和 Flex 子项的溢出问题 */
 .layout > *,
 .nav-grid > * {
   min-width: 0;
@@ -354,6 +343,7 @@ body.modal-open { overflow: hidden; }
   border-radius: 9px; color: #fff;
   font-size: 13px; font-weight: 600; line-height: 1;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .08);
+  background: var(--surface-2);
 }
 .nav-info { min-width: 0; flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 1px; }
 
@@ -397,7 +387,7 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 }
 
 /* =========================================================
-   内联下拉（多链接展开列表）
+   内联下拉
    ========================================================= */
 .inline-links {
   position: fixed;
@@ -440,13 +430,7 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
   color: var(--accent);
   outline: none;
 }
-
-.inline-link-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
+.inline-link-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .inline-link-badge {
   flex-shrink: 0;
   font-size: 10.5px;
@@ -458,14 +442,13 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
   line-height: 1.4;
 }
 
-/* 手机端微调 */
 @media (max-width: 640px) {
   .inline-links { padding: 5px; }
   .inline-link { padding: 9px 12px; min-height: 42px; }
 }
 
 /* =========================================================
-   导航提示浮层 (Tooltip)
+   提示浮层 (Tooltip)
    ========================================================= */
 .nav-tip {
   position: fixed; z-index: 80;
@@ -675,6 +658,11 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 .setting-name { font-size: 13.5px; font-weight: 600; color: var(--text); }
 .setting-desc { margin-top: 2px; font-size: 12px; color: var(--text-mute); }
 
+/* 新增：列排布与开关容器 */
+.setting-item-column { flex-direction: column; align-items: stretch; gap: 8px; }
+.setting-switch-wrap { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.setting-switch-label { font-size: 13px; color: var(--text); font-weight: 500; }
+
 .theme-colors { flex-shrink: 0; display: flex; flex-wrap: wrap; gap: 8px; padding-top: 2px; justify-content: flex-end; max-width: 140px; }
 .color-dot { width: 26px; height: 26px; padding: 0; border: 2px solid var(--border); border-radius: 50%; background: var(--dot-bg, var(--accent)); cursor: pointer; transition: all .18s; }
 .color-dot:hover { border-color: var(--border-strong); }
@@ -806,7 +794,7 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 @media (max-width: 400px) { .cat-tab-count { display: none; } }
 
 /* =========================================================
-   动效与辅助类
+   动效、编辑器及其他辅助类
    ========================================================= */
 @keyframes fadeInContent { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 .fade-in-content { animation: fadeInContent .4s cubic-bezier(.25,.46,.45,.94) forwards; }
@@ -820,9 +808,7 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 .setting-input { width: 100%; height: 32px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font-family: inherit; font-size: 12.5px; outline: none; transition: all .2s; }
 .setting-input:focus { border-color: var(--accent); background: var(--surface); }
 
-/* =========================================================
-   编辑模式下的 UI
-   ========================================================= */
+/* 编辑模式 */
 body.edit-mode .nav-card {
   border-color: var(--accent); border-style: dashed;
   padding-right: 80px; padding-bottom: 36px;
@@ -851,15 +837,12 @@ body.edit-mode .group-actions { display: flex; }
 body.edit-mode .cat-tab .cat-actions { display: flex; }
 body.edit-mode .cat-tab .cat-tab-count { display: none; }
 
-/* =========================================================
-   卡片编辑弹窗 & 多链接配置区 (始终显示)
-   ========================================================= */
-.edit-links-section {
-  border-top: 1px dashed var(--border);
-  padding-top: 12px;
-  margin-top: 4px;
-}
+/* 编辑弹窗特有样式 */
+.edit-modal-title { margin: 0; padding: 0; }
+.edit-modal-body { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; }
+.edit-save-btn { background: var(--accent); color: #fff; border: none; }
 
+.edit-links-section { border-top: 1px dashed var(--border); padding-top: 12px; margin-top: 4px; }
 .edit-links-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .edit-links-label { font-size: 12.5px; font-weight: 600; color: var(--text-dim); }
 .edit-links-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }

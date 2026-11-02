@@ -234,7 +234,6 @@
     </div>
 
     <div class="settings-body">
-      <!-- 1. 主题配色 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">主题配色</div>
@@ -243,7 +242,6 @@
         <div class="theme-colors" id="themeColors"></div>
       </div>
 
-      <!-- 2. 跟随系统 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">跟随系统</div>
@@ -255,7 +253,6 @@
         </label>
       </div>
 
-      <!-- 3. 顶部公告 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">顶部公告</div>
@@ -267,7 +264,6 @@
         </label>
       </div>
 
-      <!-- 4. 底部友站 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">底部友站</div>
@@ -279,7 +275,6 @@
         </label>
       </div>
 
-      <!-- 5. 多链接下拉 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">多链接下拉</div>
@@ -291,7 +286,6 @@
         </label>
       </div>
 
-      <!-- 6. 默认分类 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">默认分类</div>
@@ -302,7 +296,6 @@
         </select>
       </div>
 
-      <!-- 7. 链接打开方式 -->
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">链接打开方式</div>
@@ -314,17 +307,16 @@
         </div>
       </div>
 
-      <!-- 8. GitHub 在线编辑 -->
-      <div class="setting-item" style="flex-direction: column; align-items: stretch; gap: 8px;">
+      <div class="setting-item setting-item-column">
         <div class="setting-label">
           <div class="setting-name">GitHub 云端同步</div>
           <div class="setting-desc">填入 Token 后可在线编辑并保存导航数据</div>
         </div>
         <input type="text" id="ghRepo" placeholder="仓库名 (自动获取)" class="setting-input">
         <input type="password" id="ghToken" placeholder="Personal Access Token (ghp_...)" class="setting-input">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
-          <span style="font-size: 13px; color: var(--text); font-weight: 500;">可视化编辑</span>
-          <label class="switch" style="margin-top: 0;">
+        <div class="setting-switch-wrap">
+          <span class="setting-switch-label">可视化编辑</span>
+          <label class="switch">
             <input type="checkbox" id="setEditMode">
             <span class="switch-track"></span>
           </label>
@@ -345,14 +337,13 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<!-- 卡片编辑弹窗 -->
 <div class="modal-mask" id="editModalMask" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modal-head">
-      <h2 class="modal-title" id="editModalTitle" style="margin:0; padding:0;">编辑卡片</h2>
+      <h2 class="modal-title edit-modal-title" id="editModalTitle">编辑卡片</h2>
       <button class="modal-close" id="editModalClose" type="button" aria-label="关闭">×</button>
     </div>
-    <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px; padding-top: 20px;">
+    <div class="modal-body edit-modal-body">
       <input type="text" id="editName" placeholder="站点名称" class="setting-input">
       <input type="text" id="editUrl" placeholder="站点链接 (URL)" class="setting-input">
       <input type="text" id="editDesc" placeholder="站点描述 (可选)" class="setting-input">
@@ -368,7 +359,7 @@
       </div>
     </div>
     <div class="modal-actions">
-      <button class="settings-btn" id="editSaveBtn" style="background:var(--accent); color:#fff; border:none;">保存</button>
+      <button class="settings-btn edit-save-btn" id="editSaveBtn">保存</button>
     </div>
   </div>
 </div>
