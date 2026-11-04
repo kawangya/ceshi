@@ -131,6 +131,19 @@
     return safe.replace(new RegExp('(' + qq + ')', 'gi'), '<mark>$1</mark>');
   }
 
+  // 极简 Markdown 解析器
+  function parseMarkdown(text) {
+    if (!text) return '';
+    let html = esc(text);
+    // 解析 [文字](链接)
+    html = html.replace(/\[([^\]]+)\]\((http[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    // 解析 **加粗**
+    html = html.replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>');
+    // 解析 `代码`
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+    return html;
+  }
+
   function openExternal(url) {
     if (!url || url === '#' || url === 'javascript:void(0)') return;
     window.open(url, '_blank', 'noopener');
@@ -1300,7 +1313,7 @@
           const value = document.createElement('span');
           value.className = 'kv-value';
           if (it.valueHtml) value.innerHTML = it.valueHtml;
-          else value.innerHTML = highlight(it.value || '', '');
+          else value.innerHTML = parseMarkdown(it.value || '');
           if (it.note) {
             const note = document.createElement('span');
             note.className = 'kv-note';
@@ -1315,14 +1328,14 @@
         ol.className = 'num-list';
         (sec.items || []).forEach(text => {
           const li = document.createElement('li');
-          li.innerHTML = text;
+          li.innerHTML = parseMarkdown(text);
           ol.appendChild(li);
         });
         wrap.appendChild(ol);
       } else if (sec.type === 'text') {
         const p = document.createElement('p');
         p.className = 'section-text';
-        p.innerHTML = sec.text || '';
+        p.innerHTML = parseMarkdown(sec.text || '');
         wrap.appendChild(p);
       }
       frag.appendChild(wrap);

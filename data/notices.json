@@ -1,6 +1,5 @@
 [
   {
-    "id": 1,
     "tag": "代发",
     "tagClass": "tag-skin",
     "pinned": true,
@@ -18,12 +17,12 @@
           },
           {
             "label": "QQ",
-            "valueHtml": "<a href=\"https://qm.qq.com/q/rqS3pr5QkM\" target=\"_blank\" rel=\"noopener\">3596374598</a>（备注来意）",
+            "value": "[3596374598](https://qm.qq.com/q/rqS3pr5QkM)（备注来意）",
             "note": "皮肤可勾选原图直接发送，或以文件形式发送，或发送网盘链接"
           },
           {
             "label": "邮箱",
-            "valueHtml": "<a href=\"mailto:panniyueya@qq.com\">panniyueya@qq.com</a>",
+            "value": "[panniyueya@qq.com](mailto:panniyueya@qq.com)",
             "note": "皮肤以附件形式添加，或发送网盘链接"
           }
         ]
@@ -34,19 +33,37 @@
         "items": [
           "原创设计易过审核 ✨",
           "避免影视动漫角色等版权内容",
-          "更多须知见<a href=\"https://mc.163.com/dev/mcmanual/mc-dev/mcguide/35-上架与入驻/课程03-组件上架的规范及过审攻略.html\" target=\"_blank\" rel=\"noopener\">官方说明</a>"
+          "更多须知见[官方说明](https://mc.163.com/dev/mcmanual/mc-dev/mcguide/35-上架与入驻/课程03-组件上架的规范及过审攻略.html)"
         ]
       },
       {
         "type": "kv",
         "title": "投稿格式",
         "items": [
-          { "label": "皮肤名称", "value": "必填" },
-          { "label": "皮肤风格", "value": "原版 / 科幻 / 神话 / 其他" },
-          { "label": "皮肤类型", "value": "粗臂 / 细臂" },
-          { "label": "皮肤简介", "value": "可选项" },
-          { "label": "皮肤文件", "value": "按上方投稿方式发送" },
-          { "label": "皮肤封面", "value": "可选项" }
+          {
+            "label": "皮肤名称",
+            "value": "必填"
+          },
+          {
+            "label": "皮肤风格",
+            "value": "原版 / 科幻 / 神话 / 其他"
+          },
+          {
+            "label": "皮肤类型",
+            "value": "粗臂 / 细臂"
+          },
+          {
+            "label": "皮肤简介",
+            "value": "可选项"
+          },
+          {
+            "label": "皮肤文件",
+            "value": "按上方投稿方式发送"
+          },
+          {
+            "label": "皮肤封面",
+            "value": "可选项"
+          }
         ]
       },
       {
@@ -56,25 +73,62 @@
       }
     ],
     "links": [
-      { "text": "查看投稿演示", "url": "https://mp.weixin.qq.com/s/dQ9c5c7iXxCwPoyPrNNOQw" },
-      { "text": "失败案例", "url": "https://mp.weixin.qq.com/s/82rPeexuyKiRF3NwS8VlIg" }
+      {
+        "text": "查看投稿演示",
+        "url": "https://mp.weixin.qq.com/s/dQ9c5c7iXxCwPoyPrNNOQw"
+      },
+      {
+        "text": "失败案例",
+        "url": "https://mp.weixin.qq.com/s/82rPeexuyKiRF3NwS8VlIg"
+      }
     ]
   },
   {
-    "id": 2,
+    "tag": "社群",
+    "tagClass": "tag-serve",
+    "pinned": true,
+    "title": "MC交流联机群",
+    "excerpt": "点击查看群规并一键加群。欢迎志同道合的朋友加入，共建和谐良好的交流环境。",
+    "sections": [
+      {
+        "type": "text",
+        "title": "进群需知",
+        "text": "请仔细阅读以下群规，若无法接受请勿加群。感谢大家共同维护良好的交流氛围！"
+      },
+      {
+        "type": "num",
+        "items": [
+          "禁止发出或讨论争议、戾气过大的话题",
+          "禁止讨论违法违规话题",
+          "禁止讨论国家政治话题",
+          "禁止讨论追星话题",
+          "请和谐相处游玩联机（可私下建群游玩，请勿在群内争吵）",
+          "禁诈骗，防诈骗，所有私下联系涉及金钱相关话题请务必提高警惕"
+        ]
+      }
+    ],
+    "links": [
+      {
+        "text": "一键加入 QQ 群",
+        "url": "https://qm.qq.com/q/YQDLSjPJC0"
+      }
+    ]
+  },
+  {
     "tag": "流量卡",
     "tagClass": "tag-card",
     "pinned": true,
     "noModal": true,
     "title": "免费领大额流量卡",
     "excerpt": "点击卡片直接前往领取页面。",
-    "content": "",
     "links": [
-      { "text": "立即领取", "url": "https://172.lot-ml.com/ProductEn/index/2afe80abb66de5b9" }
+      {
+        "text": "立即领取",
+        "url": "https://172.lot-ml.com/ProductEn/index/2afe80abb66de5b9"
+      }
     ]
   },
   {
-    "id": 3,
     "tag": "工具",
     "tagClass": "tag-tool",
     "title": "皮肤编辑器资源（手机 + 电脑）",
@@ -89,15 +143,13 @@
         "type": "num",
         "title": "下载地址",
         "items": [
-          "<strong>Skinseed 汉化版</strong>（手机 / 安卓）—— <a href=\"https://kawang.lanzoul.com/b0xwto5hg\" target=\"_blank\" rel=\"noopener\">蓝奏云下载</a>，提取密码 <code>kawang</code>",
-          "<strong>Mcskin3d 汉化版</strong>（电脑 / Windows）—— <a href=\"https://kawang.lanzoul.com/ieJDI423aszi\" target=\"_blank\" rel=\"noopener\">蓝奏云下载</a>"
+          "**Skinseed 汉化版**（手机 / 安卓）—— [蓝奏云下载](https://kawang.lanzoul.com/b0xwto5hg)，提取密码 `kawang`",
+          "**Mcskin3d 汉化版**（电脑 / Windows）—— [蓝奏云下载](https://kawang.lanzoul.com/ieJDI423aszi)"
         ]
       }
-    ],
-    "links": []
+    ]
   },
   {
-    "id": 4,
     "tag": "知识",
     "tagClass": "tag-know",
     "title": "MC 崩溃日志分析指南",
@@ -107,25 +159,25 @@
         "type": "num",
         "title": "一、找到崩溃报告",
         "items": [
-          "打开 <code>.minecraft/crash-reports</code> 文件夹，找到最新的一份报告（文件名里带日期和时间）",
-          "如果 crash-reports 为空，去看 <code>.minecraft/logs/latest.log</code>",
+          "打开 `.minecraft/crash-reports` 文件夹，找到最新的一份报告（文件名里带日期和时间）",
+          "如果 crash-reports 为空，去看 `.minecraft/logs/latest.log`",
           "启动器崩溃的话，查看启动器自己目录下的日志文件"
         ]
       },
       {
         "type": "text",
         "title": "二、上传并分享",
-        "text": "把崩溃报告或 latest.log 的内容上传到 <a href=\"https://mclo.gs/\" target=\"_blank\" rel=\"noopener\">mclo.gs</a>，得到一个可分享的短链接。不要直接截图或整段粘贴到聊天框，长文本会被截断，很难排查。"
+        "text": "把崩溃报告或 latest.log 的内容上传到 [mclo.gs](https://mclo.gs/)，得到一个可分享的短链接。不要直接截图或整段粘贴到聊天框，长文本会被截断，很难排查。"
       },
       {
         "type": "num",
         "title": "三、看这几个关键位置",
         "items": [
-          "报告最上方的 <strong>Description</strong>：一句话说明崩溃类型",
-          "<strong>Caused by</strong>：真正的起因，通常会指向某个模组或类",
-          "最后一行的 <strong>at</strong> 列表：出问题的调用栈",
-          "看到 <code>OutOfMemoryError</code>：内存不足，调大分配内存",
-          "看到 <code>NoSuchMethodError</code> 或 <code>ClassNotFoundException</code>：通常是模组版本不匹配"
+          "报告最上方的 **Description**：一句话说明崩溃类型",
+          "**Caused by**：真正的起因，通常会指向某个模组或类",
+          "最后一行的 **at** 列表：出问题的调用栈",
+          "看到 `OutOfMemoryError`：内存不足，调大分配内存",
+          "看到 `NoSuchMethodError` 或 `ClassNotFoundException`：通常是模组版本不匹配"
         ]
       },
       {
@@ -141,11 +193,13 @@
       }
     ],
     "links": [
-      { "text": "在线分析", "url": "https://mclo.gs/" }
+      {
+        "text": "在线分析",
+        "url": "https://mclo.gs/"
+      }
     ]
   },
   {
-    "id": 5,
     "tag": "教程",
     "tagClass": "tag-tutor",
     "title": "浏览器搜索语法速查",
@@ -160,32 +214,88 @@
         "type": "kv",
         "title": "精确与排除",
         "items": [
-          { "label": "\"完整短语\"", "value": "只返回包含完整短语的结果", "note": "示例：\"人工智能发展史\"" },
-          { "label": "-关键词", "value": "排除包含该词的页面", "note": "示例：苹果 -手机" },
-          { "label": "OR / |", "value": "搜索任意一个关键词", "note": "示例：Python教程 OR Java教程" },
-          { "label": "(A OR B) C", "value": "括号分组，组合逻辑", "note": "示例：(Python OR Java) 入门教程" }
+          {
+            "label": "\"完整短语\"",
+            "value": "只返回包含完整短语的结果",
+            "note": "示例：\"人工智能发展史\""
+          },
+          {
+            "label": "-关键词",
+            "value": "排除包含该词的页面",
+            "note": "示例：苹果 -手机"
+          },
+          {
+            "label": "OR / |",
+            "value": "搜索任意一个关键词",
+            "note": "示例：Python教程 OR Java教程"
+          },
+          {
+            "label": "(A OR B) C",
+            "value": "括号分组，组合逻辑",
+            "note": "示例：(Python OR Java) 入门教程"
+          }
         ]
       },
       {
         "type": "kv",
         "title": "站内与文件",
         "items": [
-          { "label": "site:域名", "value": "只在指定网站内搜索", "note": "示例：关键词 site:example.com" },
-          { "label": "filetype:pdf", "value": "限定文件类型", "note": "示例：关键词 filetype:pdf，支持 pdf/doc/ppt/xls 等" },
-          { "label": "intitle:关键词", "value": "关键词出现在标题中", "note": "示例：intitle:气候变化" },
-          { "label": "inurl:关键词", "value": "关键词出现在网址中", "note": "示例：inurl:blog" }
+          {
+            "label": "site:域名",
+            "value": "只在指定网站内搜索",
+            "note": "示例：关键词 site:example.com"
+          },
+          {
+            "label": "filetype:pdf",
+            "value": "限定文件类型",
+            "note": "示例：关键词 filetype:pdf，支持 pdf/doc/ppt/xls 等"
+          },
+          {
+            "label": "intitle:关键词",
+            "value": "关键词出现在标题中",
+            "note": "示例：intitle:气候变化"
+          },
+          {
+            "label": "inurl:关键词",
+            "value": "关键词出现在网址中",
+            "note": "示例：inurl:blog"
+          }
         ]
       },
       {
         "type": "kv",
         "title": "高级运算符",
         "items": [
-          { "label": "*", "value": "通配符，代替未知词", "note": "示例：\"如何*学习编程\"，匹配「如何快速学习编程」" },
-          { "label": "数字..数字", "value": "数值范围", "note": "示例：手机 价格 2000..5000" },
-          { "label": "related:域名", "value": "查找相似站点", "note": "示例：related:example.com" },
-          { "label": "define:词语", "value": "查询词语定义", "note": "示例：define:元宇宙" },
-          { "label": "AROUND(n)", "value": "两个词相距 n 个词以内（Google）", "note": "示例：AI AROUND(5) 伦理" },
-          { "label": "before: / after:", "value": "按日期筛选（Google 支持）", "note": "示例：关键词 after:2023-01-01" }
+          {
+            "label": "*",
+            "value": "通配符，代替未知词",
+            "note": "示例：\"如何*学习编程\"，匹配「如何快速学习编程」"
+          },
+          {
+            "label": "数字..数字",
+            "value": "数值范围",
+            "note": "示例：手机 价格 2000..5000"
+          },
+          {
+            "label": "related:域名",
+            "value": "查找相似站点",
+            "note": "示例：related:example.com"
+          },
+          {
+            "label": "define:词语",
+            "value": "查询词语定义",
+            "note": "示例：define:元宇宙"
+          },
+          {
+            "label": "AROUND(n)",
+            "value": "两个词相距 n 个词以内（Google）",
+            "note": "示例：AI AROUND(5) 伦理"
+          },
+          {
+            "label": "before: / after:",
+            "value": "按日期筛选（Google 支持）",
+            "note": "示例：关键词 after:2023-01-01"
+          }
         ]
       },
       {
@@ -197,16 +307,14 @@
         "type": "num",
         "title": "组合示例",
         "items": [
-          "<code>\"人工智能\" filetype:pdf site:edu.cn -过时</code> —— 在教育网站里找关于「人工智能」的 PDF，排除过时内容",
-          "<code>(Python OR Java) 入门教程 after:2023-01-01</code> —— 找 2023 年之后发布的 Python 或 Java 入门教程",
-          "<code>intitle:评测 手机 价格 2000..5000</code> —— 标题含「评测」、价格在 2000-5000 之间的手机评测"
+          "`\"人工智能\" filetype:pdf site:edu.cn -过时` —— 在教育网站里找关于「人工智能」的 PDF，排除过时内容",
+          "`(Python OR Java) 入门教程 after:2023-01-01` —— 找 2023 年之后发布的 Python 或 Java 入门教程",
+          "`intitle:评测 手机 价格 2000..5000` —— 标题含「评测」、价格在 2000-5000 之间的手机评测"
         ]
       }
-    ],
-    "links": []
+    ]
   },
   {
-    "id": 6,
     "tag": "教程",
     "tagClass": "tag-tutor",
     "title": "蓝奏云 APK 文件下载教学",
@@ -246,19 +354,23 @@
       }
     ],
     "links": [
-      { "text": "查看原文", "url": "https://mp.weixin.qq.com/s/KyisjncKDKrzFEzM6Fd4kA" }
+      {
+        "text": "查看原文",
+        "url": "https://mp.weixin.qq.com/s/KyisjncKDKrzFEzM6Fd4kA"
+      }
     ]
   },
   {
-    "id": 7,
     "tag": "工具",
     "tagClass": "tag-tool",
     "noModal": true,
     "title": "有趣的翻译工具",
     "excerpt": "微信、QQ、腾讯电脑管家自带的截图翻译，Alt+A / Ctrl+Alt+A / Alt+D 一按就翻。",
-    "content": "",
     "links": [
-      { "text": "查看介绍", "url": "https://mp.weixin.qq.com/s/fXPEWOPiUw_QUg8_We6URA" }
+      {
+        "text": "查看介绍",
+        "url": "https://mp.weixin.qq.com/s/fXPEWOPiUw_QUg8_We6URA"
+      }
     ]
   }
 ]

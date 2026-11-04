@@ -237,7 +237,7 @@ mark { background: transparent; color: var(--accent); font-weight: 700; padding:
 .modal-title { margin: 10px 0 0; padding: 0 24px; flex-shrink: 0; font-size: 16.5px; font-weight: 600; color: var(--text); }
 .modal-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 14px 24px; font-size: 13.5px; line-height: 1.75; color: var(--text-dim); word-break: break-word; }
 .modal-body.plain { white-space: pre-line; }
-.modal-actions { display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 24px 20px; flex-shrink: 0; border-top: 1px solid var(--border); justify-content: flex-end; }
+.modal-actions { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 10px 10px; flex-shrink: 0; border-top: 1px solid var(--border); justify-content: flex-end; }
 .modal-btn { display: inline-flex; align-items: center; padding: 8px 16px; border-radius: 9px; background: var(--accent); color: #fff; font-size: 13px; text-decoration: none; transition: all .18s; }
 .modal-btn:hover { opacity: .88; transform: translateY(-1px); }
 .modal-btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--border-strong); }
