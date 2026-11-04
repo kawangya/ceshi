@@ -1,7 +1,5 @@
 [
   {
-    "tag": "代发",
-    "tagClass": "tag-skin",
     "pinned": true,
     "title": "网易皮肤代发-长期开放",
     "excerpt": "原创设计易过审，避免影视动漫版权内容。支持公众号、QQ、邮箱三种投稿方式。",
@@ -84,8 +82,6 @@
     ]
   },
   {
-    "tag": "社群",
-    "tagClass": "tag-serve",
     "pinned": true,
     "title": "MC交流联机群",
     "excerpt": "点击查看群规并一键加群。欢迎志同道合的朋友加入，共建和谐良好的交流环境。",
@@ -115,8 +111,6 @@
     ]
   },
   {
-    "tag": "流量卡",
-    "tagClass": "tag-card",
     "pinned": true,
     "noModal": true,
     "title": "免费领大额流量卡",
@@ -130,7 +124,6 @@
   },
   {
     "tag": "工具",
-    "tagClass": "tag-tool",
     "title": "皮肤编辑器资源（手机 + 电脑）",
     "excerpt": "Skinseed 安卓汉化版 + Mcskin3d 电脑汉化版，蓝奏云下载，附提取密码。",
     "sections": [
@@ -151,7 +144,6 @@
   },
   {
     "tag": "知识",
-    "tagClass": "tag-know",
     "title": "MC 崩溃日志分析指南",
     "excerpt": "找到崩溃报告 → 上传 mclo.gs → 看 Description 和 Caused by → 带着链接求助。",
     "sections": [
@@ -201,7 +193,6 @@
   },
   {
     "tag": "教程",
-    "tagClass": "tag-tutor",
     "title": "浏览器搜索语法速查",
     "excerpt": "精确匹配、排除、站内搜索、文件类型、数值范围、引擎差异，附三条可直接套用的组合示例。",
     "sections": [
@@ -316,7 +307,6 @@
   },
   {
     "tag": "教程",
-    "tagClass": "tag-tutor",
     "title": "蓝奏云 APK 文件下载教学",
     "excerpt": "手机端提示「非会员不在支持分享 APK 文件」？切换电脑 UA（PC 模式）即可下载。",
     "sections": [
@@ -362,7 +352,6 @@
   },
   {
     "tag": "工具",
-    "tagClass": "tag-tool",
     "noModal": true,
     "title": "有趣的翻译工具",
     "excerpt": "微信、QQ、腾讯电脑管家自带的截图翻译，Alt+A / Ctrl+Alt+A / Alt+D 一按就翻。",

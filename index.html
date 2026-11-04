@@ -1,43 +1,47 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="light" data-theme-color="orange">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="author" content="卡王">
-<meta name="description" content="卡王的导航">
-<title>卡王的导航</title>
-<link rel="icon" href="images/favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-<meta property="og:title" content="卡王的导航">
-<meta property="og:description" content="资源、工具与实用链接一站式入口">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://kawangya.github.io/ceshi/">
-<meta property="og:image" content="https://kawangya.github.io/ceshi/images/apple-touch-icon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="卡王">
+  <meta name="description" content="卡王的导航">
+  <title>卡王的导航</title>
 
-<script>
-  (function () {
-    try {
-      var s = localStorage.getItem('site.theme');
-      var theme = (!s || s === 'system')
-        ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-        : s;
-      document.documentElement.dataset.theme = theme;
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
-      var raw = localStorage.getItem('site.settings');
-      if (raw) {
-        try {
-          var st = JSON.parse(raw);
-          if (st && st.themeColor) document.documentElement.dataset.themeColor = st.themeColor;
-        } catch (e) {}
-      }
-    } catch (e) {}
-  })();
-</script>
+  <meta property="og:title" content="卡王的导航">
+  <meta property="og:description" content="资源、工具与实用链接一站式入口">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kawangya.github.io/ceshi/">
+  <meta property="og:image" content="https://kawangya.github.io/ceshi/images/apple-touch-icon.png">
 
-<link rel="stylesheet" href="data/style.css">
+  <!-- 首屏主题兜底：避免深色模式闪白 -->
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem('site.theme');
+        var theme = (!s || s === 'system')
+          ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : s;
+        document.documentElement.dataset.theme = theme;
+
+        var raw = localStorage.getItem('site.settings');
+        if (raw) {
+          try {
+            var st = JSON.parse(raw);
+            if (st && st.themeColor) document.documentElement.dataset.themeColor = st.themeColor;
+          } catch (e) {}
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="data/style.css">
 </head>
 <body>
 
+<!-- ===== 顶栏 ===== -->
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="./" title="回到顶部 / 刷新页面">
@@ -47,7 +51,7 @@
       <span class="brand-name">卡王的导航</span>
     </a>
 
-    <button id="themeBtn" class="icon-btn" aria-label="切换深浅色模式">
+    <button id="themeBtn" class="icon-btn" type="button" aria-label="切换深浅色模式">
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
       </svg>
@@ -57,7 +61,7 @@
       </svg>
     </button>
 
-    <button id="settingsBtn" class="icon-btn" aria-label="打开设置">
+    <button id="settingsBtn" class="icon-btn" type="button" aria-label="打开设置">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="3"></circle>
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -66,6 +70,7 @@
   </div>
 </header>
 
+<!-- ===== 公告条 ===== -->
 <div class="notice-bar" id="noticeBar" hidden>
   <div class="notice-bar-inner">
     <span class="bar-tag" id="barTag"></span>
@@ -74,7 +79,10 @@
   </div>
 </div>
 
+<!-- ===== 主布局 ===== -->
 <main class="layout">
+
+  <!-- 左侧分类 -->
   <aside class="cat-col" aria-label="导航大类">
     <h2 class="cat-title">导航分类</h2>
     <div class="cat-nav" id="catNav"></div>
@@ -83,6 +91,7 @@
     </div>
   </aside>
 
+  <!-- 中间导航 -->
   <section class="main-col" aria-label="快捷导航">
     <div class="nav-search" id="navSearch">
       <div class="search-wrap">
@@ -98,7 +107,9 @@
     <div class="empty empty-lg" id="navEmpty" hidden>没有找到匹配的站点</div>
   </section>
 
+  <!-- 右侧：个人 + 公告 -->
   <aside class="side-col">
+
     <section class="panel" aria-label="个人账号">
       <div class="profile-top">
         <div class="avatar">
@@ -112,30 +123,22 @@
 
       <div class="account-list">
         <a class="account-item" href="https://qm.qq.com/q/rqS3pr5QkM" target="_blank" rel="noopener" title="QQ：3596374598">
-          <span class="acc-ico">
-            <img data-fallback src="images/qq.png" alt="QQ">
-          </span>
+          <span class="acc-ico"><img data-fallback src="images/qq.png" alt="QQ"></span>
           <span class="acc-label">QQ</span>
           <span class="acc-value">3596374598</span>
         </a>
         <a class="account-item" href="mailto:panniyueya@qq.com" title="邮箱：panniyueya@qq.com">
-          <span class="acc-ico">
-            <img data-fallback src="images/email.png" alt="邮箱">
-          </span>
+          <span class="acc-ico"><img data-fallback src="images/email.png" alt="邮箱"></span>
           <span class="acc-label">邮箱</span>
           <span class="acc-value">panniyueya@qq.com</span>
         </a>
         <a class="account-item" href="https://space.bilibili.com/526424144" target="_blank" rel="noopener" title="哔哩哔哩：526424144">
-          <span class="acc-ico">
-            <img data-fallback src="images/bilibili.png" alt="B站">
-          </span>
+          <span class="acc-ico"><img data-fallback src="images/bilibili.png" alt="B站"></span>
           <span class="acc-label">B站</span>
           <span class="acc-value">526424144</span>
         </a>
         <a class="account-item" href="https://v.douyin.com/iLSLj2mq/" target="_blank" rel="noopener" title="抖音：kawangya">
-          <span class="acc-ico">
-            <img data-fallback src="images/douyin.png" alt="抖音">
-          </span>
+          <span class="acc-ico"><img data-fallback src="images/douyin.png" alt="抖音"></span>
           <span class="acc-label">抖音</span>
           <span class="acc-value">kawangya</span>
         </a>
@@ -163,9 +166,11 @@
       <ul class="notice-list" id="noticeList"></ul>
       <div class="empty" id="noticeEmpty" hidden>没有匹配的公告</div>
     </section>
+
   </aside>
 </main>
 
+<!-- ===== 底部友站 ===== -->
 <section class="friends-section" id="friendsSection" aria-label="友站链接" hidden>
   <div class="friends-inner">
     <span class="friends-label">友站</span>
@@ -173,30 +178,34 @@
   </div>
 </section>
 
+<!-- ===== 页脚 ===== -->
 <footer class="site-footer">
   卡王的导航 · 收集常用资源与工具。链接均指向第三方页面，请自行判断安全性；本站不存储任何文件。
 </footer>
 
+<!-- ===== 回到顶部 ===== -->
 <button class="back-top" id="backTop" type="button" aria-label="回到顶部">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 19V5M5 12l7-7 7 7"></path>
   </svg>
 </button>
 
+<!-- ===== 卡片简介浮层 ===== -->
 <div class="nav-tip" id="navTip" role="tooltip"></div>
 
+<!-- ===== 公告详情弹窗 ===== -->
 <div class="modal-mask" id="modalMask" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-head">
-      <span class="tag" id="modalTag"></span>
+      <h2 class="modal-title edit-modal-title" id="modalTitle"></h2>
       <button class="modal-close" id="modalClose" type="button" aria-label="关闭">×</button>
     </div>
-    <h2 class="modal-title" id="modalTitle"></h2>
     <div class="modal-body" id="modalBody"></div>
     <div class="modal-actions" id="modalActions"></div>
   </div>
 </div>
 
+<!-- ===== 图片灯箱 ===== -->
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="图片预览">
   <button class="lightbox-close" id="lightboxClose" type="button" aria-label="关闭">×</button>
   <img class="lightbox-img" id="lightboxImg" alt="">
@@ -207,6 +216,7 @@
   </div>
 </div>
 
+<!-- ===== 设置面板 ===== -->
 <div class="settings-mask" id="settingsMask" aria-hidden="true">
   <aside class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="settings-head">
@@ -214,6 +224,7 @@
       <button class="settings-close" id="settingsClose" type="button" aria-label="关闭设置">×</button>
     </div>
     <div class="settings-body">
+
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">主题配色</div>
@@ -221,6 +232,7 @@
         </div>
         <div class="theme-colors" id="themeColors"></div>
       </div>
+
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">跟随系统</div>
@@ -228,6 +240,7 @@
         </div>
         <label class="switch"><input type="checkbox" id="setFollowSystem"><span class="switch-track"></span></label>
       </div>
+
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">顶部公告</div>
@@ -235,6 +248,7 @@
         </div>
         <label class="switch"><input type="checkbox" id="setNoticeBar"><span class="switch-track"></span></label>
       </div>
+
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">底部友站</div>
@@ -242,6 +256,7 @@
         </div>
         <label class="switch"><input type="checkbox" id="setShowFriends"><span class="switch-track"></span></label>
       </div>
+
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">多链接下拉</div>
@@ -249,6 +264,7 @@
         </div>
         <label class="switch"><input type="checkbox" id="setEnableMultiLinks"><span class="switch-track"></span></label>
       </div>
+
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">默认分类</div>
@@ -256,6 +272,7 @@
         </div>
         <select class="setting-select" id="setDefaultCategory"><option value="">加载中…</option></select>
       </div>
+
       <div class="setting-item">
         <div class="setting-label">
           <div class="setting-name">链接打开方式</div>
@@ -279,6 +296,7 @@
           <label class="switch"><input type="checkbox" id="setEditMode"><span class="switch-track"></span></label>
         </div>
       </div>
+
     </div>
     <div class="settings-foot">
       <div class="settings-actions">
@@ -291,10 +309,12 @@
   </aside>
 </div>
 
+<!-- ===== Toast ===== -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<!-- ===== 卡片编辑弹窗 ===== -->
 <div class="modal-mask" id="editModalMask" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
     <div class="modal-head">
       <h2 class="modal-title edit-modal-title" id="editModalTitle">编辑卡片</h2>
       <button class="modal-close" id="editModalClose" type="button" aria-label="关闭">×</button>
@@ -312,11 +332,12 @@
       </div>
     </div>
     <div class="modal-actions">
-      <button class="settings-btn edit-save-btn" id="editSaveBtn">保存</button>
+      <button class="settings-btn edit-save-btn" id="editSaveBtn" type="button">保存</button>
     </div>
   </div>
 </div>
 
+<!-- ===== 通用提示弹窗 ===== -->
 <div class="modal-mask" id="universalModalMask" aria-hidden="true">
   <div class="modal universal-modal" role="dialog" aria-modal="true" aria-labelledby="universalTitle">
     <div class="modal-head">
@@ -328,8 +349,8 @@
       <input type="text" id="universalInput" class="setting-input" autocomplete="off">
     </div>
     <div class="modal-actions">
-      <button class="settings-btn" id="universalCancelBtn">取消</button>
-      <button class="settings-btn edit-save-btn" id="universalConfirmBtn">确定</button>
+      <button class="settings-btn" id="universalCancelBtn" type="button">取消</button>
+      <button class="settings-btn edit-save-btn" id="universalConfirmBtn" type="button">确定</button>
     </div>
   </div>
 </div>
