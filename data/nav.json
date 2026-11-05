@@ -585,33 +585,44 @@
       "title": "实用工具",
       "groups": [
         {
+          "id": "group_1793858302433",
+          "title": "解压缩工具(安卓)",
+          "items": [
+            {
+              "name": "MT管理器",
+              "url": "https://mt2.cn/",
+              "desc": "Android 端文件管理+逆向修改神器，双窗口同屏操作，支持 APK 解包/签名、资源提取、反编译、批量重命名、压缩解压等，玩机党和搞客户端拆包/汉化的人基本都装。"
+            },
+            {
+              "name": "NP管理器",
+              "url": "http://normalplayer.top",
+              "desc": "Android 端文件管理+APK 修改工具，除常规文件操作外，支持 Apk 等文件的查看、编辑与修改，偏 MT 管理器同类的玩机/拆包工具。"
+            },
+            {
+              "name": "ZArchiver Pro",
+              "url": "https://kawang.lanzoul.com/izM822xcu82d",
+              "desc": "Android 端专业压缩/解压工具，支持 RAR、ZIP、7z、分卷包、带密码压缩包，能直接看压缩包里的内容、提取单个文件。"
+            }
+          ]
+        },
+        {
           "id": "tools",
-          "title": "解压缩工具",
+          "title": "解压缩工具(PC)",
           "items": [
             {
               "name": "Bandizip",
               "url": "https://www.bandisoft.com/bandizip/",
-              "desc": "PC 高效解压，界面清爽"
+              "desc": "Windows 端高性能压缩/解压工具，支持 ZIP、7Z、RAR、ZIPX、ISO、TAR 等几十种格式；免费版够日常用，付费版多了密码管理、损坏压缩包抢救、密码恢复和压缩包内恶意软件扫描。"
             },
             {
               "name": "7-Zip",
               "url": "https://www.7-zip.org/",
-              "desc": "开源免费压缩解压"
+              "desc": "Windows 端开源压缩/解压工具，压缩率极高（尤其自家 7z 格式），完全免费可商用，支持 ZIP、RAR、TAR、ISO 等常见格式，老系统也能跑，没广告没会员。"
             },
             {
-              "name": "MT 管理器",
-              "url": "https://mt2.cn/",
-              "desc": "安卓文件管理与 APK 编辑"
-            },
-            {
-              "name": "ZArchiver",
-              "url": "https://kawang.lanzoul.com/izM822xcu82d",
-              "desc": "安卓专业解压缩"
-            },
-            {
-              "name": "NP 管理器",
-              "url": "http://normalplayer.top",
-              "desc": "安卓无广告文件管理"
+              "name": "WinRAR",
+              "url": "https://www.winrar.com.cn/",
+              "desc": "老牌压缩解压软件，RAR/RAR5 格式的原生工具，压缩率高、能分卷打包、加密、修复损坏压缩包，也支持解压 ZIP/7Z/ISO/TAR 等常见格式。"
             }
           ]
         }
