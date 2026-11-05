@@ -485,6 +485,32 @@
           ]
         },
         {
+          "id": "group_1793855838218",
+          "title": "模组社区",
+          "items": [
+            {
+              "name": "Nexus Mods",
+              "url": "https://www.nexusmods.com/",
+              "desc": "老牌综合模组平台，覆盖几千款游戏、几十亿下载量，支持一键装合集、画质/玩法/内容扩展全有，还能逛社区、传自己做的模组。"
+            },
+            {
+              "name": "GameBanana",
+              "url": "https://gamebanana.com/",
+              "desc": "老牌游戏模组社区，2001 年起做免费模组分享，偏皮肤、模型、地图、音效和外观类 Mod，FPS、格斗、独立游戏资源尤其多，下载大多不用登录，还能对接一键安装器。"
+            },
+            {
+              "name": "CurseForge",
+              "url": "https://www.curseforge.com/",
+              "desc": "综合游戏模组平台，MC 模组/整合包最全，也覆盖魔兽、模拟人生、方舟等；配桌面客户端能一键装模组、自动管版本和依赖、安全扫描，适合一次性塞一堆 Mod 不手动搬文件。"
+            },
+            {
+              "name": "3DM",
+              "url": "https://mod.3dmgame.com/",
+              "desc": "3DM 旗下中文模组资源站，集中下载热门单机游戏的 Mod、画质/人物/装备资源、整合包和 Mod 工具，带中文说明、版本标注和社区评论，对新手友好。"
+            }
+          ]
+        },
+        {
           "id": "games",
           "title": "修改器",
           "items": [
@@ -518,32 +544,6 @@
               "name": "GCM",
               "url": "https://github.com/dyang886/Game-Cheats-Manager",
               "desc": "源单机修改器管理器：把多源训练器收进一个面板，中英文搜游戏、一键下载解压归类、后台查更新、自动加 Windows Defender 白名单，还带反作弊绕过指引和社区上传审核，专治“满屏浏览器标签页找训练器”。"
-            }
-          ]
-        },
-        {
-          "id": "group_1793855838218",
-          "title": "模组社区",
-          "items": [
-            {
-              "name": "Nexus Mods",
-              "url": "https://www.nexusmods.com/",
-              "desc": "老牌综合模组平台，覆盖几千款游戏、几十亿下载量，支持一键装合集、画质/玩法/内容扩展全有，还能逛社区、传自己做的模组。"
-            },
-            {
-              "name": "GameBanana",
-              "url": "https://gamebanana.com/",
-              "desc": "老牌游戏模组社区，2001 年起做免费模组分享，偏皮肤、模型、地图、音效和外观类 Mod，FPS、格斗、独立游戏资源尤其多，下载大多不用登录，还能对接一键安装器。"
-            },
-            {
-              "name": "CurseForge",
-              "url": "https://www.curseforge.com/",
-              "desc": "综合游戏模组平台，MC 模组/整合包最全，也覆盖魔兽、模拟人生、方舟等；配桌面客户端能一键装模组、自动管版本和依赖、安全扫描，适合一次性塞一堆 Mod 不手动搬文件。"
-            },
-            {
-              "name": "3DM",
-              "url": "https://mod.3dmgame.com/",
-              "desc": "3DM 旗下中文模组资源站，集中下载热门单机游戏的 Mod、画质/人物/装备资源、整合包和 Mod 工具，带中文说明、版本标注和社区评论，对新手友好。"
             }
           ]
         },
