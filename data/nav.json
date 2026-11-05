@@ -114,7 +114,7 @@
               "desc": "PCL 官方源码仓库，Minecraft 启动器 Plain Craft Launcher 的开源代码，含 UI、动画、下载与游戏启动模块，发布新版时同步更新。",
               "links": [
                 {
-                  "text": "蓝奏云（提取码：pcl2）",
+                  "text": "蓝奏云(提取码：pcl2)",
                   "url": "https://ltcat.lanzouv.com/b0aj6gsid"
                 }
               ]
@@ -226,36 +226,100 @@
           "title": "皮肤披风相关",
           "items": [
             {
-              "name": "NameMC",
-              "url": "https://namemc.com/",
-              "desc": "正版皮肤查询与历史记录"
-            },
-            {
-              "name": "MC 皮肤编辑器",
-              "url": "https://minecraftskineditor.org/",
-              "desc": "网页端皮肤绘制与编辑"
-            },
-            {
               "name": "Blockbench",
               "url": "https://www.blockbench.net/",
-              "desc": "免费 3D 模型与皮肤建模工具，支持 MC 皮肤和实体模型"
+              "desc": "免费开源的低多边形 3D 模型编辑器，支持建模、贴图、UV 与骨骼动画，专为 Minecraft 资源（Java/基岩版）和像素风游戏资产设计，可插件扩展。"
             },
             {
-              "name": "壁纸生成器",
-              "url": "https://wallpapers.novaskin.me/",
-              "desc": "MC 风格壁纸与头像生成"
+              "name": "新_Mcskin3d",
+              "url": "https://apps.microsoft.com/detail/9N8SJT329HH1",
+              "desc": "皮肤编辑与管理工具，支持在模型上直接绘制、2D 贴图编辑和本地皮肤库管理。",
+              "links": [
+                {
+                  "text": "旧_Mcskin3d(汉化版)",
+                  "url": "https://kawang.lanzoul.com/ieJDI423aszi"
+                }
+              ]
+            },
+            {
+              "name": "网页皮肤编辑器",
+              "url": "https://studio.tdogmc.cn/zh_cn/",
+              "desc": "免费在线 MC 皮肤编辑器，支持 2D/3D 实时预览、画笔填充与镜像绘制，可导出 Java/基岩版通用 PNG 皮肤。",
+              "links": [
+                {
+                  "text": "Mcskin3d网页版",
+                  "url": "https://www.planetminecraft.com/skin-editor/"
+                },
+                {
+                  "text": "网页皮肤编辑器2",
+                  "url": "https://minecraftskineditor.org/"
+                },
+                {
+                  "text": "网页皮肤编辑器3",
+                  "url": "https://skineditor.org/zh"
+                }
+              ]
+            },
+            {
+              "name": "网页披风编辑器",
+              "url": "https://lraty-li.github.io/Minecraft-Cape-Generator/",
+              "desc": "披风在线生成工具，支持实时预览、下载、分辨率设置和披风各面布局调整。",
+              "links": [
+                {
+                  "text": "网页披风编辑器2",
+                  "url": "https://studio.tdogmc.cn/zh_cn/cape"
+                },
+                {
+                  "text": "网页披风编辑器3",
+                  "url": "https://mctools.gg/cape-editor"
+                }
+              ]
+            },
+            {
+              "name": "皮肤重新着色",
+              "url": "https://www.mcskinrecolor.com/",
+              "desc": "在线 MC 皮肤改色工具，快速给皮肤重新配色，让外观更个性。"
             },
             {
               "name": "LittleSkin",
               "url": "https://littleskin.cn/",
-              "desc": "国际皮肤站，支持上传与使用"
+              "desc": "国内公益型 Minecraft 皮肤站，提供皮肤、披风上传管理与一键预览，兼容主流加载方案，基础服务免费、加载快。",
+              "links": [
+                {
+                  "text": "红石皮肤站",
+                  "url": "https://mcskin.com.cn/"
+                },
+                {
+                  "text": "视频教程",
+                  "url": "https://www.bilibili.com/video/BV1VL411q7Vt/"
+                },
+                {
+                  "text": "图文教程",
+                  "url": "https://mp.weixin.qq.com/s/02cXHhFw7Qk2G-0Fy1qdwA"
+                }
+              ]
             },
             {
-              "name": "MC 工具集",
-              "url": "https://minecraft.tools/",
-              "desc": "命令生成、药水计算等"
+              "name": "MinecraftCapes",
+              "url": "https://minecraftcapes.net/",
+              "desc": "免费自定义披风模组与社区，可穿戴自制或画廊披风，支持 Java 版，附带服务器社区入口。",
+              "links": [
+                {
+                  "text": "视频教程",
+                  "url": "https://www.bilibili.com/video/BV1VL411q7Vt/"
+                },
+                {
+                  "text": "图文教程",
+                  "url": "https://mp.weixin.qq.com/s/02cXHhFw7Qk2G-0Fy1qdwA"
+                }
+              ]
             }
           ]
+        },
+        {
+          "id": "group_1793847061583",
+          "title": "图片壁纸",
+          "items": []
         }
       ]
     },
