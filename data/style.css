@@ -465,7 +465,7 @@ body.edit-mode .cat-tab .cat-tab-count { display: none; }
 /* ===== 编辑弹窗 ===== */
 .edit-modal-title { margin: 0; padding: 0; }
 .edit-modal-body { display: flex; flex-direction: column; gap: 12px; padding-top: 20px; }
-.edit-save-btn { background: var(--accent); color: #fff; border: none; }
+.edit-save-btn { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
 .edit-links-section { border-top: 1px dashed var(--border); padding-top: 12px; margin-top: 4px; }
 .edit-links-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .edit-links-label { font-size: 12.5px; font-weight: 600; color: var(--text-dim); }
