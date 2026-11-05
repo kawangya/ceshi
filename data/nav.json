@@ -383,6 +383,11 @@
           "title": "工具指南",
           "items": [
             {
+              "name": "我的世界百科",
+              "url": "https://minecraftsearch.com",
+              "desc": "百科与工具箱，可查物品/生物/配方数据，并提供种子地图、结构矿石定位、附魔规划和指令生成等实用工具。"
+            },
+            {
               "name": "Chunk Base",
               "url": "https://www.chunkbase.com/",
               "desc": "Minecraft 种子与地形查询工具站，提供种子地图、群系/地牢/洞穴查找器，适合快速定位遗迹、结构和资源分布。",
