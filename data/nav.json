@@ -586,7 +586,7 @@
       "groups": [
         {
           "id": "tools",
-          "title": "实用工具",
+          "title": "解压缩工具",
           "items": [
             {
               "name": "Bandizip",
@@ -612,11 +612,6 @@
               "name": "NP 管理器",
               "url": "http://normalplayer.top",
               "desc": "安卓无广告文件管理"
-            },
-            {
-              "name": "Chunkbase",
-              "url": "https://www.chunkbase.com/",
-              "desc": "种子地图与结构查询"
             }
           ]
         }
