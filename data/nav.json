@@ -2,7 +2,7 @@
   "categories": [
     {
       "id": "mc",
-      "title": "MC 导航",
+      "title": "MC导航",
       "default": true,
       "groups": [
         {
@@ -460,53 +460,148 @@
       "title": "游戏相关",
       "groups": [
         {
-          "id": "games",
-          "title": "游戏与修改",
+          "id": "group_1793856266738",
+          "title": "游戏情报站",
+          "items": [
+            {
+              "name": "FreeSteam",
+              "url": "https://freesteam.games/",
+              "desc": "游戏福利情报站，汇总 Steam、Epic、GOG 等平台的限时免费游戏、免费激活码、DLC 与组合包信息，方便玩家快速捡漏。"
+            },
+            {
+              "name": "games.gg",
+              "url": "https://games.gg/",
+              "desc": "游戏综合站：查 2500+ 游戏资料、看评测/攻略/兑换码、追发售日历和行业新闻，还能比价找折扣、绑多平台账号统管游戏库，附带 GAMES+ 会员和桌面悬浮窗。"
+            },
+            {
+              "name": "GamePulse",
+              "url": "https://gamepulse.pl/",
+              "desc": "游戏动态聚合站，集中抓 Steam/各厂商的创作者公告、补丁说明、发售预告，外加免费领取、PC 优惠和 3A/独立新作动态，适合每天快速扫一遍游戏圈更新。"
+            },
+            {
+              "name": "Game Informer",
+              "url": "https://gameinformer.com/",
+              "desc": "老牌游戏媒体站，主打新闻、评测、新作前瞻、视频和发售日期，内容偏专业编辑向，常有大作深度专题和封面企划。"
+            },
+            {
+              "name": "Patchnotes.fyi",
+              "url": "https://patchnotes.fyi/",
+              "desc": "游戏新闻聚合站：把 IGN、Eurogamer、Nintendo Life 等多家媒体消息压成时间线概览，按 24 小时/近一周/近一月分组，每条带来源、时间和标签，专看补丁、官宣、发售动态和行业大事，适合快速扫全局不用挨个点开原站。"
+            },
+            {
+              "name": "Playground.ru",
+              "url": "https://www.playground.ru/",
+              "desc": "俄罗斯老牌游戏综合站：集中看游戏新闻、补丁、模组、汉化、攻略、通关流程，还提供修改器、训练器、存档、代码和价格折扣，附带社区论坛与资源下载区。"
+            }
+          ]
+        },
+        {
+          "id": "group_1793855570450",
+          "title": "游戏平台",
           "items": [
             {
               "name": "Steam",
               "url": "https://store.steampowered.com/",
-              "desc": "全球最大 PC 游戏平台"
+              "desc": "Valve 旗下的综合游戏平台，支持买游戏、下载管理、云存档、社区交流、创意工坊、市场与直播。"
             },
             {
-              "name": "Epic Games",
+              "name": "Epic",
               "url": "https://www.epicgames.com/",
-              "desc": "每周免费游戏与虚幻引擎"
+              "desc": "PC 游戏商城与发行平台，提供买游戏、DLC、特卖和《Fortnite》等内容，常送免费游戏。"
+            },
+            {
+              "name": "GOG",
+              "url": "https://store-static-modular.gog-statics.com/",
+              "desc": "无 DRM 的 PC 游戏平台，主打买断制、可离线安装和精选游戏库，附带轻量客户端与玩家社区，强调“买了就是你的”。"
             },
             {
               "name": "WeGame",
               "url": "https://www.wegame.com.cn",
-              "desc": "腾讯游戏平台"
+              "desc": "腾讯旗下国区 PC 游戏平台，提供游戏商店、下载管理、开黑社区、高校活动和开发者发行支持。"
             },
             {
               "name": "itch.io",
               "url": "https://itch.io/",
-              "desc": "独立游戏与开发者社区"
-            },
+              "desc": "独立游戏与数字创作平台，支持开发者自由发布、自主定价和网页直玩，偏实验性、小众作品与 Game Jam 内容。"
+            }
+          ]
+        },
+        {
+          "id": "games",
+          "title": "修改器",
+          "items": [
             {
-              "name": "Nexus Mods",
-              "url": "https://www.nexusmods.com/",
-              "desc": "全球最大游戏模组网站"
-            },
-            {
-              "name": "GameBanana",
-              "url": "https://gamebanana.com/",
-              "desc": "多游戏模组资源站"
+              "name": "Cheat Engine",
+              "url": "https://www.cheatengine.org/",
+              "desc": "开源内存修改/调试工具，能扫内存、改数值、反汇编、写 Lua 脚本和做训练器，偏硬核，适合单机游戏私改和逆向学习。",
+              "links": [
+                {
+                  "text": "Cheat Engine社区",
+                  "url": "https://fearlessrevolution.com/"
+                }
+              ]
             },
             {
               "name": "风灵月影",
               "url": "https://flingtrainer.com/",
-              "desc": "免费单机游戏修改器"
+              "desc": "PC 单机训练器下载站，按游戏提供多功能修改器，标注适配版本和更新时间，即开即用。"
             },
             {
               "name": "WeMod",
               "url": "https://www.wemod.com/zh",
-              "desc": "一站式游戏修改器平台"
+              "desc": "PC 单机修改器客户端，自动识别已装游戏，提供社区测试过的秘籍、数值调整和游戏内悬浮窗，配交互式地图，零基础也能即开即用。"
             },
             {
-              "name": "Cheat Engine",
-              "url": "https://www.cheatengine.org/",
-              "desc": "开源内存修改与调试"
+              "name": "小幸修改器",
+              "url": "https://www.xiaoxingjie.com/",
+              "desc": "中文 PC 单机训练器站，按游戏提供功能修改器下载，标注适配版本，常见通过网盘分发，国产单机/经典单机覆盖较全，带风灵月影技术支持。"
+            },
+            {
+              "name": "GCM",
+              "url": "https://github.com/dyang886/Game-Cheats-Manager",
+              "desc": "源单机修改器管理器：把多源训练器收进一个面板，中英文搜游戏、一键下载解压归类、后台查更新、自动加 Windows Defender 白名单，还带反作弊绕过指引和社区上传审核，专治“满屏浏览器标签页找训练器”。"
+            }
+          ]
+        },
+        {
+          "id": "group_1793855838218",
+          "title": "模组社区",
+          "items": [
+            {
+              "name": "Nexus Mods",
+              "url": "https://www.nexusmods.com/",
+              "desc": "老牌综合模组平台，覆盖几千款游戏、几十亿下载量，支持一键装合集、画质/玩法/内容扩展全有，还能逛社区、传自己做的模组。"
+            },
+            {
+              "name": "GameBanana",
+              "url": "https://gamebanana.com/",
+              "desc": "老牌游戏模组社区，2001 年起做免费模组分享，偏皮肤、模型、地图、音效和外观类 Mod，FPS、格斗、独立游戏资源尤其多，下载大多不用登录，还能对接一键安装器。"
+            },
+            {
+              "name": "CurseForge",
+              "url": "https://www.curseforge.com/",
+              "desc": "综合游戏模组平台，MC 模组/整合包最全，也覆盖魔兽、模拟人生、方舟等；配桌面客户端能一键装模组、自动管版本和依赖、安全扫描，适合一次性塞一堆 Mod 不手动搬文件。"
+            },
+            {
+              "name": "3DM",
+              "url": "https://mod.3dmgame.com/",
+              "desc": "3DM 旗下中文模组资源站，集中下载热门单机游戏的 Mod、画质/人物/装备资源、整合包和 Mod 工具，带中文说明、版本标注和社区评论，对新手友好。"
+            }
+          ]
+        },
+        {
+          "id": "group_1793857387217",
+          "title": "单机存档工具",
+          "items": [
+            {
+              "name": "Save Editor Online",
+              "url": "https://www.saveeditonline.com/",
+              "desc": "网页版游戏存档修改器，免安装上传即用，自动识别 RPG Maker / Ren'Py / Unity / UE4-5 / Godot / HTML 等引擎的存档格式（.save .sav .rpgsave .sqlite .dat 等），可改金币、物品、属性、变量、文本，适合单机游戏快速调档。"
+            },
+            {
+              "name": "MTool",
+              "url": "https://mtool.app/",
+              "desc": "跨平台（PC/安卓）的游戏翻译与运行辅助工具，把游戏拖进去就能自动配环境、一键提取并翻译文本，解决 RTP/DLL 缺失、中文路径、系统语言等坑，适合玩没汉化的 RPG Maker / 引擎小游戏，翻译后离线也能跑。"
             }
           ]
         }
