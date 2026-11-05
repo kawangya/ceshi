@@ -511,6 +511,37 @@
           ]
         },
         {
+          "id": "group_1793857387217",
+          "title": "单机工具",
+          "items": [
+            {
+              "name": "MTool",
+              "url": "https://mtool.app/",
+              "desc": "跨平台（PC/安卓）的游戏翻译与运行辅助工具，把游戏拖进去就能自动配环境、一键提取并翻译文本，解决 RTP/DLL 缺失、中文路径、系统语言等坑，适合玩没汉化的 RPG Maker / 引擎小游戏，翻译后离线也能跑。"
+            },
+            {
+              "name": "GameLingo",
+              "url": "https://www.gamelingo.cn/",
+              "desc": "单机游戏实时汉化助手：拖游戏进去做补丁注入翻译，当前主力适配 RPG Maker MV / MZ，运行时回显译文，还带道具/开关/变量等轻量金手指；Ren'Py、Unity、Wolf、Bakin 等引擎仍在实验或未验证阶段。"
+            },
+            {
+              "name": "Save Editor Online",
+              "url": "https://www.saveeditonline.com/",
+              "desc": "网页版游戏存档修改器，免安装上传即用，自动识别 RPG Maker / Ren'Py / Unity / UE4-5 / Godot / HTML 等引擎的存档格式（.save .sav .rpgsave .sqlite .dat 等），可改金币、物品、属性、变量、文本，适合单机游戏快速调档。"
+            },
+            {
+              "name": "SaveEditor.top",
+              "url": "https://saveeditor.top/",
+              "desc": "网页版存档修改器：浏览器本地解析，支持 RPG Maker / Unity / Ren'Py / Unreal / Palworld / GameMaker 等，改金币、属性、物品、变量，单文件 50MB 内、不用装软件，部分加密格式只读或有限写入。"
+            },
+            {
+              "name": "SaveGame.org",
+              "url": "https://savegame.org/",
+              "desc": "网页版存档编辑站：完全浏览器本地处理、不上传文件，支持 RPG Maker / Ren'Py / Unity / 星露谷 / 空洞骑士 / 杀戮尖塔 / DDLC 等，改金币、属性、物品、剧情开关，导出时自动带 .bak 原档备份，还附带「存档位置数据库」帮你找游戏存档路径。"
+            }
+          ]
+        },
+        {
           "id": "games",
           "title": "修改器",
           "items": [
@@ -544,37 +575,6 @@
               "name": "GCM",
               "url": "https://github.com/dyang886/Game-Cheats-Manager",
               "desc": "源单机修改器管理器：把多源训练器收进一个面板，中英文搜游戏、一键下载解压归类、后台查更新、自动加 Windows Defender 白名单，还带反作弊绕过指引和社区上传审核，专治“满屏浏览器标签页找训练器”。"
-            }
-          ]
-        },
-        {
-          "id": "group_1793857387217",
-          "title": "单机工具",
-          "items": [
-            {
-              "name": "MTool",
-              "url": "https://mtool.app/",
-              "desc": "跨平台（PC/安卓）的游戏翻译与运行辅助工具，把游戏拖进去就能自动配环境、一键提取并翻译文本，解决 RTP/DLL 缺失、中文路径、系统语言等坑，适合玩没汉化的 RPG Maker / 引擎小游戏，翻译后离线也能跑。"
-            },
-            {
-              "name": "GameLingo",
-              "url": "https://www.gamelingo.cn/",
-              "desc": "单机游戏实时汉化助手：拖游戏进去做补丁注入翻译，当前主力适配 RPG Maker MV / MZ，运行时回显译文，还带道具/开关/变量等轻量金手指；Ren'Py、Unity、Wolf、Bakin 等引擎仍在实验或未验证阶段。"
-            },
-            {
-              "name": "Save Editor Online",
-              "url": "https://www.saveeditonline.com/",
-              "desc": "网页版游戏存档修改器，免安装上传即用，自动识别 RPG Maker / Ren'Py / Unity / UE4-5 / Godot / HTML 等引擎的存档格式（.save .sav .rpgsave .sqlite .dat 等），可改金币、物品、属性、变量、文本，适合单机游戏快速调档。"
-            },
-            {
-              "name": "SaveEditor.top",
-              "url": "https://saveeditor.top/",
-              "desc": "网页版存档修改器：浏览器本地解析，支持 RPG Maker / Unity / Ren'Py / Unreal / Palworld / GameMaker 等，改金币、属性、物品、变量，单文件 50MB 内、不用装软件，部分加密格式只读或有限写入。"
-            },
-            {
-              "name": "SaveGame.org",
-              "url": "https://savegame.org/",
-              "desc": "网页版存档编辑站：完全浏览器本地处理、不上传文件，支持 RPG Maker / Ren'Py / Unity / 星露谷 / 空洞骑士 / 杀戮尖塔 / DDLC 等，改金币、属性、物品、剧情开关，导出时自动带 .bak 原档备份，还附带「存档位置数据库」帮你找游戏存档路径。"
             }
           ]
         }
