@@ -313,13 +313,87 @@
                   "url": "https://mp.weixin.qq.com/s/02cXHhFw7Qk2G-0Fy1qdwA"
                 }
               ]
+            },
+            {
+              "name": "NameMC",
+              "url": "https://namemc.com/",
+              "desc": "Minecraft 玩家档案站，可查正版 ID、名称历史、皮肤披风，并浏览热门皮肤与社区排行。",
+              "links": [
+                {
+                  "text": "玩家查询",
+                  "url": "https://mcindex.gg/"
+                }
+              ]
             }
           ]
         },
         {
           "id": "group_1793847061583",
           "title": "图片壁纸",
-          "items": []
+          "items": [
+            {
+              "name": "NovaSkin",
+              "url": "https://wallpapers.novaskin.me/",
+              "desc": "壁纸站，可用自己的 MC 皮肤定制游戏壁纸，最高支持 4K 分辨率。",
+              "links": [
+                {
+                  "text": "MinePix",
+                  "url": "https://www.minepix.app/"
+                },
+                {
+                  "text": "MCNeko壁纸生成器",
+                  "url": "https://www.mcneko.com/tools/wallpaper/"
+                }
+              ]
+            },
+            {
+              "name": "头像生成器",
+              "url": "https://mccag.cn/",
+              "desc": "MC 可爱头像在线生成器，支持正版 ID、皮肤站和本地上传，可切换多种风格并导出头像图片。",
+              "links": [
+                {
+                  "text": "头像生成器2",
+                  "url": "https://www.minecraftmaps.com/tools/avatar-maker"
+                }
+              ]
+            },
+            {
+              "name": "Logo生成器",
+              "url": "https://textcraft.net/",
+              "desc": "免费在线文字 Logo 生成器，选模板填文字即可实时生成图片，适合快速做标题、按钮和横幅。",
+              "links": [
+                {
+                  "text": "Logo生成器2",
+                  "url": "https://ja.cooltext.com/"
+                },
+                {
+                  "text": "Logo生成器3",
+                  "url": "https://3dtext.easecation.net/"
+                },
+                {
+                  "text": "Logo生成器4",
+                  "url": "https://colorize.fun/en/minecraft"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "group_1793849885277",
+          "title": "工具指南",
+          "items": [
+            {
+              "name": "Chunk Base",
+              "url": "https://www.chunkbase.com/",
+              "desc": "Minecraft 种子与地形查询工具站，提供种子地图、群系/地牢/洞穴查找器，适合快速定位遗迹、结构和资源分布。",
+              "links": [
+                {
+                  "text": "Seeder",
+                  "url": "https://www.mcseeder.com/"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
