@@ -324,6 +324,17 @@
                   "url": "https://mcindex.gg/"
                 }
               ]
+            },
+            {
+              "name": "Skinseed",
+              "url": "https://play.google.com/store/apps/details?id=com.africasunrise.skinseed",
+              "desc": "手机皮肤编辑器与社区，支持 3D 预览、智能纹理、200 万+皮肤库和一键导出到 Java/基岩版。",
+              "links": [
+                {
+                  "text": "汉化版(提取码：kawang)",
+                  "url": "https://kawang.lanzoul.com/b0xwto5hg"
+                }
+              ]
             }
           ]
         },
