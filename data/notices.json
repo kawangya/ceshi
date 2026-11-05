@@ -123,26 +123,6 @@
     ]
   },
   {
-    "tag": "工具",
-    "title": "皮肤编辑器资源（手机 + 电脑）",
-    "excerpt": "Skinseed 安卓汉化版 + Mcskin3d 电脑汉化版，蓝奏云下载，附提取密码。",
-    "sections": [
-      {
-        "type": "text",
-        "title": "说明",
-        "text": "两个皮肤编辑器的汉化版本，按设备选择。蓝奏云链接如下，提取密码请留意对应条目。"
-      },
-      {
-        "type": "num",
-        "title": "下载地址",
-        "items": [
-          "**Skinseed 汉化版**（手机 / 安卓）—— [蓝奏云下载](https://kawang.lanzoul.com/b0xwto5hg)，提取密码 `kawang`",
-          "**Mcskin3d 汉化版**（电脑 / Windows）—— [蓝奏云下载](https://kawang.lanzoul.com/ieJDI423aszi)"
-        ]
-      }
-    ]
-  },
-  {
     "tag": "知识",
     "title": "MC 崩溃日志分析指南",
     "excerpt": "找到崩溃报告 → 上传 mclo.gs → 看 Description 和 Caused by → 带着链接求助。",
