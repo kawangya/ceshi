@@ -625,6 +625,72 @@
               "desc": "老牌压缩解压软件，RAR/RAR5 格式的原生工具，压缩率高、能分卷打包、加密、修复损坏压缩包，也支持解压 ZIP/7Z/ISO/TAR 等常见格式。"
             }
           ]
+        },
+        {
+          "id": "group_1793932097814",
+          "title": "开发工具",
+          "items": [
+            {
+              "name": "GitHub Desktop",
+              "url": "https://github.com/apps/desktop",
+              "desc": "图形化 Git 客户端，把分支切换、提交对比、暂存改动、改写提交历史、回退版本做成拖拽和点按操作，不用记命令行也能跑通协作流程，适合新手和不想跟 Git 较劲的人。",
+              "links": [
+                {
+                  "text": "汉化工具",
+                  "url": "https://github.com/cngege/GitHubDesktop2Chinese"
+                }
+              ]
+            },
+            {
+              "name": "VS Code",
+              "url": "https://code.visualstudio.com/",
+              "desc": "微软开源的跨平台代码编辑器，写代码、调试、跑终端、管 Git 一站式搞定；扩展市场 8 万+ 插件，几乎支持所有语言，现在还深度集成 Copilot 和多 Agent 协作，能本地/云端并行派活给 AI 写功能、修 Bug、提 PR。"
+            },
+            {
+              "name": "百度统计",
+              "url": "https://mtj.baidu.com/",
+              "desc": "百度出的移动端数据统计平台，给 APP / 小程序 / H5 接个轻量 SDK，就能看活跃用户、留存、漏斗、崩溃日志、渠道效果和用户画像，产品运营研发都能用，基础功能免费。"
+            },
+            {
+              "name": "FusionApp2.0",
+              "url": "https://xiyatu.lanzouq.com/b00hpvsa3g",
+              "desc": "安卓端“网页转应用”制作工具：把网站包成本地客户端，可视化搭顶栏/底栏/侧滑/悬浮按钮，支持 Lua 脚本做事件监听、广告屏蔽、交互定制，内置图标库和图标设计器，小白也能快速出一个“像原生 App”的壳子。",
+              "links": [
+                {
+                  "text": "修改版",
+                  "url": "https://xiyatu.lanzouq.com/b00hpwl25e"
+                },
+                {
+                  "text": "辅助工具",
+                  "url": "https://xiyatu.lanzouq.com/b04lb88gj"
+                },
+                {
+                  "text": "部分开源项目",
+                  "url": "https://xiyatu.lanzouq.com/b00hqb3nfc"
+                },
+                {
+                  "text": "lua官方解密工具",
+                  "url": "https://xiyatu.lanzouq.com/b00hqdgfgf"
+                },
+                {
+                  "text": "简易网页套壳教程模板(上)",
+                  "url": "https://www.bilibili.com/video/BV1srxRe9EU7/"
+                },
+                {
+                  "text": "简易网页套壳教程模板(中)",
+                  "url": "https://www.bilibili.com/video/BV1xrxRe9E53/"
+                },
+                {
+                  "text": "简易网页套壳教程模板(下)",
+                  "url": "https://www.bilibili.com/video/BV1N816YyEYL/"
+                },
+                {
+                  "text": "简易远程请求教学",
+                  "url": "https://www.bilibili.com/video/BV1GkNgeXEZA/"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
